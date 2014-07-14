@@ -6,8 +6,6 @@ import org.json.JSONObject;
 import org.json.JSONArray;
         
 /**
-    DataRow
-    
     Represents a row in a custom data table.
     
     For example, each response to a poll is stored as one row in a data table.
@@ -48,8 +46,6 @@ import org.json.JSONArray;
 public class DataRow extends Entity
 {
     /**
-        row.save()
-        
         Saves any fields or custom variables that have changed for this data row.
     */
     @Override
@@ -59,8 +55,6 @@ public class DataRow extends Entity
     }
 
     /**
-        row.delete()
-        
         Deletes this data row.
     */
     public void delete() throws IOException

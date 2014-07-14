@@ -8,8 +8,6 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 
 /**
-    Message
-    
     Represents a single message.
     
     Fields:
@@ -122,16 +120,7 @@ import org.json.JSONArray;
 public class Message extends Entity 
 {    
     /**
-        message.hasLabel(label)
-        
         Returns true if this message has a particular label, false otherwise.
-        
-        Arguments:
-          - label (Label)
-              * Required
-          
-        Returns:
-            bool
      */
     public boolean hasLabel(Label label) throws IOException
     {
@@ -140,13 +129,7 @@ public class Message extends Entity
     }
       
     /**
-        message.addLabel(label)
-        
         Adds a label to the given message.
-        
-        Arguments:
-          - label (Label)
-              * Required
      */
     public void addLabel(Label label) throws IOException
     {
@@ -155,13 +138,7 @@ public class Message extends Entity
     }
     
     /**
-        message.removeLabel(label)
-        
         Removes a label from the given message.
-        
-        Arguments:
-          - label (Label)
-              * Required
      */    
     public void removeLabel(Label label) throws IOException
     {    
@@ -190,8 +167,6 @@ public class Message extends Entity
     }
 
     /**
-        message.getMMSParts()
-        
         Retrieves a list of MMS parts for this message (empty for non-MMS messages).
         
         Each MMS part in the list is an object with the following
@@ -204,9 +179,6 @@ public class Message extends Entity
         - url: URL where the content for this part is stored (secret but
         publicly accessible, so you could link/embed it in a web page without having to re-host it
         yourself)
-        
-        Returns:
-            array
     */
     public JSONArray getMMSParts() throws IOException
     {
@@ -214,8 +186,6 @@ public class Message extends Entity
     }
 
     /**
-        message.save()
-        
         Saves any fields that have changed for this message.
     */
     @Override
@@ -225,8 +195,6 @@ public class Message extends Entity
     }
 
     /**
-        message.delete()
-        
         Deletes this message.
     */
     public void delete() throws IOException

@@ -9,8 +9,8 @@
 
   <name>Telerivet Java Client</name>
   <description>Java client library for Telerivet REST API</description>
-  <url>https://telerivet.com/api</url>
-  
+  <url>https://telerivet.com/api/rest/java</url>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>

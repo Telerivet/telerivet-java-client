@@ -8,8 +8,6 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 
 /**
-    Contact
-    
     Fields:
     
       - id (string, max 34 characters)
@@ -58,16 +56,7 @@ import org.json.JSONArray;
 public class Contact extends Entity 
 {    
     /**
-        contact.isInGroup(group)
-        
         Returns true if this contact is in a particular group, false otherwise.
-        
-        Arguments:
-          - group (Group)
-              * Required
-          
-        Returns:
-            bool
      */
     public boolean isInGroup(Group group)
     {
@@ -76,13 +65,7 @@ public class Contact extends Entity
     }
       
     /**
-        contact.addToGroup(group)
-        
         Adds this contact to a group.
-        
-        Arguments:
-          - group (Group)
-              * Required
      */
     public void addToGroup(Group group) throws IOException
     {
@@ -91,13 +74,7 @@ public class Contact extends Entity
     }
     
     /**
-        contact.removeFromGroup(group)
-        
         Removes this contact from a group.
-        
-        Arguments:
-          - group (Group)
-              * Required
      */    
     public void removeFromGroup(Group group) throws IOException
     {    
@@ -126,65 +103,7 @@ public class Contact extends Entity
     }
 
     /**
-        contact.queryMessages(options)
-        
         Queries messages sent or received by this contact.
-        
-        Arguments:
-          - options (JSONObject)
-            
-            - direction
-                * Filter messages by direction
-                * Allowed values: incoming, outgoing
-            
-            - message_type
-                * Filter messages by message_type
-                * Allowed values: sms, mms, ussd, call
-            
-            - source
-                * Filter messages by source
-                * Allowed values: phone, provider, web, api, service, webhook, scheduled
-            
-            - starred (bool)
-                * Filter messages by starred/unstarred
-            
-            - status
-                * Filter messages by status
-                * Allowed values: ignored, processing, received, sent, queued, failed,
-                    failed_queued, cancelled, delivered, not_delivered
-            
-            - time_created[min] (UNIX timestamp)
-                * Filter messages created on or after a particular time
-            
-            - time_created[max] (UNIX timestamp)
-                * Filter messages created before a particular time
-            
-            - contact_id
-                * ID of the contact who sent/received the message
-            
-            - phone_id
-                * ID of the phone that sent/received the message
-            
-            - sort
-                * Sort the results based on a field
-                * Allowed values: default
-                * Default: default
-            
-            - sort_dir
-                * Sort the results in ascending or descending order
-                * Allowed values: asc, desc
-                * Default: asc
-            
-            - page_size (int)
-                * Number of results returned per page (max 200)
-                * Default: 50
-            
-            - offset (int)
-                * Number of items to skip from beginning of result set
-                * Default: 0
-          
-        Returns:
-            APICursor (of Message)
     */
     public APICursor<Message> queryMessages(JSONObject options)
     {
@@ -197,38 +116,7 @@ public class Contact extends Entity
     }
 
     /**
-        contact.queryGroups(options)
-        
         Queries groups for which this contact is a member.
-        
-        Arguments:
-          - options (JSONObject)
-            
-            - name
-                * Filter groups by name
-                * Allowed modifiers: name[ne], name[prefix], name[not_prefix], name[gte], name[gt],
-                    name[lt], name[lte]
-            
-            - sort
-                * Sort the results based on a field
-                * Allowed values: default, name
-                * Default: default
-            
-            - sort_dir
-                * Sort the results in ascending or descending order
-                * Allowed values: asc, desc
-                * Default: asc
-            
-            - page_size (int)
-                * Number of results returned per page (max 200)
-                * Default: 50
-            
-            - offset (int)
-                * Number of items to skip from beginning of result set
-                * Default: 0
-          
-        Returns:
-            APICursor (of Group)
     */
     public APICursor<Group> queryGroups(JSONObject options)
     {
@@ -241,47 +129,8 @@ public class Contact extends Entity
     }
 
     /**
-        contact.queryScheduledMessages(options)
-        
         Queries messages scheduled to this contact (not including messages scheduled to groups that
         this contact is a member of)
-        
-        Arguments:
-          - options (JSONObject)
-            
-            - message_type
-                * Filter scheduled messages by message_type
-                * Allowed values: sms, mms, ussd, call
-            
-            - time_created (UNIX timestamp)
-                * Filter scheduled messages by time_created
-                * Allowed modifiers: time_created[ne], time_created[min], time_created[max]
-            
-            - next_time (UNIX timestamp)
-                * Filter scheduled messages by next_time
-                * Allowed modifiers: next_time[exists], next_time[ne], next_time[min],
-                    next_time[max]
-            
-            - sort
-                * Sort the results based on a field
-                * Allowed values: default, name
-                * Default: default
-            
-            - sort_dir
-                * Sort the results in ascending or descending order
-                * Allowed values: asc, desc
-                * Default: asc
-            
-            - page_size (int)
-                * Number of results returned per page (max 200)
-                * Default: 50
-            
-            - offset (int)
-                * Number of items to skip from beginning of result set
-                * Default: 0
-          
-        Returns:
-            APICursor (of ScheduledMessage)
     */
     public APICursor<ScheduledMessage> queryScheduledMessages(JSONObject options)
     {
@@ -294,43 +143,7 @@ public class Contact extends Entity
     }
 
     /**
-        contact.queryDataRows(options)
-        
         Queries data rows associated with this contact (in any data table).
-        
-        Arguments:
-          - options (JSONObject)
-            
-            - time_created (UNIX timestamp)
-                * Filter data rows by the time they were created
-                * Allowed modifiers: time_created[ne], time_created[min], time_created[max]
-            
-            - vars (JSONObject)
-                * Filter data rows by value of a custom variable (e.g. vars[q1], vars[foo], etc.)
-                * Allowed modifiers: vars[foo][exists], vars[foo][ne], vars[foo][prefix],
-                    vars[foo][not_prefix], vars[foo][gte], vars[foo][gt], vars[foo][lt], vars[foo][lte],
-                    vars[foo][min], vars[foo][max]
-            
-            - sort
-                * Sort the results based on a field
-                * Allowed values: default
-                * Default: default
-            
-            - sort_dir
-                * Sort the results in ascending or descending order
-                * Allowed values: asc, desc
-                * Default: asc
-            
-            - page_size (int)
-                * Number of results returned per page (max 200)
-                * Default: 50
-            
-            - offset (int)
-                * Number of items to skip from beginning of result set
-                * Default: 0
-          
-        Returns:
-            APICursor (of DataRow)
     */
     public APICursor<DataRow> queryDataRows(JSONObject options)
     {
@@ -343,44 +156,7 @@ public class Contact extends Entity
     }
 
     /**
-        contact.queryServiceStates(options)
-        
         Queries this contact's current states for any service
-        
-        Arguments:
-          - options (JSONObject)
-            
-            - id
-                * Filter states by id
-                * Allowed modifiers: id[ne], id[prefix], id[not_prefix], id[gte], id[gt], id[lt],
-                    id[lte]
-            
-            - vars (JSONObject)
-                * Filter states by value of a custom variable (e.g. vars[email], vars[foo], etc.)
-                * Allowed modifiers: vars[foo][exists], vars[foo][ne], vars[foo][prefix],
-                    vars[foo][not_prefix], vars[foo][gte], vars[foo][gt], vars[foo][lt], vars[foo][lte],
-                    vars[foo][min], vars[foo][max]
-            
-            - sort
-                * Sort the results based on a field
-                * Allowed values: default
-                * Default: default
-            
-            - sort_dir
-                * Sort the results in ascending or descending order
-                * Allowed values: asc, desc
-                * Default: asc
-            
-            - page_size (int)
-                * Number of results returned per page (max 200)
-                * Default: 50
-            
-            - offset (int)
-                * Number of items to skip from beginning of result set
-                * Default: 0
-          
-        Returns:
-            APICursor (of ContactServiceState)
     */
     public APICursor<ContactServiceState> queryServiceStates(JSONObject options)
     {
@@ -393,8 +169,6 @@ public class Contact extends Entity
     }
 
     /**
-        contact.save()
-        
         Saves any fields or custom variables that have changed for this contact.
     */
     @Override
@@ -404,8 +178,6 @@ public class Contact extends Entity
     }
 
     /**
-        contact.delete()
-        
         Deletes this contact.
     */
     public void delete() throws IOException

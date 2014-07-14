@@ -6,8 +6,6 @@ import org.json.JSONObject;
 import org.json.JSONArray;
         
 /**
-    ScheduledMessage
-    
     Represents a scheduled message within Telerivet.
     
     Fields:
@@ -98,8 +96,6 @@ import org.json.JSONArray;
 public class ScheduledMessage extends Entity
 {
     /**
-        scheduled_msg.save()
-        
         Saves any fields or custom variables that have changed for this scheduled message.
     */
     @Override
@@ -109,8 +105,6 @@ public class ScheduledMessage extends Entity
     }
 
     /**
-        scheduled_msg.delete()
-        
         Cancels this scheduled message.
     */
     public void delete() throws IOException

@@ -6,8 +6,6 @@ import org.json.JSONObject;
 import org.json.JSONArray;
         
 /**
-    Route
-    
     Represents a custom route that can be used to send messages via one or more Phones.
     
     Note: Routing rules can currently only be configured via Telerivet's web UI.
@@ -33,8 +31,6 @@ import org.json.JSONArray;
 public class Route extends Entity
 {
     /**
-        route.save()
-        
         Saves any fields or custom variables that have changed for this route.
     */
     @Override

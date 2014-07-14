@@ -6,8 +6,6 @@ import org.json.JSONObject;
 import org.json.JSONArray;
         
 /**
-    ContactServiceState
-    
     Represents the current state of a particular contact for a particular Telerivet service.
     
     Some automated services (including polls) are 'stateful'. For polls,
@@ -64,8 +62,6 @@ import org.json.JSONArray;
 public class ContactServiceState extends Entity
 {
     /**
-        state.save()
-        
         Saves the state id and any custom variables for this contact. If the state id is null, this
         is equivalent to calling reset().
     */
@@ -76,8 +72,6 @@ public class ContactServiceState extends Entity
     }
 
     /**
-        state.reset()
-        
         Resets the state for this contact for this service.
     */
     public void reset() throws IOException

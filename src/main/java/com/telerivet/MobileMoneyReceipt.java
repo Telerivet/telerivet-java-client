@@ -6,8 +6,6 @@ import org.json.JSONObject;
 import org.json.JSONArray;
         
 /**
-    MobileMoneyReceipt
-    
     Represents a receipt received from a mobile money system such as Safaricom M-Pesa (Kenya),
     Vodacom M-Pesa (Tanzania), or Tigo Pesa (Tanzania).
     
@@ -100,8 +98,6 @@ import org.json.JSONArray;
 public class MobileMoneyReceipt extends Entity
 {
     /**
-        receipt.save()
-        
         Saves any fields or custom variables that have changed for this mobile money receipt.
     */
     @Override
@@ -111,8 +107,6 @@ public class MobileMoneyReceipt extends Entity
     }
 
     /**
-        receipt.delete()
-        
         Deletes this receipt.
     */
     public void delete() throws IOException

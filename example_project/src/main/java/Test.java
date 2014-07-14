@@ -62,7 +62,7 @@ public class Test {
             Message message = project.sendMessage(Util.options(
                 "to_number", toNumber,
                 "content", content
-            ));            
+            ));                        
             
             System.out.println("Message is " + message.getStatus() + ", message id=" + message.getId());            
         }

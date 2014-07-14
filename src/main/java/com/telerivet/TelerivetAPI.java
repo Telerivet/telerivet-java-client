@@ -59,18 +59,12 @@ public class TelerivetAPI {
     private HttpClient httpClient;
     
     /** 
-        TelerivetAPI tr = new TelerivetAPI(api_key)
-        
         Initializes a client handle to the Telerivet REST API.
         
         Each API key is associated with a Telerivet user account, and all
         API actions are performed with that user's permissions. If you want to restrict the
         permissions of an API client, simply add another user account at
         <https://telerivet.com/dashboard/users> with the desired permissions.
-        
-        Arguments:
-          - api_key (Your Telerivet API key; see <https://telerivet.com/dashboard/api>)
-              * Required
     */
     public TelerivetAPI(String apiKey)
     {
@@ -89,17 +83,7 @@ public class TelerivetAPI {
     }
        
     /**
-        tr.getProjectById(id)
-        
         Retrieves the Telerivet project with the given ID.
-        
-        Arguments:
-          - id
-              * ID of the project -- see <https://telerivet.com/dashboard/api>
-              * Required
-          
-        Returns:
-            Project
     */
     public Project getProjectById(String id) throws IOException
     {
@@ -107,17 +91,7 @@ public class TelerivetAPI {
     }
 
     /**
-        tr.initProjectById(id)
-        
         Initializes the Telerivet project with the given ID without making an API request.
-        
-        Arguments:
-          - id
-              * ID of the project -- see <https://telerivet.com/dashboard/api>
-              * Required
-          
-        Returns:
-            Project
     */
     public Project initProjectById(String id)
     {
@@ -125,38 +99,7 @@ public class TelerivetAPI {
     }
 
     /**
-        tr.queryProjects(options)
-        
         Queries projects accessible to the current user account.
-        
-        Arguments:
-          - options (JSONObject)
-            
-            - name
-                * Filter projects by name
-                * Allowed modifiers: name[ne], name[prefix], name[not_prefix], name[gte], name[gt],
-                    name[lt], name[lte]
-            
-            - sort
-                * Sort the results based on a field
-                * Allowed values: default, name
-                * Default: default
-            
-            - sort_dir
-                * Sort the results in ascending or descending order
-                * Allowed values: asc, desc
-                * Default: asc
-            
-            - page_size (int)
-                * Number of results returned per page (max 200)
-                * Default: 50
-            
-            - offset (int)
-                * Number of items to skip from beginning of result set
-                * Default: 0
-          
-        Returns:
-            APICursor (of Project)
     */
     public APICursor<Project> queryProjects(JSONObject options)
     {
