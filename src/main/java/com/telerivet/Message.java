@@ -113,6 +113,10 @@ import org.json.JSONArray;
           * ID of the contact that sent or received the message
           * Read-only
       
+      - route_id (string, max 34 characters)
+          * ID of the route that sent the message (if applicable)
+          * Read-only
+      
       - project_id
           * ID of the project this contact belongs to
           * Read-only
@@ -192,6 +196,27 @@ public class Message extends Entity
     public void save() throws IOException
     {
         super.save();
+    }
+
+    /**
+        Resends a message, for example if the message failed to send or if it was not delivered. If
+        the message was originally in the queued, retrying, failed, or cancelled states, then
+        Telerivet will return the same message object. Otherwise, Telerivet will create and return a
+        new message object.
+    */
+    public Message resend(JSONObject options) throws IOException
+    {
+        return new Message(api, (JSONObject) api.doRequest("POST", getBaseApiPath() + "/resend", options));
+    }
+
+    /**
+        Cancels sending a message that has not yet been sent. Returns the updated message object.
+        Only valid for outgoing messages that are currently in the queued, retrying, or cancelled
+        states. For other messages, the API will return an error with the code 'not_cancellable'.
+    */
+    public Message cancel() throws IOException
+    {
+        return new Message(api, (JSONObject) api.doRequest("POST", getBaseApiPath() + "/cancel"));
     }
 
     /**
@@ -310,6 +335,11 @@ public class Message extends Entity
     public String getContactId()
     {
         return (String) get("contact_id");
+    }
+
+    public String getRouteId()
+    {
+        return (String) get("route_id");
     }
 
     public String getProjectId()

@@ -61,6 +61,15 @@ public class Project extends Entity
     }
 
     /**
+        Add an incoming message to Telerivet. Acts the same as if the message was received by a
+        phone. Also triggers any automated services that apply to the message.
+    */
+    public Message receiveMessage(JSONObject options) throws IOException
+    {
+        return new Message(api, (JSONObject) api.doRequest("POST", getBaseApiPath() + "/messages/receive", options));
+    }
+
+    /**
         Retrieves OR creates and possibly updates a contact by name or phone number.
         
         If a phone number is provided, Telerivet will search for an existing

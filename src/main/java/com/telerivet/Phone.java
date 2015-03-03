@@ -30,6 +30,11 @@ import org.json.JSONArray;
           * 2-letter country code (ISO 3166-1 alpha-2) where phone is from
           * Read-only
       
+      - send_paused (bool)
+          * True if sending messages is currently paused, false if the phone can currently send
+              messages
+          * Updatable via API
+      
       - time_created (UNIX timestamp)
           * Time the phone was created in Telerivet
           * Read-only
@@ -145,6 +150,16 @@ public class Phone extends Entity
     public String getCountry()
     {
         return (String) get("country");
+    }
+
+    public Boolean getSendPaused()
+    {
+        return (Boolean) get("send_paused");
+    }
+
+    public void setSendPaused(Boolean value)
+    {
+        set("send_paused", value);
     }
 
     public Long getTimeCreated()
