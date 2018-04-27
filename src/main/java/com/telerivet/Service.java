@@ -6,87 +6,115 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 
 /**
-    Represents an automated service on Telerivet, for example a poll, auto-reply, webhook
-    service, etc.
+    <p>Represents an automated service on Telerivet, for example a poll, auto-reply, webhook
+    service, etc.</p>
     
-    A service, generally, defines some automated behavior that can be
+    <p>A service, generally, defines some automated behavior that can be
     invoked/triggered in a particular context, and may be invoked either manually or when a
-    particular event occurs.
+    particular event occurs.</p>
     
-    Most commonly, services work in the context of a particular message, when
-    the message is originally received by Telerivet.
+    <p>Most commonly, services work in the context of a particular message, when
+    the message is originally received by Telerivet.</p>
     
-    Fields:
+    <p>Fields:</p>
     
-      - id (string, max 34 characters)
-          * ID of the service
-          * Read-only
-      
-      - name
-          * Name of the service
-          * Updatable via API
-      
-      - active (bool)
-          * Whether the service is active or inactive. Inactive services are not automatically
-              triggered and cannot be invoked via the API.
-          * Updatable via API
-      
-      - priority (int)
-          * A number that determines the order that services are triggered when a particular
-              event occurs (smaller numbers are triggered first). Any service can determine whether
-              or not execution "falls-through" to subsequent services (with larger priority values)
-              by setting the return_value variable within Telerivet's Rules Engine.
-          * Updatable via API
-      
-      - contexts (JSONObject)
-          * A key/value map where the keys are the names of contexts supported by this service
-              (e.g. message, contact), and the values are themselves key/value maps where the keys
-              are event names and the values are all true. (This structure makes it easy to test
-              whether a service can be invoked for a particular context and event.)
-          * Read-only
-      
-      - vars (JSONObject)
-          * Custom variables stored for this service
-          * Updatable via API
-      
-      - project_id
-          * ID of the project this service belongs to
-          * Read-only
-      
-      - label_id
-          * ID of the label containing messages sent or received by this service (currently only
-              used for polls)
-          * Read-only
-      
-      - response_table_id
-          * ID of the data table where responses to this service will be stored (currently only
-              used for polls)
-          * Read-only
-      
-      - sample_group_id
-          * ID of the group containing contacts that have been invited to interact with this
-              service (currently only used for polls)
-          * Read-only
-      
-      - respondent_group_id
-          * ID of the group containing contacts that have completed an interaction with this
-              service (currently only used for polls)
-          * Read-only
-      
-      - questions (array)
-          * Array of objects describing each question in a poll (only used for polls). Each
-              object has the properties "id" (the question ID), "content" (the text of the
-              question), and "question_type" (either "multiple_choice", "missed_call", or "open").
-          * Read-only
+    <ul>
+    <li><p>id (string, max 34 characters)</p>
+    
+    <ul>
+    <li>ID of the service</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>name</p>
+    
+    <ul>
+    <li>Name of the service</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>active (bool)</p>
+    
+    <ul>
+    <li>Whether the service is active or inactive. Inactive services are not automatically
+      triggered and cannot be invoked via the API.</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>priority (int)</p>
+    
+    <ul>
+    <li>A number that determines the order that services are triggered when a particular
+      event occurs (smaller numbers are triggered first). Any service can determine whether
+      or not execution "falls-through" to subsequent services (with larger priority values)
+      by setting the return_value variable within Telerivet's Rules Engine.</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>contexts (JSONObject)</p>
+    
+    <ul>
+    <li>A key/value map where the keys are the names of contexts supported by this service
+      (e.g. message, contact), and the values are themselves key/value maps where the keys
+      are event names and the values are all true. (This structure makes it easy to test
+      whether a service can be invoked for a particular context and event.)</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>vars (JSONObject)</p>
+    
+    <ul>
+    <li>Custom variables stored for this service</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>project_id</p>
+    
+    <ul>
+    <li>ID of the project this service belongs to</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>label_id</p>
+    
+    <ul>
+    <li>ID of the label containing messages sent or received by this service (currently only
+      used for polls)</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>response<em>table</em>id</p>
+    
+    <ul>
+    <li>ID of the data table where responses to this service will be stored (currently only
+      used for polls)</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>sample<em>group</em>id</p>
+    
+    <ul>
+    <li>ID of the group containing contacts that have been invited to interact with this
+      service (currently only used for polls)</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>respondent<em>group</em>id</p>
+    
+    <ul>
+    <li>ID of the group containing contacts that have completed an interaction with this
+      service (currently only used for polls)</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>questions (array)</p>
+    
+    <ul>
+    <li>Array of objects describing each question in a poll (only used for polls). Each
+      object has the properties <code>"id"</code> (the question ID), <code>"content"</code> (the text of the
+      question), and <code>"question_type"</code> (either <code>"multiple_choice"</code>, <code>"missed_call"</code>, or
+      <code>"open"</code>).</li>
+    <li>Read-only</li>
+    </ul></li>
+    </ul>
  */
 public class Service extends Entity 
 {    
     /**
-        Gets the current state for a particular contact for this service.
+        <p>Gets the current state for a particular contact for this service.</p>
         
-        If the contact doesn't already have a state, this method will return
+        <p>If the contact doesn't already have a state, this method will return
         a valid state object with id=null. However this object would not be returned by
-        queryContactStates() unless it is saved with a non-null state id.
+        queryContactStates() unless it is saved with a non-null state id.</p>
      */
     public ContactServiceState getContactState(Contact contact) throws IOException
     {
@@ -94,8 +122,8 @@ public class Service extends Entity
     }
     
     /**
-        Initializes or updates the current state for a particular contact for the given service. If
-        the state id is null, the contact's state will be reset.
+        <p>Initializes or updates the current state for a particular contact for the given service. If
+        the state id is null, the contact's state will be reset.</p>
      */
     public ContactServiceState setContactState(Contact contact, JSONObject options) throws IOException
     {
@@ -103,7 +131,7 @@ public class Service extends Entity
     }    
         
     /**
-        Resets the current state for a particular contact for the given service.
+        <p>Resets the current state for a particular contact for the given service.</p>
      */
     public ContactServiceState resetContactState(Contact contact) throws IOException
     {
@@ -111,16 +139,16 @@ public class Service extends Entity
     }            
     
     /**
-        Manually invoke this service in a particular context.
+        <p>Manually invoke this service in a particular context.</p>
         
-        For example, to send a poll to a particular contact (or resend the
-        current question), you can invoke the poll service with context=contact, and contact_id as
-        the ID of the contact to send the poll to.
+        <p>For example, to send a poll to a particular contact (or resend the
+        current question), you can invoke the poll service with context=contact, and <code>contact_id</code> as
+        the ID of the contact to send the poll to.</p>
         
-        Or, to manually apply a service for an incoming message, you can
-        invoke the service with context=message, event=incoming\_message, and message_id as the ID
-        of the incoming message. (This is normally not necessary, but could be used if you want to
-        override Telerivet's standard priority-ordering of services.)
+        <p>Or, to manually apply a service for an incoming message, you can
+        invoke the service with <code>context</code>=<code>message</code>, <code>event</code>=<code>incoming_message</code>, and <code>message_id</code> as
+        the ID of the incoming message. (This is normally not necessary, but could be used if you
+        want to override Telerivet's standard priority-ordering of services.)</p>
     */
     public JSONObject invoke(JSONObject options) throws IOException
     {
@@ -128,7 +156,7 @@ public class Service extends Entity
     }
 
     /**
-        Query the current states of contacts for this service.
+        <p>Query the current states of contacts for this service.</p>
     */
     public APICursor<ContactServiceState> queryContactStates(JSONObject options)
     {
@@ -141,7 +169,7 @@ public class Service extends Entity
     }
 
     /**
-        Saves any fields or custom variables that have changed for this service.
+        <p>Saves any fields or custom variables that have changed for this service.</p>
     */
     @Override
     public void save() throws IOException
@@ -229,7 +257,7 @@ public class Service extends Entity
     {
         this(api, data, true);
     }
-    
+
     public Service(TelerivetAPI api, JSONObject data, boolean isLoaded)
     {
         super(api, data, isLoaded);

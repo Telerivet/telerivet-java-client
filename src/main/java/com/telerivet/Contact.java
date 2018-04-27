@@ -8,55 +8,114 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 
 /**
-    Fields:
+    <p>Fields:</p>
     
-      - id (string, max 34 characters)
-          * ID of the contact
-          * Read-only
-      
-      - name
-          * Name of the contact
-          * Updatable via API
-      
-      - phone_number (string)
-          * Phone number of the contact
-          * Updatable via API
-      
-      - time_created (UNIX timestamp)
-          * Time the contact was added in Telerivet
-          * Read-only
-      
-      - last_message_time (UNIX timestamp)
-          * Last time the contact sent or received a message (null if no messages have been sent
-              or received)
-          * Read-only
-      
-      - last_message_id
-          * ID of the last message sent or received by this contact (null if no messages have
-              been sent or received)
-          * Read-only
-      
-      - default_route_id
-          * ID of the phone or route that Telerivet will use by default to send messages to this
-              contact (null if using project default route)
-          * Updatable via API
-      
-      - group_ids (array of strings)
-          * List of IDs of groups that this contact belongs to
-          * Read-only
-      
-      - vars (JSONObject)
-          * Custom variables stored for this contact
-          * Updatable via API
-      
-      - project_id
-          * ID of the project this contact belongs to
-          * Read-only
+    <ul>
+    <li><p>id (string, max 34 characters)</p>
+    
+    <ul>
+    <li>ID of the contact</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>name</p>
+    
+    <ul>
+    <li>Name of the contact</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>phone_number (string)</p>
+    
+    <ul>
+    <li>Phone number of the contact</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>time_created (UNIX timestamp)</p>
+    
+    <ul>
+    <li>Time the contact was added in Telerivet</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>send_blocked (bool)</p>
+    
+    <ul>
+    <li>True if Telerivet is blocked from sending messages to this contact</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>last<em>message</em>time (UNIX timestamp)</p>
+    
+    <ul>
+    <li>Last time the contact sent or received a message (null if no messages have been sent
+      or received)</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>last<em>incoming</em>message_time (UNIX timestamp)</p>
+    
+    <ul>
+    <li>Last time a message was received from this contact</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>last<em>outgoing</em>message_time (UNIX timestamp)</p>
+    
+    <ul>
+    <li>Last time a message was sent to this contact</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>message_count (int)</p>
+    
+    <ul>
+    <li>Total number of non-deleted messages sent to or received from this contact</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>incoming<em>message</em>count (int)</p>
+    
+    <ul>
+    <li>Number of messages received from this contact</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>outgoing<em>message</em>count (int)</p>
+    
+    <ul>
+    <li>Number of messages sent to this contact</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>last<em>message</em>id</p>
+    
+    <ul>
+    <li>ID of the last message sent to or received from this contact (null if no messages
+      have been sent or received)</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>default<em>route</em>id</p>
+    
+    <ul>
+    <li>ID of the phone or route that Telerivet will use by default to send messages to this
+      contact (null if using project default route)</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>group_ids (array of strings)</p>
+    
+    <ul>
+    <li>List of IDs of groups that this contact belongs to</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>vars (JSONObject)</p>
+    
+    <ul>
+    <li>Custom variables stored for this contact</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>project_id</p>
+    
+    <ul>
+    <li>ID of the project this contact belongs to</li>
+    <li>Read-only</li>
+    </ul></li>
+    </ul>
  */
 public class Contact extends Entity 
 {    
     /**
-        Returns true if this contact is in a particular group, false otherwise.
+        <p>Returns true if this contact is in a particular group, false otherwise.</p>
      */
     public boolean isInGroup(Group group)
     {
@@ -65,7 +124,7 @@ public class Contact extends Entity
     }
       
     /**
-        Adds this contact to a group.
+        <p>Adds this contact to a group.</p>
      */
     public void addToGroup(Group group) throws IOException
     {
@@ -74,7 +133,7 @@ public class Contact extends Entity
     }
     
     /**
-        Removes this contact from a group.
+        <p>Removes this contact from a group.</p>
      */    
     public void removeFromGroup(Group group) throws IOException
     {    
@@ -103,7 +162,7 @@ public class Contact extends Entity
     }
 
     /**
-        Queries messages sent or received by this contact.
+        <p>Queries messages sent or received by this contact.</p>
     */
     public APICursor<Message> queryMessages(JSONObject options)
     {
@@ -116,7 +175,7 @@ public class Contact extends Entity
     }
 
     /**
-        Queries groups for which this contact is a member.
+        <p>Queries groups for which this contact is a member.</p>
     */
     public APICursor<Group> queryGroups(JSONObject options)
     {
@@ -129,8 +188,8 @@ public class Contact extends Entity
     }
 
     /**
-        Queries messages scheduled to this contact (not including messages scheduled to groups that
-        this contact is a member of)
+        <p>Queries messages scheduled to this contact (not including messages scheduled to groups that
+        this contact is a member of)</p>
     */
     public APICursor<ScheduledMessage> queryScheduledMessages(JSONObject options)
     {
@@ -143,7 +202,7 @@ public class Contact extends Entity
     }
 
     /**
-        Queries data rows associated with this contact (in any data table).
+        <p>Queries data rows associated with this contact (in any data table).</p>
     */
     public APICursor<DataRow> queryDataRows(JSONObject options)
     {
@@ -156,7 +215,7 @@ public class Contact extends Entity
     }
 
     /**
-        Queries this contact's current states for any service
+        <p>Queries this contact's current states for any service</p>
     */
     public APICursor<ContactServiceState> queryServiceStates(JSONObject options)
     {
@@ -169,7 +228,7 @@ public class Contact extends Entity
     }
 
     /**
-        Saves any fields or custom variables that have changed for this contact.
+        <p>Saves any fields or custom variables that have changed for this contact.</p>
     */
     @Override
     public void save() throws IOException
@@ -178,7 +237,7 @@ public class Contact extends Entity
     }
 
     /**
-        Deletes this contact.
+        <p>Deletes this contact.</p>
     */
     public void delete() throws IOException
     {
@@ -215,9 +274,44 @@ public class Contact extends Entity
         return Util.toLong(get("time_created"));
     }
 
+    public Boolean getSendBlocked()
+    {
+        return (Boolean) get("send_blocked");
+    }
+
+    public void setSendBlocked(Boolean value)
+    {
+        set("send_blocked", value);
+    }
+
     public Long getLastMessageTime()
     {
         return Util.toLong(get("last_message_time"));
+    }
+
+    public Long getLastIncomingMessageTime()
+    {
+        return Util.toLong(get("last_incoming_message_time"));
+    }
+
+    public Long getLastOutgoingMessageTime()
+    {
+        return Util.toLong(get("last_outgoing_message_time"));
+    }
+
+    public Integer getMessageCount()
+    {
+        return (Integer) get("message_count");
+    }
+
+    public Integer getIncomingMessageCount()
+    {
+        return (Integer) get("incoming_message_count");
+    }
+
+    public Integer getOutgoingMessageCount()
+    {
+        return (Integer) get("outgoing_message_count");
     }
 
     public String getLastMessageId()
@@ -255,7 +349,7 @@ public class Contact extends Entity
     {
         this(api, data, true);
     }
-    
+
     public Contact(TelerivetAPI api, JSONObject data, boolean isLoaded)
     {
         super(api, data, isLoaded);

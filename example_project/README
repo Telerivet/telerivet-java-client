@@ -5,15 +5,11 @@ then sends the message via Telerivet.
 
 Usage:
 
-1. Install Telerivet Java client library:
-    cd ..
-    mvn install
-    
-2. Build example project:
+1. Build example project:
     cd example_project
     mvn package
 
-3. Run example project:
+2. Run example project:
     java -jar target/TelerivetAPITest-bundle.jar
 
 Example output:

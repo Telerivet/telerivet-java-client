@@ -1,47 +1,59 @@
 
 package com.telerivet;
-        
+
 import java.io.IOException;
 import org.json.JSONObject;
 import org.json.JSONArray;
-        
+
 /**
-    Represents a custom data table that can store arbitrary rows.
+    <p>Represents a custom data table that can store arbitrary rows.</p>
     
-    For example, poll services use data tables to store a row for each
-    response.
+    <p>For example, poll services use data tables to store a row for each response.</p>
     
-    DataTables are schemaless -- each row simply stores custom variables. Each
+    <p>DataTables are schemaless -- each row simply stores custom variables. Each
     variable name is equivalent to a different "column" of the data table.
     Telerivet refers to these variables/columns as "fields", and automatically
-    creates a new field for each variable name used in a row of the table.
+    creates a new field for each variable name used in a row of the table.</p>
     
-    Fields:
+    <p>Fields:</p>
     
-      - id (string, max 34 characters)
-          * ID of the data table
-          * Read-only
-      
-      - name
-          * Name of the data table
-          * Updatable via API
-      
-      - num_rows (int)
-          * Number of rows in the table
-          * Read-only
-      
-      - vars (JSONObject)
-          * Custom variables stored for this data table
-          * Updatable via API
-      
-      - project_id
-          * ID of the project this data table belongs to
-          * Read-only
+    <ul>
+    <li><p>id (string, max 34 characters)</p>
+    
+    <ul>
+    <li>ID of the data table</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>name</p>
+    
+    <ul>
+    <li>Name of the data table</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>num_rows (int)</p>
+    
+    <ul>
+    <li>Number of rows in the table</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>vars (JSONObject)</p>
+    
+    <ul>
+    <li>Custom variables stored for this data table</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>project_id</p>
+    
+    <ul>
+    <li>ID of the project this data table belongs to</li>
+    <li>Read-only</li>
+    </ul></li>
+    </ul>
 */
 public class DataTable extends Entity
 {
     /**
-        Queries rows in this data table.
+        <p>Queries rows in this data table.</p>
     */
     public APICursor<DataRow> queryRows(JSONObject options)
     {
@@ -54,7 +66,7 @@ public class DataTable extends Entity
     }
 
     /**
-        Adds a new row to this data table.
+        <p>Adds a new row to this data table.</p>
     */
     public DataRow createRow(JSONObject options) throws IOException
     {
@@ -62,7 +74,7 @@ public class DataTable extends Entity
     }
 
     /**
-        Retrieves the row in the given table with the given ID.
+        <p>Retrieves the row in the given table with the given ID.</p>
     */
     public DataRow getRowById(String id) throws IOException
     {
@@ -70,7 +82,7 @@ public class DataTable extends Entity
     }
 
     /**
-        Initializes the row in the given table with the given ID, without making an API request.
+        <p>Initializes the row in the given table with the given ID, without making an API request.</p>
     */
     public DataRow initRowById(String id)
     {
@@ -78,9 +90,9 @@ public class DataTable extends Entity
     }
 
     /**
-        Gets a list of all fields (columns) defined for this data table. The return value is an
+        <p>Gets a list of all fields (columns) defined for this data table. The return value is an
         array of objects with the properties 'name' and 'variable'. (Fields are automatically
-        created any time a DataRow's 'vars' property is updated.)
+        created any time a DataRow's 'vars' property is updated.)</p>
     */
     public JSONArray getFields() throws IOException
     {
@@ -88,10 +100,10 @@ public class DataTable extends Entity
     }
 
     /**
-        Returns the number of rows for each value of a given variable. This can be used to get the
+        <p>Returns the number of rows for each value of a given variable. This can be used to get the
         total number of responses for each choice in a poll, without making a separate query for
         each response choice. The return value is an object mapping values to row counts, e.g.
-        `{"yes":7,"no":3}`
+        <code>{"yes":7,"no":3}</code></p>
     */
     public JSONObject countRowsByValue(String variable) throws IOException
     {
@@ -99,7 +111,7 @@ public class DataTable extends Entity
     }
 
     /**
-        Saves any fields that have changed for this data table.
+        <p>Saves any fields that have changed for this data table.</p>
     */
     @Override
     public void save() throws IOException
@@ -108,7 +120,7 @@ public class DataTable extends Entity
     }
 
     /**
-        Permanently deletes the given data table, including all its rows
+        <p>Permanently deletes the given data table, including all its rows</p>
     */
     public void delete() throws IOException
     {
@@ -150,7 +162,7 @@ public class DataTable extends Entity
     {
         this(api, data, true);
     }
-    
+
     public DataTable(TelerivetAPI api, JSONObject data, boolean isLoaded)
     {
         super(api, data, isLoaded);

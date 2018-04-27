@@ -1,52 +1,79 @@
 
 package com.telerivet;
-        
+
 import java.io.IOException;
 import org.json.JSONObject;
 import org.json.JSONArray;
-        
+
 /**
-    Represents a row in a custom data table.
+    <p>Represents a row in a custom data table.</p>
     
-    For example, each response to a poll is stored as one row in a data table.
+    <p>For example, each response to a poll is stored as one row in a data table.
     If a poll has a question with ID 'q1', the verbatim response to that question would be
-    stored in row.vars.q1, and the response code would be stored in row.vars.q1_code.
+    stored in row.vars.q1, and the response code would be stored in row.vars.q1_code.</p>
     
-    Each custom variable name within a data row corresponds to a different
-    column/field of the data table.
+    <p>Each custom variable name within a data row corresponds to a different
+    column/field of the data table.</p>
     
-    Fields:
+    <p>Fields:</p>
     
-      - id (string, max 34 characters)
-          * ID of the data row
-          * Read-only
-      
-      - contact_id
-          * ID of the contact this row is associated with (or null if not associated with any
-              contact)
-          * Updatable via API
-      
-      - from_number (string)
-          * Phone number that this row is associated with (or null if not associated with any
-              phone number)
-          * Updatable via API
-      
-      - vars (JSONObject)
-          * Custom variables stored for this data row
-          * Updatable via API
-      
-      - table_id
-          * ID of the table this data row belongs to
-          * Read-only
-      
-      - project_id
-          * ID of the project this data row belongs to
-          * Read-only
+    <ul>
+    <li><p>id (string, max 34 characters)</p>
+    
+    <ul>
+    <li>ID of the data row</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>contact_id</p>
+    
+    <ul>
+    <li>ID of the contact this row is associated with (or null if not associated with any
+      contact)</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>from_number (string)</p>
+    
+    <ul>
+    <li>Phone number that this row is associated with (or null if not associated with any
+      phone number)</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>vars (JSONObject)</p>
+    
+    <ul>
+    <li>Custom variables stored for this data row</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>time_created (UNIX timestamp)</p>
+    
+    <ul>
+    <li>The time this row was created in Telerivet</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>time_updated (UNIX timestamp)</p>
+    
+    <ul>
+    <li>The time this row was last updated in Telerivet</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>table_id</p>
+    
+    <ul>
+    <li>ID of the table this data row belongs to</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>project_id</p>
+    
+    <ul>
+    <li>ID of the project this data row belongs to</li>
+    <li>Read-only</li>
+    </ul></li>
+    </ul>
 */
 public class DataRow extends Entity
 {
     /**
-        Saves any fields or custom variables that have changed for this data row.
+        <p>Saves any fields or custom variables that have changed for this data row.</p>
     */
     @Override
     public void save() throws IOException
@@ -55,7 +82,7 @@ public class DataRow extends Entity
     }
 
     /**
-        Deletes this data row.
+        <p>Deletes this data row.</p>
     */
     public void delete() throws IOException
     {
@@ -87,6 +114,16 @@ public class DataRow extends Entity
         set("from_number", value);
     }
 
+    public Long getTimeCreated()
+    {
+        return Util.toLong(get("time_created"));
+    }
+
+    public Long getTimeUpdated()
+    {
+        return Util.toLong(get("time_updated"));
+    }
+
     public String getTableId()
     {
         return (String) get("table_id");
@@ -107,7 +144,7 @@ public class DataRow extends Entity
     {
         this(api, data, true);
     }
-    
+
     public DataRow(TelerivetAPI api, JSONObject data, boolean isLoaded)
     {
         super(api, data, isLoaded);

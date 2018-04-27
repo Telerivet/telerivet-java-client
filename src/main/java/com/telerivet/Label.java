@@ -1,39 +1,52 @@
 
 package com.telerivet;
-        
+
 import java.io.IOException;
 import org.json.JSONObject;
 import org.json.JSONArray;
-        
+
 /**
-    Represents a label used to organize messages within Telerivet.
+    <p>Represents a label used to organize messages within Telerivet.</p>
     
-    Fields:
+    <p>Fields:</p>
     
-      - id (string, max 34 characters)
-          * ID of the label
-          * Read-only
-      
-      - name
-          * Name of the label
-          * Updatable via API
-      
-      - time_created (UNIX timestamp)
-          * Time the label was created in Telerivet
-          * Read-only
-      
-      - vars (JSONObject)
-          * Custom variables stored for this label
-          * Updatable via API
-      
-      - project_id
-          * ID of the project this label belongs to
-          * Read-only
+    <ul>
+    <li><p>id (string, max 34 characters)</p>
+    
+    <ul>
+    <li>ID of the label</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>name</p>
+    
+    <ul>
+    <li>Name of the label</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>time_created (UNIX timestamp)</p>
+    
+    <ul>
+    <li>Time the label was created in Telerivet</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>vars (JSONObject)</p>
+    
+    <ul>
+    <li>Custom variables stored for this label</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>project_id</p>
+    
+    <ul>
+    <li>ID of the project this label belongs to</li>
+    <li>Read-only</li>
+    </ul></li>
+    </ul>
 */
 public class Label extends Entity
 {
     /**
-        Queries messages with the given label.
+        <p>Queries messages with the given label.</p>
     */
     public APICursor<Message> queryMessages(JSONObject options)
     {
@@ -46,7 +59,7 @@ public class Label extends Entity
     }
 
     /**
-        Saves any fields that have changed for the label.
+        <p>Saves any fields that have changed for the label.</p>
     */
     @Override
     public void save() throws IOException
@@ -55,7 +68,7 @@ public class Label extends Entity
     }
 
     /**
-        Deletes the given label (Note: no messages are deleted.)
+        <p>Deletes the given label (Note: no messages are deleted.)</p>
     */
     public void delete() throws IOException
     {
@@ -97,7 +110,7 @@ public class Label extends Entity
     {
         this(api, data, true);
     }
-    
+
     public Label(TelerivetAPI api, JSONObject data, boolean isLoaded)
     {
         super(api, data, isLoaded);

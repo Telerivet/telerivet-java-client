@@ -1,37 +1,48 @@
 
 package com.telerivet;
-        
+
 import java.io.IOException;
 import org.json.JSONObject;
 import org.json.JSONArray;
-        
+
 /**
-    Represents a custom route that can be used to send messages via one or more Phones.
+    <p>Represents a custom route that can be used to send messages via one or more Phones.</p>
     
-    Note: Routing rules can currently only be configured via Telerivet's web UI.
+    <p>Note: Routing rules can currently only be configured via Telerivet's web UI.</p>
     
-    Fields:
+    <p>Fields:</p>
     
-      - id (string, max 34 characters)
-          * Telerivet's internal ID for the route
-          * Read-only
-      
-      - name
-          * The name of the route
-          * Updatable via API
-      
-      - vars (JSONObject)
-          * Custom variables stored for this route
-          * Updatable via API
-      
-      - project_id
-          * ID of the project this route belongs to
-          * Read-only
+    <ul>
+    <li><p>id (string, max 34 characters)</p>
+    
+    <ul>
+    <li>Telerivet's internal ID for the route</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>name</p>
+    
+    <ul>
+    <li>The name of the route</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>vars (JSONObject)</p>
+    
+    <ul>
+    <li>Custom variables stored for this route</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>project_id</p>
+    
+    <ul>
+    <li>ID of the project this route belongs to</li>
+    <li>Read-only</li>
+    </ul></li>
+    </ul>
 */
 public class Route extends Entity
 {
     /**
-        Saves any fields or custom variables that have changed for this route.
+        <p>Saves any fields or custom variables that have changed for this route.</p>
     */
     @Override
     public void save() throws IOException
@@ -69,7 +80,7 @@ public class Route extends Entity
     {
         this(api, data, true);
     }
-    
+
     public Route(TelerivetAPI api, JSONObject data, boolean isLoaded)
     {
         super(api, data, isLoaded);

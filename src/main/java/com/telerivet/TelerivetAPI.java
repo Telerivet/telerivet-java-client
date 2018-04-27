@@ -47,43 +47,43 @@ import org.json.JSONTokener;
  * @author youngj
  */
 public class TelerivetAPI {
-    public static String CLIENT_VERSION = "1.0.2";
-    
+    public static String CLIENT_VERSION = "1.3.1";
+
     public static final int HTTP_CONNECTION_TIMEOUT = 10000; // ms
-    public static final int HTTP_SOCKET_TIMEOUT = 10000; // ms    
-    
+    public static final int HTTP_SOCKET_TIMEOUT = 10000; // ms
+
     protected String apiKey;
     protected String apiUrl;
     protected int numRequests = 0;
-    
+
     private HttpClient httpClient;
-    
-    /** 
-        Initializes a client handle to the Telerivet REST API.
+
+    /**
+        <p>Initializes a client handle to the Telerivet REST API.</p>
         
-        Each API key is associated with a Telerivet user account, and all
+        <p>Each API key is associated with a Telerivet user account, and all
         API actions are performed with that user's permissions. If you want to restrict the
         permissions of an API client, simply add another user account at
-        <https://telerivet.com/dashboard/users> with the desired permissions.
+        <a href="https://telerivet.com/dashboard/users">https://telerivet.com/dashboard/users</a> with the desired permissions.</p>
     */
     public TelerivetAPI(String apiKey)
     {
         this(apiKey, "https://api.telerivet.com/v1");
     }
-    
+
     public TelerivetAPI(String apiKey, String apiUrl)
     {
         this.apiKey = apiKey;
         this.apiUrl = apiUrl;
     }
-    
+
     public int getNumRequests()
     {
         return this.numRequests;
     }
-       
+
     /**
-        Retrieves the Telerivet project with the given ID.
+        <p>Retrieves the Telerivet project with the given ID.</p>
     */
     public Project getProjectById(String id) throws IOException
     {
@@ -91,7 +91,7 @@ public class TelerivetAPI {
     }
 
     /**
-        Initializes the Telerivet project with the given ID without making an API request.
+        <p>Initializes the Telerivet project with the given ID without making an API request.</p>
     */
     public Project initProjectById(String id)
     {
@@ -99,7 +99,7 @@ public class TelerivetAPI {
     }
 
     /**
-        Queries projects accessible to the current user account.
+        <p>Queries projects accessible to the current user account.</p>
     */
     public APICursor<Project> queryProjects(JSONObject options)
     {
@@ -111,16 +111,44 @@ public class TelerivetAPI {
         return queryProjects(null);
     }
 
+    /**
+        <p>Retrieves the Telerivet organization with the given ID.</p>
+    */
+    public Organization getOrganizationById(String id) throws IOException
+    {
+        return new Organization(this, (JSONObject) this.doRequest("GET", getBaseApiPath() + "/organizations/" + id));
+    }
+
+    /**
+        <p>Initializes the Telerivet organization with the given ID without making an API request.</p>
+    */
+    public Organization initOrganizationById(String id)
+    {
+        return new Organization(this, Util.options("id", id), false);
+    }
+
+    /**
+        <p>Queries organizations accessible to the current user account.</p>
+    */
+    public APICursor<Organization> queryOrganizations(JSONObject options)
+    {
+        return this.newCursor(Organization.class, getBaseApiPath() + "/organizations", options);
+    }
+
+    public APICursor<Organization> queryOrganizations()
+    {
+        return queryOrganizations(null);
+    }
+
     public String getBaseApiPath()
     {
         return "";
     }
-   
     protected <T extends Entity> APICursor<T> newCursor(Class<T> itemClass, String path, JSONObject options)
     {
         return new APICursor<T>(this, itemClass, path, options);
     }
-    
+
     private void encodeParamsRec(String paramName, Object value, List<BasicNameValuePair> paramArr) throws JSONException
     {
         if (value == null || value.equals(JSONObject.NULL))
@@ -147,28 +175,28 @@ public class TelerivetAPI {
             }
         }
         else if (value instanceof Number)
-        {           
+        {
             Number num = (Number)value;
             int intValue = num.intValue();
             if ((double)intValue == num.doubleValue())
             {
-                paramArr.add(new BasicNameValuePair(paramName, "" + intValue));   
+                paramArr.add(new BasicNameValuePair(paramName, "" + intValue));
             }
             else
             {
                 paramArr.add(new BasicNameValuePair(paramName, value.toString()));
-            }            
+            }
         }
         else
         {
             paramArr.add(new BasicNameValuePair(paramName, value.toString()));
         }
     }
-    
+
     private List<BasicNameValuePair> encodeParams(JSONObject jsonOptions) throws JSONException
     {
         List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-            
+
         Iterator keysIter = jsonOptions.keys();
         while(keysIter.hasNext())
         {
@@ -176,18 +204,18 @@ public class TelerivetAPI {
             encodeParamsRec(key, jsonOptions.get(key), params);
         }
         return params;
-    }    
-        
+    }
+
     public Object doRequest(String method, String path) throws IOException
     {
         return doRequest(method, path, null);
     }
-    
+
     public Object doRequest(String method, String path, JSONObject params) throws IOException
     {
-        HttpUriRequest request;     
+        HttpUriRequest request;
         String url = apiUrl + path;
-        
+
         if ("POST".equals(method) || "PUT".equals(method))
         {
             HttpEntityEnclosingRequestBase entityRequest;
@@ -198,8 +226,8 @@ public class TelerivetAPI {
             else
             {
                 entityRequest = new HttpPost(url);
-            }            
-            
+            }
+
             entityRequest.setHeader("Content-Type", "application/json");
             if (params != null)
             {
@@ -211,69 +239,69 @@ public class TelerivetAPI {
         {
             if (params != null && params.length() > 0)
             {
-                url = url + "?" + URLEncodedUtils.format(encodeParams(params), "UTF-8");                
+                url = url + "?" + URLEncodedUtils.format(encodeParams(params), "UTF-8");
             }
-            
+
             if ("GET".equals(method))
             {
-                request = new HttpGet(url); 
-            }            
+                request = new HttpGet(url);
+            }
             else if ("DELETE".equals(method))
             {
                 request = new HttpDelete(url);
             }
             else
             {
-                throw new InvalidParameterException("Invalid HTTP method");        
+                throw new InvalidParameterException("Invalid HTTP method");
             }
         }
-        
+
         return doRequest(request);
     }
-                
+
     private Object doRequest(HttpUriRequest request) throws UnsupportedEncodingException, JSONException, IOException
-    {                        
+    {
         String authParams = apiKey + ":";
-        
+
         Base64 base64 = new Base64();
         String authString = base64.encodeToString(authParams.getBytes("UTF-8"));
-        
+
         request.addHeader("Authorization", "Basic " + authString);
         request.setHeader("User-Agent", "Telerivet Java Client/" + CLIENT_VERSION + " Java/" + System.getProperty("java.version"));
-        
-        HttpClient client = getHttpClient();                
-        
+
+        HttpClient client = getHttpClient();
+
         HttpResponse response;
-        
+
         this.numRequests++;
-        
+
         try
-        {            
-            response = client.execute(request);        
+        {
+            response = client.execute(request);
         }
         catch (UnknownHostException ex)
         {
             throw new IOException("Could not connect to Telerivet API: " + ex.getMessage());
-        }        
+        }
         catch (IOException ex)
         {
             throw new IOException("Could not connect to Telerivet API: " + ex.getMessage());
         }
-        
+
         int statusCode = response.getStatusLine().getStatusCode();
-        
+
         String responseStr = EntityUtils.toString(response.getEntity());
-                
+
         Object responseData = new JSONTokener(responseStr).nextValue();
-                        
+
         if (statusCode == 200)
-        {            
+        {
             return responseData;
         }
-        else 
+        else
         {
             JSONObject responseObj = (JSONObject)responseData;
-        
+
             JSONObject error = responseObj.optJSONObject("error");
             if (error != null)
             {
@@ -285,10 +313,10 @@ public class TelerivetAPI {
                 }
                 else if ("not_found".equals(code))
                 {
-                    throw new TelerivetNotFoundException(message, code);                    
+                    throw new TelerivetNotFoundException(message, code);
                 }
                 else
-                {                                
+                {
                     throw new TelerivetAPIException(message, code);
                 }
             }
@@ -297,38 +325,38 @@ public class TelerivetAPI {
                 throw new TelerivetAPIException("Telerivet API error (HTTP " + statusCode + ")", null);
             }
         }
-    }            
-    
+    }
+
     private HttpClient getHttpClient()
     {
         if (httpClient == null)
         {
             // via http://thinkandroid.wordpress.com/2009/12/31/creating-an-http-client-example/
             // also http://hc.apache.org/httpclient-3.x/threading.html
-            
-            HttpParams httpParams = getDefaultHttpParams();            
-            
-            SchemeRegistry registry = new SchemeRegistry();            
+
+            HttpParams httpParams = getDefaultHttpParams();
+
+            SchemeRegistry registry = new SchemeRegistry();
             registry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
-            
-            final SSLSocketFactory sslSocketFactory = SSLSocketFactory.getSocketFactory();            
+
+            final SSLSocketFactory sslSocketFactory = SSLSocketFactory.getSocketFactory();
             sslSocketFactory.setHostnameVerifier(SSLSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER);
-            
+
             registry.register(new Scheme("https", sslSocketFactory, 443));
 
-            ThreadSafeClientConnManager manager = new ThreadSafeClientConnManager(httpParams, registry);            
-            
-            httpClient = new DefaultHttpClient(manager, httpParams);        
+            ThreadSafeClientConnManager manager = new ThreadSafeClientConnManager(httpParams, registry);
+
+            httpClient = new DefaultHttpClient(manager, httpParams);
         }
         return httpClient;
     }
-    
+
     private HttpParams getDefaultHttpParams()
     {
         HttpParams httpParams = new BasicHttpParams();
         HttpConnectionParams.setConnectionTimeout(httpParams, HTTP_CONNECTION_TIMEOUT);
-        HttpConnectionParams.setSoTimeout(httpParams, HTTP_SOCKET_TIMEOUT);                    
-        HttpProtocolParams.setContentCharset(httpParams, "UTF-8");            
+        HttpConnectionParams.setSoTimeout(httpParams, HTTP_SOCKET_TIMEOUT);
+        HttpProtocolParams.setContentCharset(httpParams, "UTF-8");
         return httpParams;
     }
 }

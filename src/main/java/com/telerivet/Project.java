@@ -1,40 +1,63 @@
 
 package com.telerivet;
-        
+
 import java.io.IOException;
 import org.json.JSONObject;
 import org.json.JSONArray;
-        
+
 /**
-    Represents a Telerivet project.
+    <p>Represents a Telerivet project.</p>
     
-    Provides methods for sending and scheduling messages, as well as
+    <p>Provides methods for sending and scheduling messages, as well as
     accessing, creating and updating a variety of entities, including contacts, messages,
-    scheduled messages, groups, labels, phones, services, and data tables.
+    scheduled messages, groups, labels, phones, services, and data tables.</p>
     
-    Fields:
+    <p>Fields:</p>
     
-      - id (string, max 34 characters)
-          * ID of the project
-          * Read-only
-      
-      - name
-          * Name of the project
-          * Updatable via API
-      
-      - timezone_id
-          * Default TZ database timezone ID; see
-              <http://en.wikipedia.org/wiki/List_of_tz_database_time_zones>
-          * Read-only
-      
-      - vars (JSONObject)
-          * Custom variables stored for this project
-          * Updatable via API
+    <ul>
+    <li><p>id (string, max 34 characters)</p>
+    
+    <ul>
+    <li>ID of the project</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>name</p>
+    
+    <ul>
+    <li>Name of the project</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>timezone_id</p>
+    
+    <ul>
+    <li>Default TZ database timezone ID; see
+      <a href="http://en.wikipedia.org/wiki/List_of_tz_database_time_zones">http://en.wikipedia.org/wiki/List_of_tz_database_time_zones</a></li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>url_slug</p>
+    
+    <ul>
+    <li>Unique string used as a component of the project's URL in the Telerivet web app</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>vars (JSONObject)</p>
+    
+    <ul>
+    <li>Custom variables stored for this project</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>organization_id (string, max 34 characters)</p>
+    
+    <ul>
+    <li>ID of the organization this project belongs to</li>
+    <li>Read-only</li>
+    </ul></li>
+    </ul>
 */
 public class Project extends Entity
 {
     /**
-        Sends one message (SMS or USSD request).
+        <p>Sends one message (SMS, voice call, or USSD request).</p>
     */
     public Message sendMessage(JSONObject options) throws IOException
     {
@@ -42,8 +65,8 @@ public class Project extends Entity
     }
 
     /**
-        Sends an SMS message (optionally with mail-merge templates) to a group or a list of up to
-        500 phone numbers
+        <p>Sends an SMS message (optionally with mail-merge templates) or voice call to a group or a
+        list of up to 500 phone numbers</p>
     */
     public JSONObject sendMessages(JSONObject options) throws IOException
     {
@@ -51,9 +74,9 @@ public class Project extends Entity
     }
 
     /**
-        Schedules an SMS message to a group or single contact. Note that Telerivet only sends
-        scheduled messages approximately once per minute, so it is not possible to control the exact
-        second at which a scheduled message is sent.
+        <p>Schedules a message to a group or single contact. Note that Telerivet only sends scheduled
+        messages approximately once every 15 seconds, so it is not possible to control the exact
+        second at which a scheduled message is sent.</p>
     */
     public ScheduledMessage scheduleMessage(JSONObject options) throws IOException
     {
@@ -61,8 +84,8 @@ public class Project extends Entity
     }
 
     /**
-        Add an incoming message to Telerivet. Acts the same as if the message was received by a
-        phone. Also triggers any automated services that apply to the message.
+        <p>Add an incoming message to Telerivet. Acts the same as if the message was received by a
+        phone. Also triggers any automated services that apply to the message.</p>
     */
     public Message receiveMessage(JSONObject options) throws IOException
     {
@@ -70,19 +93,20 @@ public class Project extends Entity
     }
 
     /**
-        Retrieves OR creates and possibly updates a contact by name or phone number.
+        <p>Retrieves OR creates and possibly updates a contact by name or phone number.</p>
         
-        If a phone number is provided, Telerivet will search for an existing
-        contact with that phone number (including suffix matches to allow finding contacts with
-        phone numbers in a different format).
+        <p>If a phone number is provided, by default, Telerivet will search for
+        an existing contact with that phone number (including suffix matches to allow finding
+        contacts with phone numbers in a different format). If a phone number is not provided but a
+        name is provided, Telerivet will search for a contact with that exact name (case
+        insensitive). This behavior can be modified by setting the <code>lookup_key</code> parameter to look up
+        a contact by another field, including a custom variable.</p>
         
-        If a phone number is not provided but a name is provided, Telerivet
-        will search for a contact with that exact name (case insensitive).
+        <p>If no existing contact is found, a new contact will be created.</p>
         
-        If no existing contact is found, a new contact will be created.
-        
-        Then that contact will be updated with any parameters provided
-        (name, phone_number, and vars).
+        <p>Then that contact will be updated with any parameters provided
+        (<code>name</code>, <code>phone_number</code>, <code>vars</code>, <code>default_route_id</code>, <code>send_blocked</code>, <code>add_group_ids</code>,
+        <code>remove_group_ids</code>).</p>
     */
     public Contact getOrCreateContact(JSONObject options) throws IOException
     {
@@ -90,7 +114,7 @@ public class Project extends Entity
     }
 
     /**
-        Queries contacts within the given project.
+        <p>Queries contacts within the given project.</p>
     */
     public APICursor<Contact> queryContacts(JSONObject options)
     {
@@ -103,7 +127,7 @@ public class Project extends Entity
     }
 
     /**
-        Retrieves the contact with the given ID.
+        <p>Retrieves the contact with the given ID.</p>
     */
     public Contact getContactById(String id) throws IOException
     {
@@ -111,7 +135,7 @@ public class Project extends Entity
     }
 
     /**
-        Initializes the Telerivet contact with the given ID without making an API request.
+        <p>Initializes the Telerivet contact with the given ID without making an API request.</p>
     */
     public Contact initContactById(String id)
     {
@@ -119,7 +143,7 @@ public class Project extends Entity
     }
 
     /**
-        Queries phones within the given project.
+        <p>Queries phones within the given project.</p>
     */
     public APICursor<Phone> queryPhones(JSONObject options)
     {
@@ -132,7 +156,7 @@ public class Project extends Entity
     }
 
     /**
-        Retrieves the phone with the given ID.
+        <p>Retrieves the phone with the given ID.</p>
     */
     public Phone getPhoneById(String id) throws IOException
     {
@@ -140,7 +164,7 @@ public class Project extends Entity
     }
 
     /**
-        Initializes the phone with the given ID without making an API request.
+        <p>Initializes the phone with the given ID without making an API request.</p>
     */
     public Phone initPhoneById(String id)
     {
@@ -148,7 +172,7 @@ public class Project extends Entity
     }
 
     /**
-        Queries messages within the given project.
+        <p>Queries messages within the given project.</p>
     */
     public APICursor<Message> queryMessages(JSONObject options)
     {
@@ -161,7 +185,7 @@ public class Project extends Entity
     }
 
     /**
-        Retrieves the message with the given ID.
+        <p>Retrieves the message with the given ID.</p>
     */
     public Message getMessageById(String id) throws IOException
     {
@@ -169,7 +193,7 @@ public class Project extends Entity
     }
 
     /**
-        Initializes the Telerivet message with the given ID without making an API request.
+        <p>Initializes the Telerivet message with the given ID without making an API request.</p>
     */
     public Message initMessageById(String id)
     {
@@ -177,7 +201,36 @@ public class Project extends Entity
     }
 
     /**
-        Queries groups within the given project.
+        <p>Queries broadcasts within the given project.</p>
+    */
+    public APICursor<Broadcast> queryBroadcasts(JSONObject options)
+    {
+        return api.newCursor(Broadcast.class, getBaseApiPath() + "/broadcasts", options);
+    }
+
+    public APICursor<Broadcast> queryBroadcasts()
+    {
+        return queryBroadcasts(null);
+    }
+
+    /**
+        <p>Retrieves the broadcast with the given ID.</p>
+    */
+    public Broadcast getBroadcastById(String id) throws IOException
+    {
+        return new Broadcast(api, (JSONObject) api.doRequest("GET", getBaseApiPath() + "/broadcasts/" + id));
+    }
+
+    /**
+        <p>Initializes the Telerivet broadcast with the given ID without making an API request.</p>
+    */
+    public Broadcast initBroadcastById(String id)
+    {
+        return new Broadcast(api, Util.options("project_id", get("id"), "id", id), false);
+    }
+
+    /**
+        <p>Queries groups within the given project.</p>
     */
     public APICursor<Group> queryGroups(JSONObject options)
     {
@@ -190,7 +243,7 @@ public class Project extends Entity
     }
 
     /**
-        Retrieves or creates a group by name.
+        <p>Retrieves or creates a group by name.</p>
     */
     public Group getOrCreateGroup(String name) throws IOException
     {
@@ -198,7 +251,7 @@ public class Project extends Entity
     }
 
     /**
-        Retrieves the group with the given ID.
+        <p>Retrieves the group with the given ID.</p>
     */
     public Group getGroupById(String id) throws IOException
     {
@@ -206,7 +259,7 @@ public class Project extends Entity
     }
 
     /**
-        Initializes the group with the given ID without making an API request.
+        <p>Initializes the group with the given ID without making an API request.</p>
     */
     public Group initGroupById(String id)
     {
@@ -214,7 +267,7 @@ public class Project extends Entity
     }
 
     /**
-        Queries labels within the given project.
+        <p>Queries labels within the given project.</p>
     */
     public APICursor<Label> queryLabels(JSONObject options)
     {
@@ -227,7 +280,7 @@ public class Project extends Entity
     }
 
     /**
-        Gets or creates a label by name.
+        <p>Gets or creates a label by name.</p>
     */
     public Label getOrCreateLabel(String name) throws IOException
     {
@@ -235,7 +288,7 @@ public class Project extends Entity
     }
 
     /**
-        Retrieves the label with the given ID.
+        <p>Retrieves the label with the given ID.</p>
     */
     public Label getLabelById(String id) throws IOException
     {
@@ -243,7 +296,7 @@ public class Project extends Entity
     }
 
     /**
-        Initializes the label with the given ID without making an API request.
+        <p>Initializes the label with the given ID without making an API request.</p>
     */
     public Label initLabelById(String id)
     {
@@ -251,7 +304,7 @@ public class Project extends Entity
     }
 
     /**
-        Queries data tables within the given project.
+        <p>Queries data tables within the given project.</p>
     */
     public APICursor<DataTable> queryDataTables(JSONObject options)
     {
@@ -264,7 +317,7 @@ public class Project extends Entity
     }
 
     /**
-        Gets or creates a data table by name.
+        <p>Gets or creates a data table by name.</p>
     */
     public DataTable getOrCreateDataTable(String name) throws IOException
     {
@@ -272,7 +325,7 @@ public class Project extends Entity
     }
 
     /**
-        Retrieves the data table with the given ID.
+        <p>Retrieves the data table with the given ID.</p>
     */
     public DataTable getDataTableById(String id) throws IOException
     {
@@ -280,7 +333,7 @@ public class Project extends Entity
     }
 
     /**
-        Initializes the data table with the given ID without making an API request.
+        <p>Initializes the data table with the given ID without making an API request.</p>
     */
     public DataTable initDataTableById(String id)
     {
@@ -288,7 +341,7 @@ public class Project extends Entity
     }
 
     /**
-        Queries scheduled messages within the given project.
+        <p>Queries scheduled messages within the given project.</p>
     */
     public APICursor<ScheduledMessage> queryScheduledMessages(JSONObject options)
     {
@@ -301,7 +354,7 @@ public class Project extends Entity
     }
 
     /**
-        Retrieves the scheduled message with the given ID.
+        <p>Retrieves the scheduled message with the given ID.</p>
     */
     public ScheduledMessage getScheduledMessageById(String id) throws IOException
     {
@@ -309,7 +362,7 @@ public class Project extends Entity
     }
 
     /**
-        Initializes the scheduled message with the given ID without making an API request.
+        <p>Initializes the scheduled message with the given ID without making an API request.</p>
     */
     public ScheduledMessage initScheduledMessageById(String id)
     {
@@ -317,7 +370,7 @@ public class Project extends Entity
     }
 
     /**
-        Queries services within the given project.
+        <p>Queries services within the given project.</p>
     */
     public APICursor<Service> queryServices(JSONObject options)
     {
@@ -330,7 +383,7 @@ public class Project extends Entity
     }
 
     /**
-        Retrieves the service with the given ID.
+        <p>Retrieves the service with the given ID.</p>
     */
     public Service getServiceById(String id) throws IOException
     {
@@ -338,7 +391,7 @@ public class Project extends Entity
     }
 
     /**
-        Initializes the service with the given ID without making an API request.
+        <p>Initializes the service with the given ID without making an API request.</p>
     */
     public Service initServiceById(String id)
     {
@@ -346,7 +399,7 @@ public class Project extends Entity
     }
 
     /**
-        Queries mobile money receipts within the given project.
+        <p>Queries mobile money receipts within the given project.</p>
     */
     public APICursor<MobileMoneyReceipt> queryReceipts(JSONObject options)
     {
@@ -359,7 +412,7 @@ public class Project extends Entity
     }
 
     /**
-        Retrieves the mobile money receipt with the given ID.
+        <p>Retrieves the mobile money receipt with the given ID.</p>
     */
     public MobileMoneyReceipt getReceiptById(String id) throws IOException
     {
@@ -367,7 +420,7 @@ public class Project extends Entity
     }
 
     /**
-        Initializes the mobile money receipt with the given ID without making an API request.
+        <p>Initializes the mobile money receipt with the given ID without making an API request.</p>
     */
     public MobileMoneyReceipt initReceiptById(String id)
     {
@@ -375,7 +428,7 @@ public class Project extends Entity
     }
 
     /**
-        Queries custom routes that can be used to send messages (not including Phones).
+        <p>Queries custom routes that can be used to send messages (not including Phones).</p>
     */
     public APICursor<Route> queryRoutes(JSONObject options)
     {
@@ -388,7 +441,7 @@ public class Project extends Entity
     }
 
     /**
-        Gets a custom route by ID
+        <p>Gets a custom route by ID</p>
     */
     public Route getRouteById(String id) throws IOException
     {
@@ -396,7 +449,7 @@ public class Project extends Entity
     }
 
     /**
-        Initializes a custom route by ID without making an API request.
+        <p>Initializes a custom route by ID without making an API request.</p>
     */
     public Route initRouteById(String id)
     {
@@ -404,7 +457,17 @@ public class Project extends Entity
     }
 
     /**
-        Saves any fields or custom variables that have changed for the project.
+        <p>Returns an array of user accounts that have access to this project. Each item in the array
+        is an object containing <code>id</code>, <code>email</code>, and <code>name</code> properties. (The id corresponds to the
+        <code>user_id</code> property of the Message object.)</p>
+    */
+    public JSONArray getUsers() throws IOException
+    {
+        return (JSONArray) api.doRequest("GET", getBaseApiPath() + "/users");
+    }
+
+    /**
+        <p>Saves any fields or custom variables that have changed for the project.</p>
     */
     @Override
     public void save() throws IOException
@@ -432,6 +495,16 @@ public class Project extends Entity
         return (String) get("timezone_id");
     }
 
+    public String getUrlSlug()
+    {
+        return (String) get("url_slug");
+    }
+
+    public String getOrganizationId()
+    {
+        return (String) get("organization_id");
+    }
+
     @Override
     public String getBaseApiPath()
     {
@@ -442,7 +515,7 @@ public class Project extends Entity
     {
         this(api, data, true);
     }
-    
+
     public Project(TelerivetAPI api, JSONObject data, boolean isLoaded)
     {
         super(api, data, isLoaded);

@@ -1,43 +1,64 @@
 
 package com.telerivet;
-        
+
 import java.io.IOException;
 import org.json.JSONObject;
 import org.json.JSONArray;
-        
+
 /**
-    Represents a group used to organize contacts within Telerivet.
+    <p>Represents a group used to organize contacts within Telerivet.</p>
     
-    Fields:
+    <p>Fields:</p>
     
-      - id (string, max 34 characters)
-          * ID of the group
-          * Read-only
-      
-      - name
-          * Name of the group
-          * Updatable via API
-      
-      - num_members (int)
-          * Number of contacts in the group
-          * Read-only
-      
-      - time_created (UNIX timestamp)
-          * Time the group was created in Telerivet
-          * Read-only
-      
-      - vars (JSONObject)
-          * Custom variables stored for this group
-          * Updatable via API
-      
-      - project_id
-          * ID of the project this group belongs to
-          * Read-only
+    <ul>
+    <li><p>id (string, max 34 characters)</p>
+    
+    <ul>
+    <li>ID of the group</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>name</p>
+    
+    <ul>
+    <li>Name of the group</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>dynamic (bool)</p>
+    
+    <ul>
+    <li>Whether this is a dynamic or normal group</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>num_members (int)</p>
+    
+    <ul>
+    <li>Number of contacts in the group (null if the group is dynamic)</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>time_created (UNIX timestamp)</p>
+    
+    <ul>
+    <li>Time the group was created in Telerivet</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>vars (JSONObject)</p>
+    
+    <ul>
+    <li>Custom variables stored for this group</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>project_id</p>
+    
+    <ul>
+    <li>ID of the project this group belongs to</li>
+    <li>Read-only</li>
+    </ul></li>
+    </ul>
 */
 public class Group extends Entity
 {
     /**
-        Queries contacts that are members of the given group.
+        <p>Queries contacts that are members of the given group.</p>
     */
     public APICursor<Contact> queryContacts(JSONObject options)
     {
@@ -50,7 +71,7 @@ public class Group extends Entity
     }
 
     /**
-        Queries scheduled messages to the given group.
+        <p>Queries scheduled messages to the given group.</p>
     */
     public APICursor<ScheduledMessage> queryScheduledMessages(JSONObject options)
     {
@@ -63,7 +84,7 @@ public class Group extends Entity
     }
 
     /**
-        Saves any fields that have changed for this group.
+        <p>Saves any fields that have changed for this group.</p>
     */
     @Override
     public void save() throws IOException
@@ -72,7 +93,7 @@ public class Group extends Entity
     }
 
     /**
-        Deletes this group (Note: no contacts are deleted.)
+        <p>Deletes this group (Note: no contacts are deleted.)</p>
     */
     public void delete() throws IOException
     {
@@ -92,6 +113,11 @@ public class Group extends Entity
     public void setName(String value)
     {
         set("name", value);
+    }
+
+    public Boolean getDynamic()
+    {
+        return (Boolean) get("dynamic");
     }
 
     public Integer getNumMembers()
@@ -119,7 +145,7 @@ public class Group extends Entity
     {
         this(api, data, true);
     }
-    
+
     public Group(TelerivetAPI api, JSONObject data, boolean isLoaded)
     {
         super(api, data, isLoaded);
