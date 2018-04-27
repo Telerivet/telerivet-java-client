@@ -2,8 +2,8 @@ Java client library for Telerivet REST API
 
 http://telerivet.com/api
 
-Overview:
----------
+Overview
+--------
 This library makes it easy to integrate your Java application with Telerivet.
 You can use it to:
 
@@ -20,13 +20,13 @@ as well as in the comments of the Java source files.
 
 See the example_project folder for an example project using this API.
 
-System Requirements:
---------------------
+System Requirements
+-------------------
 JRE
 Apache Maven (to build from source)
 
-Installation:
--------------
+Installation
+------------
 A pre-compiled version of this library is distributed using Maven Central.
 
 When using Maven, simply add the following dependency to your pom.xml:
@@ -42,8 +42,8 @@ When using Maven, simply add the following dependency to your pom.xml:
 If you want to build the Java client library from source instead of using Maven Central,
 clone this repository then run `mvn install` from the root folder.
 
-Example Usage:
---------------
+Example Usage
+-------------
 
 ```
 import com.telerivet.*;
