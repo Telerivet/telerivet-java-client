@@ -188,7 +188,7 @@ import org.json.JSONArray;
     <li><p>phone_id (string, max 34 characters)</p>
     
     <ul>
-    <li>ID of the phone that sent or received the message</li>
+    <li>ID of the phone (basic route) that sent or received the message</li>
     <li>Read-only</li>
     </ul></li>
     <li><p>contact_id (string, max 34 characters)</p>
@@ -200,7 +200,7 @@ import org.json.JSONArray;
     <li><p>route_id (string, max 34 characters)</p>
     
     <ul>
-    <li>ID of the route that sent the message (if applicable)</li>
+    <li>ID of the custom route that sent the message (if applicable)</li>
     <li>Read-only</li>
     </ul></li>
     <li><p>broadcast_id (string, max 34 characters)</p>

@@ -65,8 +65,28 @@ public class Project extends Entity
     }
 
     /**
-        <p>Sends an SMS message (optionally with mail-merge templates) or voice call to a group or a
+        <p>Sends a text message (optionally with mail-merge templates) or voice call to a group or a
         list of up to 500 phone numbers</p>
+    */
+    public Broadcast sendBroadcast(JSONObject options) throws IOException
+    {
+        return new Broadcast(api, (JSONObject) api.doRequest("POST", getBaseApiPath() + "/send_broadcast", options));
+    }
+
+    /**
+        <p>Sends up to 100 different messages in a single API request. This method is significantly
+        faster than sending a separate API request for each message.</p>
+    */
+    public JSONObject sendMulti(JSONObject options) throws IOException
+    {
+        return (JSONObject) api.doRequest("POST", getBaseApiPath() + "/send_multi", options);
+    }
+
+    /**
+        <p>(Deprecated) Send a message a to group or a list of phone numbers.
+        This method is only needed to maintain backward compatibility with
+        code developed using previous versions of the client library.
+        Use <code>sendBroadcast</code> or <code>sendMulti</code> instead.</p>
     */
     public JSONObject sendMessages(JSONObject options) throws IOException
     {
@@ -396,35 +416,6 @@ public class Project extends Entity
     public Service initServiceById(String id)
     {
         return new Service(api, Util.options("project_id", get("id"), "id", id), false);
-    }
-
-    /**
-        <p>Queries mobile money receipts within the given project.</p>
-    */
-    public APICursor<MobileMoneyReceipt> queryReceipts(JSONObject options)
-    {
-        return api.newCursor(MobileMoneyReceipt.class, getBaseApiPath() + "/receipts", options);
-    }
-
-    public APICursor<MobileMoneyReceipt> queryReceipts()
-    {
-        return queryReceipts(null);
-    }
-
-    /**
-        <p>Retrieves the mobile money receipt with the given ID.</p>
-    */
-    public MobileMoneyReceipt getReceiptById(String id) throws IOException
-    {
-        return new MobileMoneyReceipt(api, (JSONObject) api.doRequest("GET", getBaseApiPath() + "/receipts/" + id));
-    }
-
-    /**
-        <p>Initializes the mobile money receipt with the given ID without making an API request.</p>
-    */
-    public MobileMoneyReceipt initReceiptById(String id)
-    {
-        return new MobileMoneyReceipt(api, Util.options("project_id", get("id"), "id", id), false);
     }
 
     /**

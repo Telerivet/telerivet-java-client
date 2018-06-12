@@ -8,6 +8,10 @@ import org.json.JSONArray;
 /**
     <p>Represents a phone or gateway that you use to send/receive messages via Telerivet.</p>
     
+    <p>Basic Routes were formerly referred to as "Phones" within Telerivet. API
+    methods, parameters, and properties related to Basic Routes continue to use the term "Phone"
+    to maintain backwards compatibility.</p>
+    
     <p>Fields:</p>
     
     <ul>
@@ -26,13 +30,13 @@ import org.json.JSONArray;
     <li><p>phone_number (string)</p>
     
     <ul>
-    <li>Phone number of the phone</li>
+    <li>Phone number or sender ID</li>
     <li>Updatable via API</li>
     </ul></li>
     <li><p>phone_type</p>
     
     <ul>
-    <li>Type of this phone/gateway (e.g. android, twilio, nexmo, etc)</li>
+    <li>Type of this phone/route (e.g. android, twilio, nexmo, etc)</li>
     <li>Read-only</li>
     </ul></li>
     <li><p>country</p>

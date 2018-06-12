@@ -6,6 +6,13 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 
 /**
+    <p>Represents a collection of related outgoing messages.
+    Typically, messages in a broadcast have the same content template and were
+    sent at the same time; however, a broadcast can also contain messages with unrelated content
+    and messages that were sent at different times.
+    A broadcast is automatically created when sending a message to a group of
+    contacts.</p>
+    
     <p>Fields:</p>
     
     <ul>
@@ -34,11 +41,12 @@ import org.json.JSONArray;
       <code>filter_params</code> properties, as they may change without notice.)</p></li>
     <li>Read-only</li>
     </ul></li>
-    <li><p>recipients_str</p>
+    <li><p>title</p>
     
     <ul>
-    <li>A string with a human readable description of the first few recipients (possibly
-      truncated)</li>
+    <li>Title of the broadcast. If a title was not provided when the broadcast was sent, it
+      is automatically set to a human readable description of the first few recipients
+      (possibly truncated)</li>
     <li>Read-only</li>
     </ul></li>
     <li><p>time_created (UNIX timestamp)</p>
@@ -159,7 +167,7 @@ import org.json.JSONArray;
     <li><p>vars (JSONObject)</p>
     
     <ul>
-    <li>Custom variables stored for this message</li>
+    <li>Custom variables stored for this broadcast</li>
     <li>Read-only</li>
     </ul></li>
     <li><p>price (number)</p>
@@ -231,9 +239,9 @@ public class Broadcast extends Entity
         return (JSONArray) get("recipients");
     }
 
-    public String getRecipientsStr()
+    public String getTitle()
     {
-        return (String) get("recipients_str");
+        return (String) get("title");
     }
 
     public Long getTimeCreated()

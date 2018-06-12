@@ -15,8 +15,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.GzipCompressingEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
@@ -29,6 +31,7 @@ import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.ContentEncodingHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.message.BasicNameValuePair;
@@ -47,7 +50,7 @@ import org.json.JSONTokener;
  * @author youngj
  */
 public class TelerivetAPI {
-    public static String CLIENT_VERSION = "1.3.1";
+    public static String CLIENT_VERSION = "1.4.0";
 
     public static final int HTTP_CONNECTION_TIMEOUT = 10000; // ms
     public static final int HTTP_SOCKET_TIMEOUT = 10000; // ms
@@ -231,7 +234,13 @@ public class TelerivetAPI {
             entityRequest.setHeader("Content-Type", "application/json");
             if (params != null)
             {
-                entityRequest.setEntity(new StringEntity(params.toString(), "UTF-8"));
+                String paramsJson = params.toString();
+                HttpEntity entity = new StringEntity(paramsJson, "UTF-8");
+                if (paramsJson.length() >= 400)
+                {
+                    entity = new GzipCompressingEntity(entity);
+                }
+                entityRequest.setEntity(entity);
             }
             request = entityRequest;
         }
@@ -346,7 +355,7 @@ public class TelerivetAPI {
 
             ThreadSafeClientConnManager manager = new ThreadSafeClientConnManager(httpParams, registry);
 
-            httpClient = new DefaultHttpClient(manager, httpParams);
+            httpClient = new ContentEncodingHttpClient(manager, httpParams);
         }
         return httpClient;
     }
