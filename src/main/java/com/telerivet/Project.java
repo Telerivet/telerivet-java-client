@@ -134,6 +134,24 @@ public class Project extends Entity
     }
 
     /**
+        <p>Creates and/or updates up to 200 contacts in a single API call. When creating or updating a
+        large number of contacts, this method is significantly faster than sending a separate API
+        request for each contact.</p>
+        
+        <p>By default, if the phone number for any contact matches an existing
+        contact, the existing contact will be updated with any information provided. This behavior
+        can be modified by setting the <code>lookup_key</code> parameter to look up contacts by another field,
+        including a custom variable.</p>
+        
+        <p>If any contact was not found matching the provided <code>lookup_key</code>, a
+        new contact will be created.</p>
+    */
+    public JSONObject importContacts(JSONObject options) throws IOException
+    {
+        return (JSONObject) api.doRequest("POST", getBaseApiPath() + "/import_contacts", options);
+    }
+
+    /**
         <p>Queries contacts within the given project.</p>
     */
     public APICursor<Contact> queryContacts(JSONObject options)
