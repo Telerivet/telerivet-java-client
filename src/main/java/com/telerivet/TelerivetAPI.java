@@ -50,7 +50,7 @@ import org.json.JSONTokener;
  * @author youngj
  */
 public class TelerivetAPI {
-    public static String CLIENT_VERSION = "1.4.1";
+    public static String CLIENT_VERSION = "1.4.2";
 
     public static final int HTTP_CONNECTION_TIMEOUT = 10000; // ms
     public static final int HTTP_SOCKET_TIMEOUT = 10000; // ms

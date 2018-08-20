@@ -36,6 +36,24 @@ import org.json.JSONArray;
     <li>Number of rows in the table</li>
     <li>Read-only</li>
     </ul></li>
+    <li><p>show<em>add</em>row (bool)</p>
+    
+    <ul>
+    <li>Whether to allow adding or importing rows via the web app</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>show_stats (bool)</p>
+    
+    <ul>
+    <li>Whether to show row statistics in the web app</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>show<em>contact</em>columns (bool)</p>
+    
+    <ul>
+    <li>Whether to show 'Contact Name' and 'Phone Number' columns in the web app</li>
+    <li>Updatable via API</li>
+    </ul></li>
     <li><p>vars (JSONObject)</p>
     
     <ul>
@@ -91,12 +109,21 @@ public class DataTable extends Entity
 
     /**
         <p>Gets a list of all fields (columns) defined for this data table. The return value is an
-        array of objects with the properties 'name' and 'variable'. (Fields are automatically
-        created any time a DataRow's 'vars' property is updated.)</p>
+        array of objects with the properties 'name', 'variable', 'type', 'order', 'readonly', and
+        'lookup_key'. (Fields are automatically created any time a DataRow's 'vars' property is
+        updated.)</p>
     */
     public JSONArray getFields() throws IOException
     {
         return (JSONArray) api.doRequest("GET", getBaseApiPath() + "/fields");
+    }
+
+    /**
+        <p>Allows customizing how a field (column) is displayed in the Telerivet web app.</p>
+    */
+    public JSONObject setFieldMetadata(String variable, JSONObject options) throws IOException
+    {
+        return (JSONObject) api.doRequest("POST", getBaseApiPath() + "/fields/" + variable, options);
     }
 
     /**
@@ -145,6 +172,36 @@ public class DataTable extends Entity
     public Integer getNumRows()
     {
         return (Integer) get("num_rows");
+    }
+
+    public Boolean getShowAddRow()
+    {
+        return (Boolean) get("show_add_row");
+    }
+
+    public void setShowAddRow(Boolean value)
+    {
+        set("show_add_row", value);
+    }
+
+    public Boolean getShowStats()
+    {
+        return (Boolean) get("show_stats");
+    }
+
+    public void setShowStats(Boolean value)
+    {
+        set("show_stats", value);
+    }
+
+    public Boolean getShowContactColumns()
+    {
+        return (Boolean) get("show_contact_columns");
+    }
+
+    public void setShowContactColumns(Boolean value)
+    {
+        set("show_contact_columns", value);
     }
 
     public String getProjectId()
