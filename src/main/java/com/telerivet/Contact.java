@@ -35,10 +35,23 @@ import org.json.JSONArray;
     <li>Time the contact was added in Telerivet</li>
     <li>Read-only</li>
     </ul></li>
+    <li><p>time_updated (UNIX timestamp)</p>
+    
+    <ul>
+    <li>Time the contact was last updated in Telerivet</li>
+    <li>Read-only</li>
+    </ul></li>
     <li><p>send_blocked (bool)</p>
     
     <ul>
     <li>True if Telerivet is blocked from sending messages to this contact</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>conversation_status</p>
+    
+    <ul>
+    <li>Current status of the conversation with this contact</li>
+    <li>Allowed values: closed, active, handled</li>
     <li>Updatable via API</li>
     </ul></li>
     <li><p>last<em>message</em>time (UNIX timestamp)</p>
@@ -274,6 +287,11 @@ public class Contact extends Entity
         return Util.toLong(get("time_created"));
     }
 
+    public Long getTimeUpdated()
+    {
+        return Util.toLong(get("time_updated"));
+    }
+
     public Boolean getSendBlocked()
     {
         return (Boolean) get("send_blocked");
@@ -282,6 +300,16 @@ public class Contact extends Entity
     public void setSendBlocked(Boolean value)
     {
         set("send_blocked", value);
+    }
+
+    public String getConversationStatus()
+    {
+        return (String) get("conversation_status");
+    }
+
+    public void setConversationStatus(String value)
+    {
+        set("conversation_status", value);
     }
 
     public Long getLastMessageTime()

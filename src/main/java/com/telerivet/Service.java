@@ -143,7 +143,9 @@ public class Service extends Entity
         
         <p>For example, to send a poll to a particular contact (or resend the
         current question), you can invoke the poll service with context=contact, and <code>contact_id</code> as
-        the ID of the contact to send the poll to.</p>
+        the ID of the contact to send the poll to. (To trigger a service to multiple contacts, use
+        <a href="#Project.sendBroadcast">project.sendBroadcast</a>. To schedule a service in the future, use
+        <a href="#Project.scheduleMessage">project.scheduleMessage</a>.)</p>
         
         <p>Or, to manually apply a service for an incoming message, you can
         invoke the service with <code>context</code>=<code>message</code>, <code>event</code>=<code>incoming_message</code>, and <code>message_id</code> as

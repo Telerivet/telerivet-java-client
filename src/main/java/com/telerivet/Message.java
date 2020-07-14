@@ -39,14 +39,14 @@ import org.json.JSONArray;
     
     <ul>
     <li>Type of the message</li>
-    <li>Allowed values: sms, mms, ussd, call</li>
+    <li>Allowed values: sms, mms, ussd, call, service</li>
     <li>Read-only</li>
     </ul></li>
     <li><p>source</p>
     
     <ul>
     <li>How the message originated within Telerivet</li>
-    <li>Allowed values: phone, provider, web, api, service, webhook, scheduled</li>
+    <li>Allowed values: phone, provider, web, api, service, webhook, scheduled, integration</li>
     <li>Read-only</li>
     </ul></li>
     <li><p>time_created (UNIX timestamp)</p>
@@ -60,6 +60,12 @@ import org.json.JSONArray;
     <ul>
     <li>The time that the message was reported to have been sent (null for incoming messages
       and messages that have not yet been sent)</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>time_updated (UNIX timestamp)</p>
+    
+    <ul>
+    <li>The time that the message was last updated in Telerivet.</li>
     <li>Read-only</li>
     </ul></li>
     <li><p>from_number (string)</p>
@@ -106,6 +112,13 @@ import org.json.JSONArray;
     <ul>
     <li>Custom variables stored for this message</li>
     <li>Updatable via API</li>
+    </ul></li>
+    <li><p>priority (int)</p>
+    
+    <ul>
+    <li>Priority of this message. Telerivet will attempt to send messages with higher
+      priority numbers first. Only defined for outgoing messages.</li>
+    <li>Read-only</li>
     </ul></li>
     <li><p>error_message</p>
     
@@ -178,6 +191,43 @@ import org.json.JSONArray;
       <a href="#Message.getMMSParts">getMMSParts</a>.</p></li>
     <li>Read-only</li>
     </ul></li>
+    <li><p>track_clicks (boolean)</p>
+    
+    <ul>
+    <li>If true, URLs in the message content are short URLs that redirect to a destination
+      URL.</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>short_urls (array)</p>
+    
+    <ul>
+    <li>For text messages containing short URLs, this is an array of objects with the
+      properties <code>short_url</code>, <code>link_type</code>, and <code>time_clicked</code> (the first time that URL was
+      clicked). If <code>link_type</code> is "redirect", the object also contains a <code>destination_url</code>
+      property. If <code>link_type</code> is "media", the object also contains an <code>media_index</code>
+      property (the index in the media array). If <code>link_type</code> is "service", the object also
+      contains a <code>service_id</code> property. This property is undefined for messages that do not
+      contain short URLs.</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>media (array)</p>
+    
+    <ul>
+    <li>For text messages containing media files, this is an array of objects with the
+      properties <code>url</code>, <code>type</code> (MIME type), <code>filename</code>, and <code>size</code> (file size in bytes).
+      Unknown properties are null. This property is undefined for messages that do not
+      contain media files. Note: For files uploaded via the Telerivet web app, the URL is
+      temporary and may not be valid for more than 1 day.</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>time_clicked (UNIX timestamp)</p>
+    
+    <ul>
+    <li>If the message contains any short URLs, this is the first time that a short URL in
+      the message was clicked.  This property is undefined for messages that do not contain
+      short URLs.</li>
+    <li>Read-only</li>
+    </ul></li>
     <li><p>service_id (string, max 34 characters)</p>
     
     <ul>
@@ -207,6 +257,12 @@ import org.json.JSONArray;
     
     <ul>
     <li>ID of the broadcast that this message is part of (if applicable)</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>scheduled_id (string, max 34 characters)</p>
+    
+    <ul>
+    <li>ID of the scheduled message that created this message is part of (if applicable)</li>
     <li>Read-only</li>
     </ul></li>
     <li><p>user_id (string, max 34 characters)</p>
@@ -366,6 +422,11 @@ public class Message extends Entity
         return Util.toLong(get("time_sent"));
     }
 
+    public Long getTimeUpdated()
+    {
+        return Util.toLong(get("time_updated"));
+    }
+
     public String getFromNumber()
     {
         return (String) get("from_number");
@@ -399,6 +460,11 @@ public class Message extends Entity
     public JSONArray getLabelIds()
     {
         return (JSONArray) get("label_ids");
+    }
+
+    public Integer getPriority()
+    {
+        return (Integer) get("priority");
     }
 
     public String getErrorMessage()
@@ -456,6 +522,26 @@ public class Message extends Entity
         return (JSONArray) get("mms_parts");
     }
 
+    public String getTrackClicks()
+    {
+        return (String) get("track_clicks");
+    }
+
+    public JSONArray getShortUrls()
+    {
+        return (JSONArray) get("short_urls");
+    }
+
+    public JSONArray getMedia()
+    {
+        return (JSONArray) get("media");
+    }
+
+    public Long getTimeClicked()
+    {
+        return Util.toLong(get("time_clicked"));
+    }
+
     public String getServiceId()
     {
         return (String) get("service_id");
@@ -479,6 +565,11 @@ public class Message extends Entity
     public String getBroadcastId()
     {
         return (String) get("broadcast_id");
+    }
+
+    public String getScheduledId()
+    {
+        return (String) get("scheduled_id");
     }
 
     public String getUserId()

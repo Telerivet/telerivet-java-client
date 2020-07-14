@@ -100,7 +100,7 @@ import org.json.JSONArray;
     
     <ul>
     <li>Type of message sent from this broadcast</li>
-    <li>Allowed values: sms, mms, ussd, call</li>
+    <li>Allowed values: sms, mms, ussd, call, service</li>
     <li>Read-only</li>
     </ul></li>
     <li><p>content (string)</p>
@@ -148,7 +148,7 @@ import org.json.JSONArray;
     
     <ul>
     <li>How the message originated within Telerivet</li>
-    <li>Allowed values: phone, provider, web, api, service, webhook, scheduled</li>
+    <li>Allowed values: phone, provider, web, api, service, webhook, scheduled, integration</li>
     <li>Read-only</li>
     </ul></li>
     <li><p>simulated (bool)</p>
@@ -158,10 +158,35 @@ import org.json.JSONArray;
       sent to or received by a real phone)</li>
     <li>Read-only</li>
     </ul></li>
+    <li><p>track_clicks (boolean)</p>
+    
+    <ul>
+    <li>If true, URLs in the message content will automatically be replaced with unique
+      short URLs.</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>clicked_count (int)</p>
+    
+    <ul>
+    <li>The number of messages in this broadcast containing short links that were clicked.
+      At most one click per message is counted. If track_clicks is false, this property will
+      be null.</li>
+    <li>Read-only</li>
+    </ul></li>
     <li><p>label_ids (array)</p>
     
     <ul>
     <li>List of IDs of labels applied to all messages in the broadcast</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>media (array)</p>
+    
+    <ul>
+    <li>For text messages containing media files, this is an array of objects with the
+      properties <code>url</code>, <code>type</code> (MIME type), <code>filename</code>, and <code>size</code> (file size in bytes).
+      Unknown properties are null. This property is undefined for messages that do not
+      contain media files. Note: For files uploaded via the Telerivet web app, the URL is
+      temporary and may not be valid for more than 1 day.</li>
     <li>Read-only</li>
     </ul></li>
     <li><p>vars (JSONObject)</p>
@@ -200,6 +225,13 @@ import org.json.JSONArray;
     
     <ul>
     <li>ID of the phone or route used to send the broadcast (if applicable)</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>service_id (string, max 34 characters)</p>
+    
+    <ul>
+    <li>The service associated with this broadcast (for voice calls, the service defines the
+      call flow)</li>
     <li>Read-only</li>
     </ul></li>
     <li><p>user_id (string, max 34 characters)</p>
@@ -319,9 +351,24 @@ public class Broadcast extends Entity
         return (Boolean) get("simulated");
     }
 
+    public String getTrackClicks()
+    {
+        return (String) get("track_clicks");
+    }
+
+    public Integer getClickedCount()
+    {
+        return (Integer) get("clicked_count");
+    }
+
     public JSONArray getLabelIds()
     {
         return (JSONArray) get("label_ids");
+    }
+
+    public JSONArray getMedia()
+    {
+        return (JSONArray) get("media");
     }
 
     public Double getPrice()
@@ -347,6 +394,11 @@ public class Broadcast extends Entity
     public String getRouteId()
     {
         return (String) get("route_id");
+    }
+
+    public String getServiceId()
+    {
+        return (String) get("service_id");
     }
 
     public String getUserId()

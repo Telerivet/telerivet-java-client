@@ -122,7 +122,7 @@ import org.json.JSONArray;
     
     <ul>
     <li>Type of scheduled message</li>
-    <li>Allowed values: sms, ussd, call</li>
+    <li>Allowed values: sms, mms, ussd, call, service</li>
     <li>Read-only</li>
     </ul></li>
     <li><p>time_created (UNIX timestamp)</p>
@@ -169,6 +169,23 @@ import org.json.JSONArray;
     <ul>
     <li>Set to true if Telerivet will render variables like [[contact.name]] in the message
       content, false otherwise</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>track_clicks (boolean)</p>
+    
+    <ul>
+    <li>If true, URLs in the message content will automatically be replaced with unique
+      short URLs</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>media (array)</p>
+    
+    <ul>
+    <li>For text messages containing media files, this is an array of objects with the
+      properties <code>url</code>, <code>type</code> (MIME type), <code>filename</code>, and <code>size</code> (file size in bytes).
+      Unknown properties are null. This property is undefined for messages that do not
+      contain media files. Note: For files uploaded via the Telerivet web app, the URL is
+      temporary and may not be valid for more than 1 day.</li>
     <li>Read-only</li>
     </ul></li>
     <li><p>vars (JSONObject)</p>
@@ -318,6 +335,16 @@ public class ScheduledMessage extends Entity
     public Boolean getIsTemplate()
     {
         return (Boolean) get("is_template");
+    }
+
+    public String getTrackClicks()
+    {
+        return (String) get("track_clicks");
+    }
+
+    public JSONArray getMedia()
+    {
+        return (JSONArray) get("media");
     }
 
     public JSONArray getLabelIds()

@@ -57,7 +57,7 @@ import org.json.JSONArray;
 public class Project extends Entity
 {
     /**
-        <p>Sends one message (SMS, voice call, or USSD request).</p>
+        <p>Sends one message (SMS, MMS, voice call, or USSD request).</p>
     */
     public Message sendMessage(JSONObject options) throws IOException
     {
@@ -66,7 +66,11 @@ public class Project extends Entity
 
     /**
         <p>Sends a text message (optionally with mail-merge templates) or voice call to a group or a
-        list of up to 500 phone numbers</p>
+        list of up to 500 phone numbers.</p>
+        
+        <p>With <code>message_type</code>=<code>service</code>, invokes an automated service (such as
+        a poll) for a group or list of phone numbers. Any service that can be triggered for a
+        contact can be invoked via this method, whether or not the service actually sends a message.</p>
     */
     public Broadcast sendBroadcast(JSONObject options) throws IOException
     {
@@ -97,6 +101,11 @@ public class Project extends Entity
         <p>Schedules a message to a group or single contact. Note that Telerivet only sends scheduled
         messages approximately once every 15 seconds, so it is not possible to control the exact
         second at which a scheduled message is sent.</p>
+        
+        <p>With <code>message_type</code>=<code>service</code>, schedules an automated service (such
+        as a poll) to be invoked for a group or list of phone numbers. Any service that can be
+        triggered for a contact can be scheduled via this method, whether or not the service
+        actually sends a message.</p>
     */
     public ScheduledMessage scheduleMessage(JSONObject options) throws IOException
     {
@@ -473,6 +482,35 @@ public class Project extends Entity
     public JSONArray getUsers() throws IOException
     {
         return (JSONArray) api.doRequest("GET", getBaseApiPath() + "/users");
+    }
+
+    /**
+        <p>Returns information about each airtime transaction.</p>
+    */
+    public APICursor<AirtimeTransaction> queryAirtimeTransactions(JSONObject options)
+    {
+        return api.newCursor(AirtimeTransaction.class, getBaseApiPath() + "/airtime_transactions", options);
+    }
+
+    public APICursor<AirtimeTransaction> queryAirtimeTransactions()
+    {
+        return queryAirtimeTransactions(null);
+    }
+
+    /**
+        <p>Gets an airtime transaction by ID</p>
+    */
+    public AirtimeTransaction getAirtimeTransactionById(String id) throws IOException
+    {
+        return new AirtimeTransaction(api, (JSONObject) api.doRequest("GET", getBaseApiPath() + "/airtime_transactions/" + id));
+    }
+
+    /**
+        <p>Initializes an airtime transaction by ID without making an API request.</p>
+    */
+    public AirtimeTransaction initAirtimeTransactionById(String id)
+    {
+        return new AirtimeTransaction(api, Util.options("project_id", get("id"), "id", id), false);
     }
 
     /**
