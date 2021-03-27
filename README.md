@@ -35,7 +35,7 @@ When using Maven, simply add the following dependency to your pom.xml:
     <dependency>
         <groupId>com.telerivet</groupId>
         <artifactId>TelerivetAPIClient</artifactId>
-        <version>1.4.6</version>
+        <version>1.5.0</version>
     </dependency>
 ```
 

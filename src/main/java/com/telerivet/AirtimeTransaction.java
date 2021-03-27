@@ -96,6 +96,12 @@ import org.json.JSONArray;
     <li>ID of the project that the airtime transaction belongs to</li>
     <li>Read-only</li>
     </ul></li>
+    <li><p>external_id</p>
+    
+    <ul>
+    <li>The ID of this transaction from an external airtime gateway provider, if available.</li>
+    <li>Read-only</li>
+    </ul></li>
     <li><p>vars (JSONObject)</p>
     
     <ul>
@@ -169,6 +175,11 @@ public class AirtimeTransaction extends Entity
     public String getProjectId()
     {
         return (String) get("project_id");
+    }
+
+    public String getExternalId()
+    {
+        return (String) get("external_id");
     }
 
     @Override

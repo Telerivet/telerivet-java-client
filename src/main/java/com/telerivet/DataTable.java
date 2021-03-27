@@ -33,7 +33,8 @@ import org.json.JSONArray;
     <li><p>num_rows (int)</p>
     
     <ul>
-    <li>Number of rows in the table</li>
+    <li>Number of rows in the table. For performance reasons, this number may sometimes be
+      out-of-date.</li>
     <li>Read-only</li>
     </ul></li>
     <li><p>show<em>add</em>row (bool)</p>

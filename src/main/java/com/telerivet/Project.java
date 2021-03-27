@@ -277,6 +277,62 @@ public class Project extends Entity
     }
 
     /**
+        <p>Creates and starts an asynchronous task that is applied to all entities matching a filter
+        (e.g. contacts, messages, or data rows).
+        Tasks are designed to efficiently process a large number of
+        entities. When processing a large number of entities,
+        tasks are much faster than using the API to query and loop over
+        all objects matching a filter.</p>
+        
+        <p>Several different types of tasks are supported, including
+        applying services to contacts, messages, or data rows;
+        adding or removing contacts from a group; blocking or unblocking
+        sending messages to a contact; updating a custom variable;
+        deleting contacts, messages, or data rows; or exporting data to
+        CSV.</p>
+        
+        <p>When using a task to apply a Custom Actions or Cloud Script API
+        service (<code>apply_service_to_contacts</code>, <code>apply_service_to_rows</code>, or
+        <code>apply_service_to_messages</code>),
+        the <code>task</code> variable will be available within the service. The
+        service can use custom variables on the task object (e.g. <code>task.vars.example</code>), such as
+        to store aggregate statistics for the rows matching the filter.</p>
+    */
+    public Task createTask(JSONObject options) throws IOException
+    {
+        return new Task(api, (JSONObject) api.doRequest("POST", getBaseApiPath() + "/tasks", options));
+    }
+
+    /**
+        <p>Queries batch tasks within the given project.</p>
+    */
+    public APICursor<Task> queryTasks(JSONObject options)
+    {
+        return api.newCursor(Task.class, getBaseApiPath() + "/tasks", options);
+    }
+
+    public APICursor<Task> queryTasks()
+    {
+        return queryTasks(null);
+    }
+
+    /**
+        <p>Retrieves the task with the given ID.</p>
+    */
+    public Task getTaskById(String id) throws IOException
+    {
+        return new Task(api, (JSONObject) api.doRequest("GET", getBaseApiPath() + "/tasks/" + id));
+    }
+
+    /**
+        <p>Initializes the task with the given ID without making an API request.</p>
+    */
+    public Task initTaskById(String id)
+    {
+        return new Task(api, Util.options("project_id", get("id"), "id", id), false);
+    }
+
+    /**
         <p>Queries groups within the given project.</p>
     */
     public APICursor<Group> queryGroups(JSONObject options)
