@@ -41,6 +41,18 @@ import org.json.JSONArray;
     <li>Country code</li>
     <li>Read-only</li>
     </ul></li>
+    <li><p>time_created (UNIX timestamp)</p>
+    
+    <ul>
+    <li>The time that the airtime transaction was created on Telerivet's servers</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>transaction_time (UNIX timestamp)</p>
+    
+    <ul>
+    <li>The time that the airtime transaction was sent, or null if it has not been sent</li>
+    <li>Read-only</li>
+    </ul></li>
     <li><p>status</p>
     
     <ul>
@@ -130,6 +142,16 @@ public class AirtimeTransaction extends Entity
     public String getCountry()
     {
         return (String) get("country");
+    }
+
+    public Long getTimeCreated()
+    {
+        return Util.toLong(get("time_created"));
+    }
+
+    public Long getTransactionTime()
+    {
+        return Util.toLong(get("transaction_time"));
     }
 
     public String getStatus()

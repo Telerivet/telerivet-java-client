@@ -55,13 +55,13 @@ import org.json.JSONArray;
     <li>Time the broadcast was sent in Telerivet</li>
     <li>Read-only</li>
     </ul></li>
-    <li><p>last<em>message</em>time (UNIX timestamp)</p>
+    <li><p>last_message_time (UNIX timestamp)</p>
     
     <ul>
     <li>Time the most recent message was queued to send in this broadcast</li>
     <li>Read-only</li>
     </ul></li>
-    <li><p>last<em>send</em>time (UNIX timestamp)</p>
+    <li><p>last_send_time (UNIX timestamp)</p>
     
     <ul>
     <li>Time the most recent message was sent (or failed to send) in this broadcast, or null
@@ -100,7 +100,7 @@ import org.json.JSONArray;
     
     <ul>
     <li>Type of message sent from this broadcast</li>
-    <li>Allowed values: sms, mms, ussd, call, service</li>
+    <li>Allowed values: sms, mms, ussd, ussd_session, call, chat, service</li>
     <li>Read-only</li>
     </ul></li>
     <li><p>content (string)</p>
@@ -130,7 +130,7 @@ import org.json.JSONArray;
     <li>Allowed values: female, male</li>
     <li>Read-only</li>
     </ul></li>
-    <li><p>is_template (bool)</p>
+    <li><p>replace_variables (bool)</p>
     
     <ul>
     <li>Set to true if Telerivet will render variables like [[contact.name]] in the message
@@ -195,6 +195,15 @@ import org.json.JSONArray;
     <li>Custom variables stored for this broadcast</li>
     <li>Read-only</li>
     </ul></li>
+    <li><p>route_params (JSONObject)</p>
+    
+    <ul>
+    <li>Route-specific parameters for the messages in the broadcast. The parameters object
+      may have keys matching the <code>phone_type</code> field of a phone (basic route) that may be
+      used to send messages in this broadcast. The corresponding value is an object with
+      route-specific parameters to use when sending messages with that type of route.</li>
+    <li>Read-only</li>
+    </ul></li>
     <li><p>price (number)</p>
     
     <ul>
@@ -214,7 +223,7 @@ import org.json.JSONArray;
       (Replies are not included in <code>message_count</code> ,<code>status_counts</code>, or <code>price</code>.)</li>
     <li>Read-only</li>
     </ul></li>
-    <li><p>last<em>reply</em>time (UNIX timestamp)</p>
+    <li><p>last_reply_time (UNIX timestamp)</p>
     
     <ul>
     <li>Time the most recent reply was received in response to a message sent in this
@@ -331,9 +340,9 @@ public class Broadcast extends Entity
         return (String) get("tts_voice");
     }
 
-    public Boolean getIsTemplate()
+    public Boolean getReplaceVariables()
     {
-        return (Boolean) get("is_template");
+        return (Boolean) get("replace_variables");
     }
 
     public String getStatus()
@@ -369,6 +378,11 @@ public class Broadcast extends Entity
     public JSONArray getMedia()
     {
         return (JSONArray) get("media");
+    }
+
+    public JSONObject getRouteParams()
+    {
+        return (JSONObject) get("route_params");
     }
 
     public Double getPrice()

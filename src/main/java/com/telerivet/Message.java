@@ -31,15 +31,15 @@ import org.json.JSONArray;
     
     <ul>
     <li>Current status of the message</li>
-    <li>Allowed values: ignored, processing, received, sent, queued, failed, failed<em>queued,
-      cancelled, delivered, not</em>delivered</li>
+    <li>Allowed values: ignored, processing, received, sent, queued, failed, failed_queued,
+      cancelled, delivered, not_delivered, read</li>
     <li>Read-only</li>
     </ul></li>
     <li><p>message_type</p>
     
     <ul>
     <li>Type of the message</li>
-    <li>Allowed values: sms, mms, ussd, call, service</li>
+    <li>Allowed values: sms, mms, ussd, ussd_session, call, chat, service</li>
     <li>Read-only</li>
     </ul></li>
     <li><p>source</p>
@@ -107,6 +107,15 @@ import org.json.JSONArray;
     <li>List of IDs of labels applied to this message</li>
     <li>Read-only</li>
     </ul></li>
+    <li><p>route_params (JSONObject)</p>
+    
+    <ul>
+    <li>Route-specific parameters for the message. The parameters object may have keys
+      matching the <code>phone_type</code> field of a phone (basic route) that may be used to send the
+      message. The corresponding value is an object with route-specific parameters to use
+      when the message is sent by that type of route.</li>
+    <li>Read-only</li>
+    </ul></li>
     <li><p>vars (JSONObject)</p>
     
     <ul>
@@ -130,8 +139,14 @@ import org.json.JSONArray;
     <li><p>external_id</p>
     
     <ul>
-    <li>The ID of this message from an external SMS gateway provider (e.g. Twilio or Nexmo),
-      if available.</li>
+    <li>The ID of this message from an external SMS gateway provider (e.g. Twilio or
+      Vonage), if available.</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>num_parts (number)</p>
+    
+    <ul>
+    <li>The number of SMS parts associated with the message, if applicable and if known.</li>
     <li>Read-only</li>
     </ul></li>
     <li><p>price (number)</p>
@@ -180,17 +195,6 @@ import org.json.JSONArray;
     <li>Allowed values: female, male</li>
     <li>Read-only</li>
     </ul></li>
-    <li><p>mms_parts (array)</p>
-    
-    <ul>
-    <li><p>A list of parts in the MMS message, the same as returned by the
-      <a href="#Message.getMMSParts">getMMSParts</a> method.</p>
-    
-    <p>Note: This property is only present when retrieving an individual
-      MMS message by ID, not when querying a list of messages. In other cases, use
-      <a href="#Message.getMMSParts">getMMSParts</a>.</p></li>
-    <li>Read-only</li>
-    </ul></li>
     <li><p>track_clicks (boolean)</p>
     
     <ul>
@@ -202,12 +206,24 @@ import org.json.JSONArray;
     
     <ul>
     <li>For text messages containing short URLs, this is an array of objects with the
-      properties <code>short_url</code>, <code>link_type</code>, and <code>time_clicked</code> (the first time that URL was
-      clicked). If <code>link_type</code> is "redirect", the object also contains a <code>destination_url</code>
-      property. If <code>link_type</code> is "media", the object also contains an <code>media_index</code>
-      property (the index in the media array). If <code>link_type</code> is "service", the object also
-      contains a <code>service_id</code> property. This property is undefined for messages that do not
-      contain short URLs.</li>
+      properties <code>short_url</code>, <code>link_type</code>, <code>time_clicked</code> (the first time that URL was
+      clicked), and <code>expiration_time</code>. If <code>link_type</code> is "redirect", the object also
+      contains a <code>destination_url</code> property. If <code>link_type</code> is "media", the object also
+      contains an <code>media_index</code> property (the index in the media array). If <code>link_type</code> is
+      "service", the object also contains a <code>service_id</code> property. This property is
+      undefined for messages that do not contain short URLs.</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>network_code (string)</p>
+    
+    <ul>
+    <li>A string identifying the network that sent or received the message, if known. For
+      mobile networks, this string contains the 3-digit mobile country code (MCC) followed
+      by the 2- or 3-digit mobile network code (MNC), which results in a 5- or 6-digit
+      number. For lists of mobile network operators and their corresponding MCC/MNC values,
+      see <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Mobile_country_code">Mobile country code Wikipedia
+      article</a>. The network_code property
+      may be non-numeric for messages not sent via mobile networks.</li>
     <li>Read-only</li>
     </ul></li>
     <li><p>media (array)</p>
@@ -218,6 +234,31 @@ import org.json.JSONArray;
       Unknown properties are null. This property is undefined for messages that do not
       contain media files. Note: For files uploaded via the Telerivet web app, the URL is
       temporary and may not be valid for more than 1 day.</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>mms_parts (array)</p>
+    
+    <ul>
+    <li><p>A list of parts in the MMS message (only for incoming MMS messages received via
+      Telerivet Gateway Android app).</p>
+    
+    <p>Each MMS part in the list is an object with the following
+      properties:</p>
+    
+    <ul>
+    <li>cid: MMS content-id</li>
+    <li>type: MIME type</li>
+    <li>filename: original filename</li>
+    <li>size (int): number of bytes</li>
+    <li><p>url: URL where the content for this part is stored (secret but
+    publicly accessible, so you could link/embed it in a web page without having to
+    re-host it yourself)</p>
+    
+    <p>In general, the <code>media</code> property of the message is recommended for
+    retrieving information about MMS media files, instead of <code>mms_parts</code>.
+    The <code>mms_parts</code> property is also only present when retrieving an
+    individual MMS message by ID, not when querying a list of messages.</p></li>
+    </ul></li>
     <li>Read-only</li>
     </ul></li>
     <li><p>time_clicked (UNIX timestamp)</p>
@@ -329,20 +370,15 @@ public class Message extends Entity
     }
 
     /**
-        <p>Retrieves a list of MMS parts for this message (empty for non-MMS messages).</p>
+        <p>(Deprecated) Retrieves a list of MMS parts for this message (only for incoming MMS messages
+        received via Telerivet Gateway Android app).
+        Note: This only works for MMS messages received via the Telerivet
+        Gateway Android app.
+        In general, the <code>media</code> property of the message is recommended for
+        retrieving information about MMS media files.</p>
         
-        <p>Each MMS part in the list is an object with the following
-        properties:</p>
-        
-        <ul>
-        <li>cid: MMS content-id</li>
-        <li>type: MIME type</li>
-        <li>filename: original filename</li>
-        <li>size (int): number of bytes</li>
-        <li>url: URL where the content for this part is stored (secret but
-        publicly accessible, so you could link/embed it in a web page without having to re-host it
-        yourself)</li>
-        </ul>
+        <p>The return value has the same format as the <code>mms_parts</code> property of
+        the Message object.</p>
     */
     public JSONArray getMMSParts() throws IOException
     {
@@ -462,6 +498,11 @@ public class Message extends Entity
         return (JSONArray) get("label_ids");
     }
 
+    public JSONObject getRouteParams()
+    {
+        return (JSONObject) get("route_params");
+    }
+
     public Integer getPriority()
     {
         return (Integer) get("priority");
@@ -480,6 +521,11 @@ public class Message extends Entity
     public String getExternalId()
     {
         return (String) get("external_id");
+    }
+
+    public Double getNumParts()
+    {
+        return Util.toDouble(get("num_parts"));
     }
 
     public Double getPrice()
@@ -517,11 +563,6 @@ public class Message extends Entity
         return (String) get("tts_voice");
     }
 
-    public JSONArray getMmsParts()
-    {
-        return (JSONArray) get("mms_parts");
-    }
-
     public String getTrackClicks()
     {
         return (String) get("track_clicks");
@@ -532,9 +573,19 @@ public class Message extends Entity
         return (JSONArray) get("short_urls");
     }
 
+    public String getNetworkCode()
+    {
+        return (String) get("network_code");
+    }
+
     public JSONArray getMedia()
     {
         return (JSONArray) get("media");
+    }
+
+    public JSONArray getMmsParts()
+    {
+        return (JSONArray) get("mms_parts");
     }
 
     public Long getTimeClicked()

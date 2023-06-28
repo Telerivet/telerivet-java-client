@@ -30,15 +30,33 @@ import org.json.JSONArray;
     <li><p>timezone_id</p>
     
     <ul>
-    <li>Default TZ database timezone ID; see
-      <a href="http://en.wikipedia.org/wiki/List_of_tz_database_time_zones">http://en.wikipedia.org/wiki/List_of_tz_database_time_zones</a></li>
-    <li>Read-only</li>
+    <li>Default TZ database timezone ID; see <a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/List_of_tz_database_time_zones">List of tz database time zones Wikipedia
+      article</a>.</li>
+    <li>Updatable via API</li>
     </ul></li>
     <li><p>url_slug</p>
     
     <ul>
     <li>Unique string used as a component of the project's URL in the Telerivet web app</li>
-    <li>Read-only</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>default_route_id</p>
+    
+    <ul>
+    <li>The ID of a basic route or custom route that will be used to send messages by
+      default (via both the API and web app), unless a particular route ID is specified when
+      sending the message.</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>auto_create_contacts (bool)</p>
+    
+    <ul>
+    <li>If true, a contact will be automatically created for each unique phone number that a
+      message is sent to or received from. If false, contacts will not automatically be
+      created (unless contact information is modified by an automated service). The
+      Conversations tab in the web app will only show messages that are associated with a
+      contact.</li>
+    <li>Updatable via API</li>
     </ul></li>
     <li><p>vars (JSONObject)</p>
     
@@ -57,7 +75,7 @@ import org.json.JSONArray;
 public class Project extends Entity
 {
     /**
-        <p>Sends one message (SMS, MMS, voice call, or USSD request).</p>
+        <p>Sends one message (SMS, MMS, chat app message, voice call, or USSD request).</p>
     */
     public Message sendMessage(JSONObject options) throws IOException
     {
@@ -102,6 +120,9 @@ public class Project extends Entity
         messages approximately once every 15 seconds, so it is not possible to control the exact
         second at which a scheduled message is sent.</p>
         
+        <p>Only one of the parameters group_id, to_number, and contact_id
+        should be provided.</p>
+        
         <p>With <code>message_type</code>=<code>service</code>, schedules an automated service (such
         as a poll) to be invoked for a group or list of phone numbers. Any service that can be
         triggered for a contact can be scheduled via this method, whether or not the service
@@ -110,6 +131,27 @@ public class Project extends Entity
     public ScheduledMessage scheduleMessage(JSONObject options) throws IOException
     {
         return new ScheduledMessage(api, (JSONObject) api.doRequest("POST", getBaseApiPath() + "/scheduled", options));
+    }
+
+    /**
+        <p>Creates a relative scheduled message. This allows scheduling messages on a different date
+        for each contact, for example on their birthday, a certain number of days before an
+        appointment, or a certain number of days after enrolling in a campaign.</p>
+        
+        <p>Telerivet will automatically create a
+        <a href="#ScheduledMessage">ScheduledMessage</a> for each contact matching a RelativeScheduledMessage.</p>
+        
+        <p>Relative scheduled messages can be created for a group or an
+        individual contact, although dynamic groups are not supported. Only one of the parameters
+        group_id, to_number, and contact_id should be provided.</p>
+        
+        <p>With message_type=service, schedules an automated service (such as a
+        poll). Any service that can be triggered for a contact can be scheduled via this method,
+        whether or not the service actually sends a message.</p>
+    */
+    public RelativeScheduledMessage createRelativeScheduledMessage(JSONObject options) throws IOException
+    {
+        return new RelativeScheduledMessage(api, (JSONObject) api.doRequest("POST", getBaseApiPath() + "/relative_scheduled", options));
     }
 
     /**
@@ -190,7 +232,7 @@ public class Project extends Entity
     }
 
     /**
-        <p>Queries phones within the given project.</p>
+        <p>Queries basic routes within the given project.</p>
     */
     public APICursor<Phone> queryPhones(JSONObject options)
     {
@@ -203,7 +245,7 @@ public class Project extends Entity
     }
 
     /**
-        <p>Retrieves the phone with the given ID.</p>
+        <p>Retrieves the basic route with the given ID.</p>
     */
     public Phone getPhoneById(String id) throws IOException
     {
@@ -211,7 +253,7 @@ public class Project extends Entity
     }
 
     /**
-        <p>Initializes the phone with the given ID without making an API request.</p>
+        <p>Initializes the basic route with the given ID without making an API request.</p>
     */
     public Phone initPhoneById(String id)
     {
@@ -457,6 +499,19 @@ public class Project extends Entity
     }
 
     /**
+        <p>Queries relative scheduled messages within the given project.</p>
+    */
+    public APICursor<RelativeScheduledMessage> queryRelativeScheduledMessages(JSONObject options)
+    {
+        return api.newCursor(RelativeScheduledMessage.class, getBaseApiPath() + "/relative_scheduled", options);
+    }
+
+    public APICursor<RelativeScheduledMessage> queryRelativeScheduledMessages()
+    {
+        return queryRelativeScheduledMessages(null);
+    }
+
+    /**
         <p>Retrieves the scheduled message with the given ID.</p>
     */
     public ScheduledMessage getScheduledMessageById(String id) throws IOException
@@ -470,6 +525,40 @@ public class Project extends Entity
     public ScheduledMessage initScheduledMessageById(String id)
     {
         return new ScheduledMessage(api, Util.options("project_id", get("id"), "id", id), false);
+    }
+
+    /**
+        <p>Retrieves the scheduled message with the given ID.</p>
+    */
+    public RelativeScheduledMessage getRelativeScheduledMessageById(String id) throws IOException
+    {
+        return new RelativeScheduledMessage(api, (JSONObject) api.doRequest("GET", getBaseApiPath() + "/relative_scheduled/" + id));
+    }
+
+    /**
+        <p>Initializes the relative scheduled message with the given ID without making an API request.</p>
+    */
+    public RelativeScheduledMessage initRelativeScheduledMessageById(String id)
+    {
+        return new RelativeScheduledMessage(api, Util.options("project_id", get("id"), "id", id), false);
+    }
+
+    /**
+        <p>Creates a new automated service.</p>
+        
+        <p>Only certain types of automated services can be created via the API.
+        Other types of services can only be created via the web app.</p>
+        
+        <p>Although Custom Actions services cannot be created directly via the
+        API, they may be converted to a template,
+        and then instances of the template can be created via this method
+        with <code>service_type</code>=<code>custom_template_instance</code>. Converting a service
+        to a template requires the Service Templates feature to be enabled
+        for the organization.</p>
+    */
+    public Service createService(JSONObject options) throws IOException
+    {
+        return new Service(api, (JSONObject) api.doRequest("POST", getBaseApiPath() + "/services", options));
     }
 
     /**
@@ -499,6 +588,22 @@ public class Project extends Entity
     public Service initServiceById(String id)
     {
         return new Service(api, Util.options("project_id", get("id"), "id", id), false);
+    }
+
+    /**
+        <p>Queries service log entries associated with this project.</p>
+        
+        <p>Note: Service logs are automatically deleted and no longer available
+        via the API after approximately one month.</p>
+    */
+    public APICursor<JSONObject> queryServiceLogs(JSONObject options)
+    {
+        return api.newCursor(JSONObject.class, getBaseApiPath() + "/service_logs", options);
+    }
+
+    public APICursor<JSONObject> queryServiceLogs()
+    {
+        return queryServiceLogs(null);
     }
 
     /**
@@ -570,6 +675,54 @@ public class Project extends Entity
     }
 
     /**
+        <p>Gets a list of all custom fields defined for contacts in this project. The return value is
+        an array of objects with the properties 'name', 'variable', 'type', 'order', 'readonly', and
+        'lookup_key'. (Fields are automatically created any time a Contact's 'vars' property is
+        updated.)</p>
+    */
+    public JSONArray getContactFields() throws IOException
+    {
+        return (JSONArray) api.doRequest("GET", getBaseApiPath() + "/contact_fields");
+    }
+
+    /**
+        <p>Allows customizing how a custom contact field is displayed in the Telerivet web app.</p>
+    */
+    public JSONObject setContactFieldMetadata(String variable, JSONObject options) throws IOException
+    {
+        return (JSONObject) api.doRequest("POST", getBaseApiPath() + "/contact_fields/" + variable, options);
+    }
+
+    /**
+        <p>Gets a list of all custom fields defined for messages in this project. The return value is
+        an array of objects with the properties 'name', 'variable', 'type', 'order', 'readonly', and
+        'lookup_key'. (Fields are automatically created any time a Contact's 'vars' property is
+        updated.)</p>
+    */
+    public JSONArray getMessageFields() throws IOException
+    {
+        return (JSONArray) api.doRequest("GET", getBaseApiPath() + "/message_fields");
+    }
+
+    /**
+        <p>Allows customizing how a custom message field is displayed in the Telerivet web app.</p>
+    */
+    public JSONObject setMessageFieldMetadata(String variable, JSONObject options) throws IOException
+    {
+        return (JSONObject) api.doRequest("POST", getBaseApiPath() + "/message_fields/" + variable, options);
+    }
+
+    /**
+        <p>Retrieves statistics about messages sent or received via Telerivet. This endpoint returns
+        historical data that is computed shortly after midnight each day in the project's time zone,
+        and does not contain message statistics for the current day.</p>
+    */
+    public JSONObject getMessageStats(JSONObject options) throws IOException
+    {
+        return (JSONObject) api.doRequest("GET", getBaseApiPath() + "/message_stats", options);
+    }
+
+    /**
         <p>Saves any fields or custom variables that have changed for the project.</p>
     */
     @Override
@@ -598,9 +751,39 @@ public class Project extends Entity
         return (String) get("timezone_id");
     }
 
+    public void setTimezoneId(String value)
+    {
+        set("timezone_id", value);
+    }
+
     public String getUrlSlug()
     {
         return (String) get("url_slug");
+    }
+
+    public void setUrlSlug(String value)
+    {
+        set("url_slug", value);
+    }
+
+    public String getDefaultRouteId()
+    {
+        return (String) get("default_route_id");
+    }
+
+    public void setDefaultRouteId(String value)
+    {
+        set("default_route_id", value);
+    }
+
+    public Boolean getAutoCreateContacts()
+    {
+        return (Boolean) get("auto_create_contacts");
+    }
+
+    public void setAutoCreateContacts(Boolean value)
+    {
+        set("auto_create_contacts", value);
     }
 
     public String getOrganizationId()

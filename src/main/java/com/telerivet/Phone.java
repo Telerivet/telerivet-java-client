@@ -6,7 +6,8 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 
 /**
-    <p>Represents a phone or gateway that you use to send/receive messages via Telerivet.</p>
+    <p>Represents a basic route (i.e. a phone or gateway) that you use to send/receive messages via
+    Telerivet.</p>
     
     <p>Basic Routes were formerly referred to as "Phones" within Telerivet. API
     methods, parameters, and properties related to Basic Routes continue to use the term "Phone"
@@ -58,7 +59,7 @@ import org.json.JSONArray;
     <li>Time the phone was created in Telerivet</li>
     <li>Read-only</li>
     </ul></li>
-    <li><p>last<em>active</em>time (UNIX timestamp)</p>
+    <li><p>last_active_time (UNIX timestamp)</p>
     
     <ul>
     <li>Approximate time this phone last connected to Telerivet</li>
@@ -108,8 +109,8 @@ import org.json.JSONArray;
     
     <ul>
     <li>Android SDK level, indicating the approximate version of the Android OS installed on
-      this phone; see
-      <a href="http://developer.android.com/guide/topics/manifest/uses-sdk-element.html#ApiLevels">http://developer.android.com/guide/topics/manifest/uses-sdk-element.html#ApiLevels</a>
+      this phone; see <a target="_blank" rel="noopener" href="http://developer.android.com/guide/topics/manifest/uses-sdk-element.html#ApiLevels">list of Android SDK
+      levels</a>
       (only present for Android phones)</li>
     <li>Read-only</li>
     </ul></li>
@@ -117,8 +118,9 @@ import org.json.JSONArray;
     
     <ul>
     <li>Code indicating the Android phone's current country (MCC) and mobile network
-      operator (MNC); see <a href="http://en.wikipedia.org/wiki/Mobile_country_code">http://en.wikipedia.org/wiki/Mobile_country_code</a> (only present
-      for Android phones). Note this is a string containing numeric digits, not an integer.</li>
+      operator (MNC); see <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Mobile_country_code">Mobile country code Wikipedia
+      article</a> (only present for Android
+      phones). Note this is a string containing numeric digits, not an integer.</li>
     <li>Read-only</li>
     </ul></li>
     <li><p>manufacturer</p>
@@ -146,7 +148,7 @@ import org.json.JSONArray;
 public class Phone extends Entity
 {
     /**
-        <p>Queries messages sent or received by this phone.</p>
+        <p>Queries messages sent or received by this basic route.</p>
     */
     public APICursor<Message> queryMessages(JSONObject options)
     {
@@ -159,7 +161,7 @@ public class Phone extends Entity
     }
 
     /**
-        <p>Saves any fields or custom variables that have changed for this phone.</p>
+        <p>Saves any fields or custom variables that have changed for this basic route.</p>
     */
     @Override
     public void save() throws IOException

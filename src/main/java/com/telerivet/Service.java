@@ -31,6 +31,12 @@ import org.json.JSONArray;
     <li>Name of the service</li>
     <li>Updatable via API</li>
     </ul></li>
+    <li><p>service_type</p>
+    
+    <ul>
+    <li>Type of the service.</li>
+    <li>Read-only</li>
+    </ul></li>
     <li><p>active (bool)</p>
     
     <ul>
@@ -68,41 +74,62 @@ import org.json.JSONArray;
     <li>ID of the project this service belongs to</li>
     <li>Read-only</li>
     </ul></li>
-    <li><p>label_id</p>
+    <li><p>response_table_id</p>
     
     <ul>
-    <li>ID of the label containing messages sent or received by this service (currently only
-      used for polls)</li>
-    <li>Read-only</li>
+    <li>ID of the data table where responses to this service will be stored</li>
+    <li>Updatable via API</li>
     </ul></li>
-    <li><p>response<em>table</em>id</p>
+    <li><p>phone_ids</p>
     
     <ul>
-    <li>ID of the data table where responses to this service will be stored (currently only
-      used for polls)</li>
-    <li>Read-only</li>
+    <li>IDs of phones (basic routes) associated with this service, or null if the service is
+      associated with all routes. Only applies for service types that handle incoming
+      messages, voice calls, or USSD sessions.</li>
+    <li>Updatable via API</li>
     </ul></li>
-    <li><p>sample<em>group</em>id</p>
+    <li><p>apply_mode</p>
     
     <ul>
-    <li>ID of the group containing contacts that have been invited to interact with this
-      service (currently only used for polls)</li>
-    <li>Read-only</li>
+    <li>If apply_mode is <code>unhandled</code>, the service will not be triggered if another service
+      has already handled the incoming message. If apply_mode is <code>always</code>, the service will
+      always be triggered regardless of other services. Only applies to services that handle
+      incoming messages.</li>
+    <li>Allowed values: always, unhandled</li>
+    <li>Updatable via API</li>
     </ul></li>
-    <li><p>respondent<em>group</em>id</p>
+    <li><p>contact_number_filter</p>
     
     <ul>
-    <li>ID of the group containing contacts that have completed an interaction with this
-      service (currently only used for polls)</li>
-    <li>Read-only</li>
+    <li>If contact_number_filter is <code>long_number</code>, this service will only be triggered if
+      the contact phone number has at least 7 digits (ignoring messages from shortcodes and
+      alphanumeric senders). If contact_number_filter is <code>all</code>, the service will be
+      triggered for all contact phone numbers.  Only applies to services that handle
+      incoming messages.</li>
+    <li>Allowed values: long_number, all</li>
+    <li>Updatable via API</li>
     </ul></li>
-    <li><p>questions (array)</p>
+    <li><p>show_action (bool)</p>
     
     <ul>
-    <li>Array of objects describing each question in a poll (only used for polls). Each
-      object has the properties <code>"id"</code> (the question ID), <code>"content"</code> (the text of the
-      question), and <code>"question_type"</code> (either <code>"multiple_choice"</code>, <code>"missed_call"</code>, or
-      <code>"open"</code>).</li>
+    <li>Whether this service is shown in the 'Actions' menu within the Telerivet web app
+      when the service is active. Only provided for service types that are manually
+      triggered.</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>direction</p>
+    
+    <ul>
+    <li>Determines whether the service handles incoming voice calls, outgoing voice calls,
+      or both. Only applies to services that handle voice calls.</li>
+    <li>Allowed values: incoming, outgoing, both</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>webhook_url</p>
+    
+    <ul>
+    <li>URL that a third-party can invoke to trigger this service. Only provided for
+      services that are triggered by a webhook request.</li>
     <li>Read-only</li>
     </ul></li>
     </ul>
@@ -171,12 +198,45 @@ public class Service extends Entity
     }
 
     /**
+        <p>Gets configuration specific to the type of automated service.</p>
+        
+        <p>Only certain types of services provide their configuration via the
+        API.</p>
+    */
+    public JSONObject getConfig() throws IOException
+    {
+        return (JSONObject) api.doRequest("GET", getBaseApiPath() + "/config");
+    }
+
+    /**
+        <p>Updates configuration specific to the type of automated service.</p>
+        
+        <p>Only certain types of services support updating their configuration
+        via the API.</p>
+        
+        <p>Note: when updating a service of type custom_template_instance,
+        the validation script will be invoked when calling this method.</p>
+    */
+    public JSONObject setConfig(JSONObject options) throws IOException
+    {
+        return (JSONObject) api.doRequest("POST", getBaseApiPath() + "/config", options);
+    }
+
+    /**
         <p>Saves any fields or custom variables that have changed for this service.</p>
     */
     @Override
     public void save() throws IOException
     {
         super.save();
+    }
+
+    /**
+        <p>Deletes this service.</p>
+    */
+    public void delete() throws IOException
+    {
+        api.doRequest("DELETE", getBaseApiPath());
     }
 
     public String getId()
@@ -192,6 +252,11 @@ public class Service extends Entity
     public void setName(String value)
     {
         set("name", value);
+    }
+
+    public String getServiceType()
+    {
+        return (String) get("service_type");
     }
 
     public Boolean getActive()
@@ -224,29 +289,69 @@ public class Service extends Entity
         return (String) get("project_id");
     }
 
-    public String getLabelId()
-    {
-        return (String) get("label_id");
-    }
-
     public String getResponseTableId()
     {
         return (String) get("response_table_id");
     }
 
-    public String getSampleGroupId()
+    public void setResponseTableId(String value)
     {
-        return (String) get("sample_group_id");
+        set("response_table_id", value);
     }
 
-    public String getRespondentGroupId()
+    public String getPhoneIds()
     {
-        return (String) get("respondent_group_id");
+        return (String) get("phone_ids");
     }
 
-    public JSONArray getQuestions()
+    public void setPhoneIds(String value)
     {
-        return (JSONArray) get("questions");
+        set("phone_ids", value);
+    }
+
+    public String getApplyMode()
+    {
+        return (String) get("apply_mode");
+    }
+
+    public void setApplyMode(String value)
+    {
+        set("apply_mode", value);
+    }
+
+    public String getContactNumberFilter()
+    {
+        return (String) get("contact_number_filter");
+    }
+
+    public void setContactNumberFilter(String value)
+    {
+        set("contact_number_filter", value);
+    }
+
+    public Boolean getShowAction()
+    {
+        return (Boolean) get("show_action");
+    }
+
+    public void setShowAction(Boolean value)
+    {
+        set("show_action", value);
+    }
+
+    public String getDirection()
+    {
+        return (String) get("direction");
+    }
+
+    public void setDirection(String value)
+    {
+        set("direction", value);
+    }
+
+    public String getWebhookUrl()
+    {
+        return (String) get("webhook_url");
     }
 
     @Override

@@ -6,7 +6,18 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 
 /**
-    <p>Represents a scheduled message within Telerivet.</p>
+    <p>A relative scheduled message is a message that is scheduled relative to a date stored as a
+    custom field for each recipient contact.
+    This allows scheduling messages on a different date for each contact, for
+    example on their birthday, a certain number of days before an appointment, or a certain
+    number of days after enrolling in a campaign.</p>
+    
+    <p>Telerivet will automatically create a <a href="#ScheduledMessage">ScheduledMessage</a>
+    for each contact matching a RelativeScheduledMessage.</p>
+    
+    <p>Any service that can be manually triggered for a contact (including polls)
+    may also be scheduled via a relative scheduled message, whether or not the service actually
+    sends a message.</p>
     
     <p>Fields:</p>
     
@@ -14,13 +25,44 @@ import org.json.JSONArray;
     <li><p>id (string, max 34 characters)</p>
     
     <ul>
-    <li>ID of the scheduled message</li>
+    <li>ID of the relative scheduled message</li>
     <li>Read-only</li>
     </ul></li>
     <li><p>content</p>
     
     <ul>
-    <li>Text content of the scheduled message</li>
+    <li>Text content of the relative scheduled message</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>time_of_day</p>
+    
+    <ul>
+    <li>Time of day when scheduled messages will be sent in HH:MM format (with hours from 00
+      to 23)</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>date_variable</p>
+    
+    <ul>
+    <li>Custom contact variable storing date or date/time values relative to which messages
+      will be scheduled.</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>offset_scale</p>
+    
+    <ul>
+    <li>The type of interval (day/week/month/year) that will be used to adjust the scheduled
+      date relative to the date stored in the contact's date_variable, when offset_count is
+      non-zero (D=day, W=week, M=month, Y=year)</li>
+    <li>Allowed values: D, W, M, Y</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>offset_count (int)</p>
+    
+    <ul>
+    <li>The number of days/weeks/months/years to adjust the date of the scheduled message
+      relative relative to the date stored in the contact's date_variable. May be positive,
+      negative, or zero.</li>
     <li>Updatable via API</li>
     </ul></li>
     <li><p>rrule</p>
@@ -31,6 +73,13 @@ import org.json.JSONArray;
       <a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc2445#section-4.3.10">RFC2445</a>.</li>
     <li>Updatable via API</li>
     </ul></li>
+    <li><p>end_time (UNIX timestamp)</p>
+    
+    <ul>
+    <li>Time after which recurring messages will stop (not applicable to non-recurring
+      scheduled messages)</li>
+    <li>Updatable via API</li>
+    </ul></li>
     <li><p>timezone_id</p>
     
     <ul>
@@ -39,51 +88,29 @@ import org.json.JSONArray;
       article</a>.</li>
     <li>Updatable via API</li>
     </ul></li>
-    <li><p>recipients (array of objects)</p>
-    
-    <ul>
-    <li><p>List of recipients. Each recipient is an object with a string <code>type</code> property, which
-      may be <code>"phone_number"</code>, <code>"group"</code>, or <code>"filter"</code>.</p>
-    
-    <p>If the type is <code>"phone_number"</code>, the <code>phone_number</code> property will
-      be set to the recipient's phone number.</p>
-    
-    <p>If the type is <code>"group"</code>, the <code>group_id</code> property will be set to
-      the ID of the group, and the <code>group_name</code> property will be set to the name of the
-      group.</p>
-    
-    <p>If the type is <code>"filter"</code>, the <code>filter_type</code> property (string) and
-      <code>filter_params</code> property (object) describe the filter used to send the broadcast. (API
-      clients should not rely on a particular value or format of the <code>filter_type</code> or
-      <code>filter_params</code> properties, as they may change without notice.)</p></li>
-    <li>Read-only</li>
-    </ul></li>
     <li><p>recipients_str</p>
     
     <ul>
-    <li>A string with a human readable description of the first few recipients (possibly
-      truncated)</li>
+    <li>A string with a human readable description of the recipient</li>
     <li>Read-only</li>
     </ul></li>
     <li><p>group_id</p>
     
     <ul>
     <li>ID of the group to send the message to (null if the recipient is an individual
-      contact, or if there are multiple recipients)</li>
+      contact)</li>
     <li>Updatable via API</li>
     </ul></li>
     <li><p>contact_id</p>
     
     <ul>
-    <li>ID of the contact to send the message to (null if the recipient is a group, or if
-      there are multiple recipients)</li>
+    <li>ID of the contact to send the message to (null if the recipient is a group)</li>
     <li>Updatable via API</li>
     </ul></li>
     <li><p>to_number</p>
     
     <ul>
-    <li>Phone number to send the message to (null if the recipient is a group, or if there
-      are multiple recipients)</li>
+    <li>Phone number to send the message to (null if the recipient is a group)</li>
     <li>Updatable via API</li>
     </ul></li>
     <li><p>route_id</p>
@@ -130,40 +157,7 @@ import org.json.JSONArray;
     <li><p>time_created (UNIX timestamp)</p>
     
     <ul>
-    <li>Time the scheduled message was created in Telerivet</li>
-    <li>Read-only</li>
-    </ul></li>
-    <li><p>start_time (UNIX timestamp)</p>
-    
-    <ul>
-    <li>The time that the message will be sent (or first sent for recurring messages)</li>
-    <li>Updatable via API</li>
-    </ul></li>
-    <li><p>end_time (UNIX timestamp)</p>
-    
-    <ul>
-    <li>Time after which a recurring message will stop (not applicable to non-recurring
-      scheduled messages)</li>
-    <li>Updatable via API</li>
-    </ul></li>
-    <li><p>prev_time (UNIX timestamp)</p>
-    
-    <ul>
-    <li>The most recent time that Telerivet has sent this scheduled message (null if it has
-      never been sent)</li>
-    <li>Read-only</li>
-    </ul></li>
-    <li><p>next_time (UNIX timestamp)</p>
-    
-    <ul>
-    <li>The next upcoming time that Telerivet will sent this scheduled message (null if it
-      will not be sent again)</li>
-    <li>Read-only</li>
-    </ul></li>
-    <li><p>occurrences (int)</p>
-    
-    <ul>
-    <li>Number of times this scheduled message has already been sent</li>
+    <li>Time the relative scheduled message was created in Telerivet</li>
     <li>Read-only</li>
     </ul></li>
     <li><p>replace_variables (bool)</p>
@@ -202,7 +196,8 @@ import org.json.JSONArray;
     <li><p>vars (JSONObject)</p>
     
     <ul>
-    <li>Custom variables stored for this scheduled message (copied to Message when sent)</li>
+    <li>Custom variables stored for this scheduled message (copied to each ScheduledMessage
+      and Message when sent)</li>
     <li>Updatable via API</li>
     </ul></li>
     <li><p>label_ids (array)</p>
@@ -211,25 +206,18 @@ import org.json.JSONArray;
     <li>IDs of labels to add to the Message</li>
     <li>Updatable via API</li>
     </ul></li>
-    <li><p>relative_scheduled_id</p>
-    
-    <ul>
-    <li>ID of the relative scheduled message this scheduled message was created from, if
-      applicable</li>
-    <li>Read-only</li>
-    </ul></li>
     <li><p>project_id</p>
     
     <ul>
-    <li>ID of the project this scheduled message belongs to</li>
+    <li>ID of the project this relative scheduled message belongs to</li>
     <li>Read-only</li>
     </ul></li>
     </ul>
 */
-public class ScheduledMessage extends Entity
+public class RelativeScheduledMessage extends Entity
 {
     /**
-        <p>Saves any fields or custom variables that have changed for this scheduled message.</p>
+        <p>Saves any fields or custom variables that have changed for this relative scheduled message.</p>
     */
     @Override
     public void save() throws IOException
@@ -238,7 +226,7 @@ public class ScheduledMessage extends Entity
     }
 
     /**
-        <p>Cancels this scheduled message.</p>
+        <p>Deletes this relative scheduled message and any associated scheduled messages.</p>
     */
     public void delete() throws IOException
     {
@@ -260,6 +248,46 @@ public class ScheduledMessage extends Entity
         set("content", value);
     }
 
+    public String getTimeOfDay()
+    {
+        return (String) get("time_of_day");
+    }
+
+    public void setTimeOfDay(String value)
+    {
+        set("time_of_day", value);
+    }
+
+    public String getDateVariable()
+    {
+        return (String) get("date_variable");
+    }
+
+    public void setDateVariable(String value)
+    {
+        set("date_variable", value);
+    }
+
+    public String getOffsetScale()
+    {
+        return (String) get("offset_scale");
+    }
+
+    public void setOffsetScale(String value)
+    {
+        set("offset_scale", value);
+    }
+
+    public Integer getOffsetCount()
+    {
+        return (Integer) get("offset_count");
+    }
+
+    public void setOffsetCount(Integer value)
+    {
+        set("offset_count", value);
+    }
+
     public String getRrule()
     {
         return (String) get("rrule");
@@ -270,6 +298,16 @@ public class ScheduledMessage extends Entity
         set("rrule", value);
     }
 
+    public Long getEndTime()
+    {
+        return Util.toLong(get("end_time"));
+    }
+
+    public void setEndTime(Long value)
+    {
+        set("end_time", value);
+    }
+
     public String getTimezoneId()
     {
         return (String) get("timezone_id");
@@ -278,11 +316,6 @@ public class ScheduledMessage extends Entity
     public void setTimezoneId(String value)
     {
         set("timezone_id", value);
-    }
-
-    public JSONArray getRecipients()
-    {
-        return (JSONArray) get("recipients");
     }
 
     public String getRecipientsStr()
@@ -380,41 +413,6 @@ public class ScheduledMessage extends Entity
         return Util.toLong(get("time_created"));
     }
 
-    public Long getStartTime()
-    {
-        return Util.toLong(get("start_time"));
-    }
-
-    public void setStartTime(Long value)
-    {
-        set("start_time", value);
-    }
-
-    public Long getEndTime()
-    {
-        return Util.toLong(get("end_time"));
-    }
-
-    public void setEndTime(Long value)
-    {
-        set("end_time", value);
-    }
-
-    public Long getPrevTime()
-    {
-        return Util.toLong(get("prev_time"));
-    }
-
-    public Long getNextTime()
-    {
-        return Util.toLong(get("next_time"));
-    }
-
-    public Integer getOccurrences()
-    {
-        return (Integer) get("occurrences");
-    }
-
     public Boolean getReplaceVariables()
     {
         return (Boolean) get("replace_variables");
@@ -460,11 +458,6 @@ public class ScheduledMessage extends Entity
         set("label_ids", value);
     }
 
-    public String getRelativeScheduledId()
-    {
-        return (String) get("relative_scheduled_id");
-    }
-
     public String getProjectId()
     {
         return (String) get("project_id");
@@ -473,15 +466,15 @@ public class ScheduledMessage extends Entity
     @Override
     public String getBaseApiPath()
     {
-        return "/projects/" + getProjectId() + "/scheduled/" + getId() + "";
+        return "/projects/" + getProjectId() + "/relative_scheduled/" + getId() + "";
     }
 
-    public ScheduledMessage(TelerivetAPI api, JSONObject data)
+    public RelativeScheduledMessage(TelerivetAPI api, JSONObject data)
     {
         this(api, data, true);
     }
 
-    public ScheduledMessage(TelerivetAPI api, JSONObject data, boolean isLoaded)
+    public RelativeScheduledMessage(TelerivetAPI api, JSONObject data, boolean isLoaded)
     {
         super(api, data, isLoaded);
     }

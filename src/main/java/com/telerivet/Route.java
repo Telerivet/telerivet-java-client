@@ -48,7 +48,7 @@ import org.json.JSONArray;
 public class Route extends Entity
 {
     /**
-        <p>Saves any fields or custom variables that have changed for this route.</p>
+        <p>Saves any fields or custom variables that have changed for this custom route.</p>
     */
     @Override
     public void save() throws IOException

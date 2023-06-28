@@ -26,14 +26,25 @@ import org.json.JSONArray;
     <li><p>timezone_id</p>
     
     <ul>
-    <li>Billing quota time zone ID; see
-      <a href="http://en.wikipedia.org/wiki/List_of_tz_database_time_zones">http://en.wikipedia.org/wiki/List_of_tz_database_time_zones</a></li>
+    <li>Billing quota time zone ID; see <a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/List_of_tz_database_time_zones">List of tz database time zones Wikipedia
+      article</a>.</li>
     <li>Updatable via API</li>
     </ul></li>
     </ul>
 */
 public class Organization extends Entity
 {
+    /**
+        <p>Creates a new project.</p>
+        
+        <p>Some project settings are not currently possible to configure via
+        the API, and can only be edited via the web app after the project is created.</p>
+    */
+    public Project createProject(JSONObject options) throws IOException
+    {
+        return new Project(api, (JSONObject) api.doRequest("POST", getBaseApiPath() + "/projects", options));
+    }
+
     /**
         <p>Saves any fields that have changed for this organization.</p>
     */
@@ -59,6 +70,16 @@ public class Organization extends Entity
     public Integer getUsage(String usage_type) throws IOException
     {
         return (Integer) api.doRequest("GET", getBaseApiPath() + "/usage/" + usage_type);
+    }
+
+    /**
+        <p>Retrieves statistics about messages sent or received via Telerivet. This endpoint returns
+        historical data that is computed shortly after midnight each day in the project's time zone,
+        and does not contain message statistics for the current day.</p>
+    */
+    public JSONObject getMessageStats(JSONObject options) throws IOException
+    {
+        return (JSONObject) api.doRequest("GET", getBaseApiPath() + "/message_stats", options);
     }
 
     /**

@@ -50,7 +50,7 @@ import org.json.JSONTokener;
  * @author youngj
  */
 public class TelerivetAPI {
-    public static String CLIENT_VERSION = "1.5.0";
+    public static String CLIENT_VERSION = "1.7.0";
 
     public static final int HTTP_CONNECTION_TIMEOUT = 10000; // ms
     public static final int HTTP_SOCKET_TIMEOUT = 10000; // ms
@@ -67,7 +67,7 @@ public class TelerivetAPI {
         <p>Each API key is associated with a Telerivet user account, and all
         API actions are performed with that user's permissions. If you want to restrict the
         permissions of an API client, simply add another user account at
-        <a href="https://telerivet.com/dashboard/users">https://telerivet.com/dashboard/users</a> with the desired permissions.</p>
+        <a target="_blank" rel="noopener" href="https://telerivet.com/dashboard/users">https://telerivet.com/dashboard/users</a> with the desired permissions.</p>
     */
     public TelerivetAPI(String apiKey)
     {
@@ -147,7 +147,7 @@ public class TelerivetAPI {
     {
         return "";
     }
-    protected <T extends Entity> APICursor<T> newCursor(Class<T> itemClass, String path, JSONObject options)
+    protected <T> APICursor<T> newCursor(Class<T> itemClass, String path, JSONObject options)
     {
         return new APICursor<T>(this, itemClass, path, options);
     }

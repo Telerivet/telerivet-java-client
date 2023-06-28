@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.telerivet</groupId>
   <artifactId>TelerivetAPIClient</artifactId>
-  <version>1.5.0</version>
+  <version>1.7.0</version>
   <packaging>jar</packaging>
   <name>Telerivet Java Client</name>
   <description>Java client library for Telerivet REST API</description>
@@ -42,7 +42,7 @@
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
-      <version>4.3.4</version>
+      <version>4.5.13</version>
     </dependency>
     <dependency>
       <groupId>org.json</groupId>

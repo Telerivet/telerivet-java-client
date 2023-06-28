@@ -54,20 +54,20 @@ import org.json.JSONArray;
     <li>Allowed values: closed, active, handled</li>
     <li>Updatable via API</li>
     </ul></li>
-    <li><p>last<em>message</em>time (UNIX timestamp)</p>
+    <li><p>last_message_time (UNIX timestamp)</p>
     
     <ul>
     <li>Last time the contact sent or received a message (null if no messages have been sent
       or received)</li>
     <li>Read-only</li>
     </ul></li>
-    <li><p>last<em>incoming</em>message_time (UNIX timestamp)</p>
+    <li><p>last_incoming_message_time (UNIX timestamp)</p>
     
     <ul>
     <li>Last time a message was received from this contact</li>
     <li>Read-only</li>
     </ul></li>
-    <li><p>last<em>outgoing</em>message_time (UNIX timestamp)</p>
+    <li><p>last_outgoing_message_time (UNIX timestamp)</p>
     
     <ul>
     <li>Last time a message was sent to this contact</li>
@@ -79,30 +79,30 @@ import org.json.JSONArray;
     <li>Total number of non-deleted messages sent to or received from this contact</li>
     <li>Read-only</li>
     </ul></li>
-    <li><p>incoming<em>message</em>count (int)</p>
+    <li><p>incoming_message_count (int)</p>
     
     <ul>
     <li>Number of messages received from this contact</li>
     <li>Read-only</li>
     </ul></li>
-    <li><p>outgoing<em>message</em>count (int)</p>
+    <li><p>outgoing_message_count (int)</p>
     
     <ul>
     <li>Number of messages sent to this contact</li>
     <li>Read-only</li>
     </ul></li>
-    <li><p>last<em>message</em>id</p>
+    <li><p>last_message_id</p>
     
     <ul>
     <li>ID of the last message sent to or received from this contact (null if no messages
       have been sent or received)</li>
     <li>Read-only</li>
     </ul></li>
-    <li><p>default<em>route</em>id</p>
+    <li><p>default_route_id</p>
     
     <ul>
-    <li>ID of the phone or route that Telerivet will use by default to send messages to this
-      contact (null if using project default route)</li>
+    <li>ID of the basic route (phone) or custom route that Telerivet will use by default to
+      send messages to this contact (null if using project default route)</li>
     <li>Updatable via API</li>
     </ul></li>
     <li><p>group_ids (array of strings)</p>

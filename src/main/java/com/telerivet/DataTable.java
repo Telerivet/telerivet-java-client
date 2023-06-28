@@ -37,7 +37,7 @@ import org.json.JSONArray;
       out-of-date.</li>
     <li>Read-only</li>
     </ul></li>
-    <li><p>show<em>add</em>row (bool)</p>
+    <li><p>show_add_row (bool)</p>
     
     <ul>
     <li>Whether to allow adding or importing rows via the web app</li>
@@ -49,7 +49,7 @@ import org.json.JSONArray;
     <li>Whether to show row statistics in the web app</li>
     <li>Updatable via API</li>
     </ul></li>
-    <li><p>show<em>contact</em>columns (bool)</p>
+    <li><p>show_contact_columns (bool)</p>
     
     <ul>
     <li>Whether to show 'Contact Name' and 'Phone Number' columns in the web app</li>
