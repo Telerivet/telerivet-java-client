@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 
 /**
-    <p>Represents a scheduled message within Telerivet.</p>
+    <div class='markdown'><p>Represents a scheduled message within Telerivet.</p>
     
     <p>Fields:</p>
     
@@ -193,16 +193,25 @@ import org.json.JSONArray;
     <li><p>route_params (JSONObject)</p>
     
     <ul>
-    <li>Route-specific parameters to use when sending the message. The parameters object may
-      have keys matching the <code>phone_type</code> field of a phone (basic route) that may be used to
-      send the message. The corresponding value is an object with route-specific parameters
-      to use when sending a message with that type of route.</li>
+    <li><p>Route-specific parameters to use when sending the message.</p>
+    
+    <p>When sending messages via chat apps such as WhatsApp, the route_params
+      parameter can be used to send messages with app-specific features such as quick
+      replies and link buttons.</p>
+    
+    <p>For more details, see <a href="#route_params">Route-Specific Parameters</a>.</p></li>
     <li>Updatable via API</li>
     </ul></li>
     <li><p>vars (JSONObject)</p>
     
     <ul>
-    <li>Custom variables stored for this scheduled message (copied to Message when sent)</li>
+    <li>Custom variables stored for this scheduled message (copied to Message when sent).
+      Variable names may be up to 32 characters in length and can contain the characters
+      a-z, A-Z, 0-9, and _.
+      Values may be strings, numbers, or boolean (true/false).
+      String values may be up to 4096 bytes in length when encoded as UTF-8.
+      Up to 100 variables are supported per object.
+      Setting a variable to null will delete the variable.</li>
     <li>Updatable via API</li>
     </ul></li>
     <li><p>label_ids (array)</p>
@@ -225,11 +234,13 @@ import org.json.JSONArray;
     <li>Read-only</li>
     </ul></li>
     </ul>
+    </div>
 */
 public class ScheduledMessage extends Entity
 {
     /**
-        <p>Saves any fields or custom variables that have changed for this scheduled message.</p>
+        <div class='markdown'><p>Saves any fields or custom variables that have changed for this scheduled message.</p>
+        </div>
     */
     @Override
     public void save() throws IOException
@@ -238,7 +249,8 @@ public class ScheduledMessage extends Entity
     }
 
     /**
-        <p>Cancels this scheduled message.</p>
+        <div class='markdown'><p>Cancels this scheduled message.</p>
+        </div>
     */
     public void delete() throws IOException
     {

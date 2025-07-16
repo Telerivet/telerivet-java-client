@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 
 /**
-    <p>Represents a custom route that can be used to send messages via one or more basic routes
+    <div class='markdown'><p>Represents a custom route that can be used to send messages via one or more basic routes
     (phones).</p>
     
     <p>Custom Routes were formerly referred to simply as "Routes" within Telerivet. API methods,
@@ -34,7 +34,12 @@ import org.json.JSONArray;
     <li><p>vars (JSONObject)</p>
     
     <ul>
-    <li>Custom variables stored for this route</li>
+    <li>Custom variables stored for this route. Variable names may be up to 32 characters in
+      length and can contain the characters a-z, A-Z, 0-9, and _.
+      Values may be strings, numbers, or boolean (true/false).
+      String values may be up to 4096 bytes in length when encoded as UTF-8.
+      Up to 100 variables are supported per object.
+      Setting a variable to null will delete the variable.</li>
     <li>Updatable via API</li>
     </ul></li>
     <li><p>project_id</p>
@@ -44,11 +49,13 @@ import org.json.JSONArray;
     <li>Read-only</li>
     </ul></li>
     </ul>
+    </div>
 */
 public class Route extends Entity
 {
     /**
-        <p>Saves any fields or custom variables that have changed for this custom route.</p>
+        <div class='markdown'><p>Saves any fields or custom variables that have changed for this custom route.</p>
+        </div>
     */
     @Override
     public void save() throws IOException

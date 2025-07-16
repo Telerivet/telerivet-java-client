@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 
 /**
-    <p>Represents an automated service on Telerivet, for example a poll, auto-reply, webhook
+    <div class='markdown'><p>Represents an automated service on Telerivet, for example a poll, auto-reply, webhook
     service, etc.</p>
     
     <p>A service, generally, defines some automated behavior that can be
@@ -65,7 +65,12 @@ import org.json.JSONArray;
     <li><p>vars (JSONObject)</p>
     
     <ul>
-    <li>Custom variables stored for this service</li>
+    <li>Custom variables stored for this service. Variable names may be up to 32 characters
+      in length and can contain the characters a-z, A-Z, 0-9, and _.
+      Values may be strings, numbers, or boolean (true/false).
+      String values may be up to 4096 bytes in length when encoded as UTF-8.
+      Up to 100 variables are supported per object.
+      Setting a variable to null will delete the variable.</li>
     <li>Updatable via API</li>
     </ul></li>
     <li><p>project_id</p>
@@ -133,15 +138,17 @@ import org.json.JSONArray;
     <li>Read-only</li>
     </ul></li>
     </ul>
+    </div>
  */
 public class Service extends Entity 
 {    
     /**
-        <p>Gets the current state for a particular contact for this service.</p>
+        <div class='markdown'><p>Gets the current state for a particular contact for this service.</p>
         
         <p>If the contact doesn't already have a state, this method will return
         a valid state object with id=null. However this object would not be returned by
         queryContactStates() unless it is saved with a non-null state id.</p>
+        </div>
      */
     public ContactServiceState getContactState(Contact contact) throws IOException
     {
@@ -149,8 +156,9 @@ public class Service extends Entity
     }
     
     /**
-        <p>Initializes or updates the current state for a particular contact for the given service. If
+        <div class='markdown'><p>Initializes or updates the current state for a particular contact for the given service. If
         the state id is null, the contact's state will be reset.</p>
+        </div>
      */
     public ContactServiceState setContactState(Contact contact, JSONObject options) throws IOException
     {
@@ -158,7 +166,8 @@ public class Service extends Entity
     }    
         
     /**
-        <p>Resets the current state for a particular contact for the given service.</p>
+        <div class='markdown'><p>Resets the current state for a particular contact for the given service.</p>
+        </div>
      */
     public ContactServiceState resetContactState(Contact contact) throws IOException
     {
@@ -166,7 +175,7 @@ public class Service extends Entity
     }            
     
     /**
-        <p>Manually invoke this service in a particular context.</p>
+        <div class='markdown'><p>Manually invoke this service in a particular context.</p>
         
         <p>For example, to send a poll to a particular contact (or resend the
         current question), you can invoke the poll service with context=contact, and <code>contact_id</code> as
@@ -178,6 +187,7 @@ public class Service extends Entity
         invoke the service with <code>context</code>=<code>message</code>, <code>event</code>=<code>incoming_message</code>, and <code>message_id</code> as
         the ID of the incoming message. (This is normally not necessary, but could be used if you
         want to override Telerivet's standard priority-ordering of services.)</p>
+        </div>
     */
     public JSONObject invoke(JSONObject options) throws IOException
     {
@@ -185,7 +195,8 @@ public class Service extends Entity
     }
 
     /**
-        <p>Query the current states of contacts for this service.</p>
+        <div class='markdown'><p>Query the current states of contacts for this service.</p>
+        </div>
     */
     public APICursor<ContactServiceState> queryContactStates(JSONObject options)
     {
@@ -198,10 +209,11 @@ public class Service extends Entity
     }
 
     /**
-        <p>Gets configuration specific to the type of automated service.</p>
+        <div class='markdown'><p>Gets configuration specific to the type of automated service.</p>
         
         <p>Only certain types of services provide their configuration via the
         API.</p>
+        </div>
     */
     public JSONObject getConfig() throws IOException
     {
@@ -209,13 +221,14 @@ public class Service extends Entity
     }
 
     /**
-        <p>Updates configuration specific to the type of automated service.</p>
+        <div class='markdown'><p>Updates configuration specific to the type of automated service.</p>
         
         <p>Only certain types of services support updating their configuration
         via the API.</p>
         
         <p>Note: when updating a service of type custom_template_instance,
         the validation script will be invoked when calling this method.</p>
+        </div>
     */
     public JSONObject setConfig(JSONObject options) throws IOException
     {
@@ -223,7 +236,8 @@ public class Service extends Entity
     }
 
     /**
-        <p>Saves any fields or custom variables that have changed for this service.</p>
+        <div class='markdown'><p>Saves any fields or custom variables that have changed for this service.</p>
+        </div>
     */
     @Override
     public void save() throws IOException
@@ -232,7 +246,8 @@ public class Service extends Entity
     }
 
     /**
-        <p>Deletes this service.</p>
+        <div class='markdown'><p>Deletes this service.</p>
+        </div>
     */
     public void delete() throws IOException
     {

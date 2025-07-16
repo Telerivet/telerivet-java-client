@@ -8,7 +8,7 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 
 /**
-    <p>Fields:</p>
+    <div class='markdown'><p>Fields:</p>
     
     <ul>
     <li><p>id (string, max 34 characters)</p>
@@ -114,7 +114,12 @@ import org.json.JSONArray;
     <li><p>vars (JSONObject)</p>
     
     <ul>
-    <li>Custom variables stored for this contact</li>
+    <li>Custom variables stored for this contact. Variable names may be up to 32 characters
+      in length and can contain the characters a-z, A-Z, 0-9, and _.
+      Values may be strings, numbers, or boolean (true/false).
+      String values may be up to 4096 bytes in length when encoded as UTF-8.
+      Up to 100 variables are supported per object.
+      Setting a variable to null will delete the variable.</li>
     <li>Updatable via API</li>
     </ul></li>
     <li><p>project_id</p>
@@ -124,11 +129,13 @@ import org.json.JSONArray;
     <li>Read-only</li>
     </ul></li>
     </ul>
+    </div>
  */
 public class Contact extends Entity 
 {    
     /**
-        <p>Returns true if this contact is in a particular group, false otherwise.</p>
+        <div class='markdown'><p>Returns true if this contact is in a particular group, false otherwise.</p>
+        </div>
      */
     public boolean isInGroup(Group group)
     {
@@ -137,7 +144,8 @@ public class Contact extends Entity
     }
       
     /**
-        <p>Adds this contact to a group.</p>
+        <div class='markdown'><p>Adds this contact to a group.</p>
+        </div>
      */
     public void addToGroup(Group group) throws IOException
     {
@@ -146,7 +154,8 @@ public class Contact extends Entity
     }
     
     /**
-        <p>Removes this contact from a group.</p>
+        <div class='markdown'><p>Removes this contact from a group.</p>
+        </div>
      */    
     public void removeFromGroup(Group group) throws IOException
     {    
@@ -175,7 +184,8 @@ public class Contact extends Entity
     }
 
     /**
-        <p>Queries messages sent or received by this contact.</p>
+        <div class='markdown'><p>Queries messages sent or received by this contact.</p>
+        </div>
     */
     public APICursor<Message> queryMessages(JSONObject options)
     {
@@ -188,7 +198,8 @@ public class Contact extends Entity
     }
 
     /**
-        <p>Queries groups for which this contact is a member.</p>
+        <div class='markdown'><p>Queries groups for which this contact is a member.</p>
+        </div>
     */
     public APICursor<Group> queryGroups(JSONObject options)
     {
@@ -201,8 +212,9 @@ public class Contact extends Entity
     }
 
     /**
-        <p>Queries messages scheduled to this contact (not including messages scheduled to groups that
+        <div class='markdown'><p>Queries messages scheduled to this contact (not including messages scheduled to groups that
         this contact is a member of)</p>
+        </div>
     */
     public APICursor<ScheduledMessage> queryScheduledMessages(JSONObject options)
     {
@@ -215,7 +227,8 @@ public class Contact extends Entity
     }
 
     /**
-        <p>Queries data rows associated with this contact (in any data table).</p>
+        <div class='markdown'><p>Queries data rows associated with this contact (in any data table).</p>
+        </div>
     */
     public APICursor<DataRow> queryDataRows(JSONObject options)
     {
@@ -228,7 +241,8 @@ public class Contact extends Entity
     }
 
     /**
-        <p>Queries this contact's current states for any service</p>
+        <div class='markdown'><p>Queries this contact's current states for any service</p>
+        </div>
     */
     public APICursor<ContactServiceState> queryServiceStates(JSONObject options)
     {
@@ -241,7 +255,8 @@ public class Contact extends Entity
     }
 
     /**
-        <p>Saves any fields or custom variables that have changed for this contact.</p>
+        <div class='markdown'><p>Saves any fields or custom variables that have changed for this contact.</p>
+        </div>
     */
     @Override
     public void save() throws IOException
@@ -250,7 +265,8 @@ public class Contact extends Entity
     }
 
     /**
-        <p>Deletes this contact.</p>
+        <div class='markdown'><p>Deletes this contact.</p>
+        </div>
     */
     public void delete() throws IOException
     {

@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 
 /**
-    <p>Represents a custom data table that can store arbitrary rows.</p>
+    <div class='markdown'><p>Represents a custom data table that can store arbitrary rows.</p>
     
     <p>For example, poll services use data tables to store a row for each response.</p>
     
@@ -46,7 +46,8 @@ import org.json.JSONArray;
     <li><p>show_stats (bool)</p>
     
     <ul>
-    <li>Whether to show row statistics in the web app</li>
+    <li>Whether to show summary charts (pie charts, bar charts, tables of top values) for
+      this data table in the web app</li>
     <li>Updatable via API</li>
     </ul></li>
     <li><p>show_contact_columns (bool)</p>
@@ -58,7 +59,12 @@ import org.json.JSONArray;
     <li><p>vars (JSONObject)</p>
     
     <ul>
-    <li>Custom variables stored for this data table</li>
+    <li>Custom variables stored for this data table. Variable names may be up to 32
+      characters in length and can contain the characters a-z, A-Z, 0-9, and _.
+      Values may be strings, numbers, or boolean (true/false).
+      String values may be up to 4096 bytes in length when encoded as UTF-8.
+      Up to 100 variables are supported per object.
+      Setting a variable to null will delete the variable.</li>
     <li>Updatable via API</li>
     </ul></li>
     <li><p>project_id</p>
@@ -68,11 +74,13 @@ import org.json.JSONArray;
     <li>Read-only</li>
     </ul></li>
     </ul>
+    </div>
 */
 public class DataTable extends Entity
 {
     /**
-        <p>Queries rows in this data table.</p>
+        <div class='markdown'><p>Queries rows in this data table.</p>
+        </div>
     */
     public APICursor<DataRow> queryRows(JSONObject options)
     {
@@ -85,7 +93,8 @@ public class DataTable extends Entity
     }
 
     /**
-        <p>Adds a new row to this data table.</p>
+        <div class='markdown'><p>Adds a new row to this data table.</p>
+        </div>
     */
     public DataRow createRow(JSONObject options) throws IOException
     {
@@ -93,7 +102,8 @@ public class DataTable extends Entity
     }
 
     /**
-        <p>Retrieves the row in the given table with the given ID.</p>
+        <div class='markdown'><p>Retrieves the row in the given table with the given ID.</p>
+        </div>
     */
     public DataRow getRowById(String id) throws IOException
     {
@@ -101,7 +111,8 @@ public class DataTable extends Entity
     }
 
     /**
-        <p>Initializes the row in the given table with the given ID, without making an API request.</p>
+        <div class='markdown'><p>Initializes the row in the given table with the given ID, without making an API request.</p>
+        </div>
     */
     public DataRow initRowById(String id)
     {
@@ -109,10 +120,11 @@ public class DataTable extends Entity
     }
 
     /**
-        <p>Gets a list of all fields (columns) defined for this data table. The return value is an
+        <div class='markdown'><p>Gets a list of all fields (columns) defined for this data table. The return value is an
         array of objects with the properties 'name', 'variable', 'type', 'order', 'readonly', and
         'lookup_key'. (Fields are automatically created any time a DataRow's 'vars' property is
         updated.)</p>
+        </div>
     */
     public JSONArray getFields() throws IOException
     {
@@ -120,7 +132,11 @@ public class DataTable extends Entity
     }
 
     /**
-        <p>Allows customizing how a field (column) is displayed in the Telerivet web app.</p>
+        <div class='markdown'><p>Allows customizing how a field (column) is displayed in the Telerivet web app.</p>
+        
+        <p>The variable path parameter can contain the characters a-z, A-Z,
+        0-9, and _, and may be up to 32 characters in length.</p>
+        </div>
     */
     public JSONObject setFieldMetadata(String variable, JSONObject options) throws IOException
     {
@@ -128,10 +144,11 @@ public class DataTable extends Entity
     }
 
     /**
-        <p>Returns the number of rows for each value of a given variable. This can be used to get the
+        <div class='markdown'><p>Returns the number of rows for each value of a given variable. This can be used to get the
         total number of responses for each choice in a poll, without making a separate query for
         each response choice. The return value is an object mapping values to row counts, e.g.
         <code>{"yes":7,"no":3}</code></p>
+        </div>
     */
     public JSONObject countRowsByValue(String variable) throws IOException
     {
@@ -139,7 +156,8 @@ public class DataTable extends Entity
     }
 
     /**
-        <p>Saves any fields that have changed for this data table.</p>
+        <div class='markdown'><p>Saves any fields that have changed for this data table.</p>
+        </div>
     */
     @Override
     public void save() throws IOException
@@ -148,7 +166,8 @@ public class DataTable extends Entity
     }
 
     /**
-        <p>Permanently deletes the given data table, including all its rows</p>
+        <div class='markdown'><p>Permanently deletes the given data table, including all its rows</p>
+        </div>
     */
     public void delete() throws IOException
     {

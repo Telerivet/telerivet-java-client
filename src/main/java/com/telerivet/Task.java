@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 
 /**
-    <p>Represents an asynchronous task that is applied to all entities matching a filter.</p>
+    <div class='markdown'><p>Represents an asynchronous task that is applied to all entities matching a filter.</p>
     
     <p>Tasks include services applied to contacts, messages, or data rows; adding
     or removing contacts from a group; blocking or unblocking sending messages to a contact;
@@ -88,7 +88,12 @@ import org.json.JSONArray;
     <li><p>vars (JSONObject)</p>
     
     <ul>
-    <li>Custom variables stored for this task</li>
+    <li>Custom variables stored for this task. Variable names may be up to 32 characters in
+      length and can contain the characters a-z, A-Z, 0-9, and _.
+      Values may be strings, numbers, or boolean (true/false).
+      String values may be up to 4096 bytes in length when encoded as UTF-8.
+      Up to 100 variables are supported per object.
+      Setting a variable to null will delete the variable.</li>
     <li>Read-only</li>
     </ul></li>
     <li><p>table_id (string, max 34 characters)</p>
@@ -110,11 +115,13 @@ import org.json.JSONArray;
     <li>Read-only</li>
     </ul></li>
     </ul>
+    </div>
 */
 public class Task extends Entity
 {
     /**
-        <p>Cancels a task that is not yet complete.</p>
+        <div class='markdown'><p>Cancels a task that is not yet complete.</p>
+        </div>
     */
     public Task cancel() throws IOException
     {

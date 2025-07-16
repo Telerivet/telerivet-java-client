@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 
 /**
-    <p>Represents a group used to organize contacts within Telerivet.</p>
+    <div class='markdown'><p>Represents a group used to organize contacts within Telerivet.</p>
     
     <p>Fields:</p>
     
@@ -41,10 +41,29 @@ import org.json.JSONArray;
     <li>Time the group was created in Telerivet</li>
     <li>Read-only</li>
     </ul></li>
+    <li><p>allow_sending (bool)</p>
+    
+    <ul>
+    <li>True if messages can be sent to this group, false otherwise.</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>add_time_variable (string)</p>
+    
+    <ul>
+    <li>Variable name of a custom contact field that will automatically be set to the
+      current date/time on any contact that is added to the group. This variable will only
+      be set if the contact does not already have a value for this variable.</li>
+    <li>Updatable via API</li>
+    </ul></li>
     <li><p>vars (JSONObject)</p>
     
     <ul>
-    <li>Custom variables stored for this group</li>
+    <li>Custom variables stored for this group. Variable names may be up to 32 characters in
+      length and can contain the characters a-z, A-Z, 0-9, and _.
+      Values may be strings, numbers, or boolean (true/false).
+      String values may be up to 4096 bytes in length when encoded as UTF-8.
+      Up to 100 variables are supported per object.
+      Setting a variable to null will delete the variable.</li>
     <li>Updatable via API</li>
     </ul></li>
     <li><p>project_id</p>
@@ -54,11 +73,13 @@ import org.json.JSONArray;
     <li>Read-only</li>
     </ul></li>
     </ul>
+    </div>
 */
 public class Group extends Entity
 {
     /**
-        <p>Queries contacts that are members of the given group.</p>
+        <div class='markdown'><p>Queries contacts that are members of the given group.</p>
+        </div>
     */
     public APICursor<Contact> queryContacts(JSONObject options)
     {
@@ -71,7 +92,8 @@ public class Group extends Entity
     }
 
     /**
-        <p>Queries scheduled messages to the given group.</p>
+        <div class='markdown'><p>Queries scheduled messages to the given group.</p>
+        </div>
     */
     public APICursor<ScheduledMessage> queryScheduledMessages(JSONObject options)
     {
@@ -84,7 +106,8 @@ public class Group extends Entity
     }
 
     /**
-        <p>Saves any fields that have changed for this group.</p>
+        <div class='markdown'><p>Saves any fields that have changed for this group.</p>
+        </div>
     */
     @Override
     public void save() throws IOException
@@ -93,7 +116,8 @@ public class Group extends Entity
     }
 
     /**
-        <p>Deletes this group (Note: no contacts are deleted.)</p>
+        <div class='markdown'><p>Deletes this group (Note: no contacts are deleted.)</p>
+        </div>
     */
     public void delete() throws IOException
     {
@@ -128,6 +152,26 @@ public class Group extends Entity
     public Long getTimeCreated()
     {
         return Util.toLong(get("time_created"));
+    }
+
+    public Boolean getAllowSending()
+    {
+        return (Boolean) get("allow_sending");
+    }
+
+    public void setAllowSending(Boolean value)
+    {
+        set("allow_sending", value);
+    }
+
+    public String getAddTimeVariable()
+    {
+        return (String) get("add_time_variable");
+    }
+
+    public void setAddTimeVariable(String value)
+    {
+        set("add_time_variable", value);
     }
 
     public String getProjectId()

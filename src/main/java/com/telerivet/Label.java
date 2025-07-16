@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 
 /**
-    <p>Represents a label used to organize messages within Telerivet.</p>
+    <div class='markdown'><p>Represents a label used to organize messages within Telerivet.</p>
     
     <p>Fields:</p>
     
@@ -32,7 +32,12 @@ import org.json.JSONArray;
     <li><p>vars (JSONObject)</p>
     
     <ul>
-    <li>Custom variables stored for this label</li>
+    <li>Custom variables stored for this label. Variable names may be up to 32 characters in
+      length and can contain the characters a-z, A-Z, 0-9, and _.
+      Values may be strings, numbers, or boolean (true/false).
+      String values may be up to 4096 bytes in length when encoded as UTF-8.
+      Up to 100 variables are supported per object.
+      Setting a variable to null will delete the variable.</li>
     <li>Updatable via API</li>
     </ul></li>
     <li><p>project_id</p>
@@ -42,11 +47,13 @@ import org.json.JSONArray;
     <li>Read-only</li>
     </ul></li>
     </ul>
+    </div>
 */
 public class Label extends Entity
 {
     /**
-        <p>Queries messages with the given label.</p>
+        <div class='markdown'><p>Queries messages with the given label.</p>
+        </div>
     */
     public APICursor<Message> queryMessages(JSONObject options)
     {
@@ -59,7 +66,8 @@ public class Label extends Entity
     }
 
     /**
-        <p>Saves any fields that have changed for the label.</p>
+        <div class='markdown'><p>Saves any fields that have changed for the label.</p>
+        </div>
     */
     @Override
     public void save() throws IOException
@@ -68,7 +76,8 @@ public class Label extends Entity
     }
 
     /**
-        <p>Deletes the given label (Note: no messages are deleted.)</p>
+        <div class='markdown'><p>Deletes the given label (Note: no messages are deleted.)</p>
+        </div>
     */
     public void delete() throws IOException
     {

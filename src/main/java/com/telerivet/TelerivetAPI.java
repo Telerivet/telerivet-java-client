@@ -44,13 +44,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.json.JSONParserConfiguration;
 
 /**
  *
  * @author youngj
  */
 public class TelerivetAPI {
-    public static String CLIENT_VERSION = "1.7.1";
+    public static String CLIENT_VERSION = "1.8.0";
 
     public static final int HTTP_CONNECTION_TIMEOUT = 10000; // ms
     public static final int HTTP_SOCKET_TIMEOUT = 10000; // ms
@@ -62,12 +63,13 @@ public class TelerivetAPI {
     private HttpClient httpClient;
 
     /**
-        <p>Initializes a client handle to the Telerivet REST API.</p>
+        <div class='markdown'><p>Initializes a client handle to the Telerivet REST API.</p>
         
         <p>Each API key is associated with a Telerivet user account, and all
         API actions are performed with that user's permissions. If you want to restrict the
         permissions of an API client, simply add another user account at
         <a target="_blank" rel="noopener" href="https://telerivet.com/dashboard/users">https://telerivet.com/dashboard/users</a> with the desired permissions.</p>
+        </div>
     */
     public TelerivetAPI(String apiKey)
     {
@@ -86,7 +88,8 @@ public class TelerivetAPI {
     }
 
     /**
-        <p>Retrieves the Telerivet project with the given ID.</p>
+        <div class='markdown'><p>Retrieves the Telerivet project with the given ID.</p>
+        </div>
     */
     public Project getProjectById(String id) throws IOException
     {
@@ -94,7 +97,8 @@ public class TelerivetAPI {
     }
 
     /**
-        <p>Initializes the Telerivet project with the given ID without making an API request.</p>
+        <div class='markdown'><p>Initializes the Telerivet project with the given ID without making an API request.</p>
+        </div>
     */
     public Project initProjectById(String id)
     {
@@ -102,7 +106,8 @@ public class TelerivetAPI {
     }
 
     /**
-        <p>Queries projects accessible to the current user account.</p>
+        <div class='markdown'><p>Queries projects accessible to the current user account.</p>
+        </div>
     */
     public APICursor<Project> queryProjects(JSONObject options)
     {
@@ -115,7 +120,8 @@ public class TelerivetAPI {
     }
 
     /**
-        <p>Retrieves the Telerivet organization with the given ID.</p>
+        <div class='markdown'><p>Retrieves the Telerivet organization with the given ID.</p>
+        </div>
     */
     public Organization getOrganizationById(String id) throws IOException
     {
@@ -123,7 +129,8 @@ public class TelerivetAPI {
     }
 
     /**
-        <p>Initializes the Telerivet organization with the given ID without making an API request.</p>
+        <div class='markdown'><p>Initializes the Telerivet organization with the given ID without making an API request.</p>
+        </div>
     */
     public Organization initOrganizationById(String id)
     {
@@ -131,7 +138,8 @@ public class TelerivetAPI {
     }
 
     /**
-        <p>Queries organizations accessible to the current user account.</p>
+        <div class='markdown'><p>Queries organizations accessible to the current user account.</p>
+        </div>
     */
     public APICursor<Organization> queryOrganizations(JSONObject options)
     {
@@ -301,13 +309,17 @@ public class TelerivetAPI {
 
         String responseStr = EntityUtils.toString(response.getEntity());
 
-        Object responseData = new JSONTokener(responseStr).nextValue();
-
-        if (statusCode == 200)
+        Object responseData;
+        try
         {
-            return responseData;
+            responseData = new JSONTokener(responseStr, (new JSONParserConfiguration()).withStrictMode(true)).nextValue();
         }
-        else
+        catch (JSONException ex)
+        {
+            throw new TelerivetAPIException("Unexpected response from Telerivet API (HTTP " + statusCode + "): " + responseStr, null);
+        }
+
+        if (responseData instanceof JSONObject)
         {
             JSONObject responseObj = (JSONObject)responseData;
 
@@ -318,7 +330,7 @@ public class TelerivetAPI {
                 String message = error.optString("message");
                 if ("invalid_param".equals(code))
                 {
-                    throw new TelerivetInvalidParameterException(message, code);
+                    throw new TelerivetInvalidParameterException(message, code, error.optString("param"));
                 }
                 else if ("not_found".equals(code))
                 {
@@ -331,8 +343,12 @@ public class TelerivetAPI {
             }
             else
             {
-                throw new TelerivetAPIException("Telerivet API error (HTTP " + statusCode + ")", null);
+                return responseData;
             }
+        }
+        else
+        {
+            return responseData;
         }
     }
 

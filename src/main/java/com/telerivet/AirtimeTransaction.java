@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 
 /**
-    <p>Represents a transaction where airtime is sent to a mobile phone number.</p>
+    <div class='markdown'><p>Represents a transaction where airtime is sent to a mobile phone number.</p>
     
     <p>To send airtime, first <a href="/dashboard/add_service?subtype_id=main.service.rules.contact&amp;action_id=main.rule.sendairtime">create a Custom Actions service to send a particular amount of
     airtime</a>,
@@ -57,7 +57,7 @@ import org.json.JSONArray;
     
     <ul>
     <li>Current status of airtime transaction (<code>successful</code>, <code>failed</code>, <code>cancelled</code>,
-      <code>queued</code>, <code>pending_approval</code>, or <code>pending_payment</code>)</li>
+      <code>queued</code>, <code>processing</code>, <code>submitted</code>, <code>pending_approval</code>, or <code>pending_payment</code>)</li>
     <li>Read-only</li>
     </ul></li>
     <li><p>status_text</p>
@@ -114,13 +114,25 @@ import org.json.JSONArray;
     <li>The ID of this transaction from an external airtime gateway provider, if available.</li>
     <li>Read-only</li>
     </ul></li>
+    <li><p>user_id (string, max 34 characters)</p>
+    
+    <ul>
+    <li>ID of the Telerivet user who sent the airtime transaction (if applicable)</li>
+    <li>Read-only</li>
+    </ul></li>
     <li><p>vars (JSONObject)</p>
     
     <ul>
-    <li>Custom variables stored for this transaction</li>
+    <li>Custom variables stored for this transaction. Variable names may be up to 32
+      characters in length and can contain the characters a-z, A-Z, 0-9, and _.
+      Values may be strings, numbers, or boolean (true/false).
+      String values may be up to 4096 bytes in length when encoded as UTF-8.
+      Up to 100 variables are supported per object.
+      Setting a variable to null will delete the variable.</li>
     <li>Updatable via API</li>
     </ul></li>
     </ul>
+    </div>
 */
 public class AirtimeTransaction extends Entity
 {
@@ -202,6 +214,11 @@ public class AirtimeTransaction extends Entity
     public String getExternalId()
     {
         return (String) get("external_id");
+    }
+
+    public String getUserId()
+    {
+        return (String) get("user_id");
     }
 
     @Override

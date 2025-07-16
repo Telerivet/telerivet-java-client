@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 
 /**
-    <p>Represents the current state of a particular contact for a particular Telerivet service.</p>
+    <div class='markdown'><p>Represents the current state of a particular contact for a particular Telerivet service.</p>
     
     <p>Some automated services (including polls) are 'stateful'. For polls,
     Telerivet needs to keep track of which question the contact is currently answering, and
@@ -53,7 +53,12 @@ import org.json.JSONArray;
     <li><p>vars (JSONObject)</p>
     
     <ul>
-    <li>Custom variables stored for this contact/service state</li>
+    <li>Custom variables stored for this contact/service state. Variable names may be up to
+      32 characters in length and can contain the characters a-z, A-Z, 0-9, and _.
+      Values may be strings, numbers, or boolean (true/false).
+      String values may be up to 4096 bytes in length when encoded as UTF-8.
+      Up to 100 variables are supported per object.
+      Setting a variable to null will delete the variable.</li>
     <li>Updatable via API</li>
     </ul></li>
     <li><p>time_created (UNIX timestamp)</p>
@@ -75,12 +80,14 @@ import org.json.JSONArray;
     <li>Read-only</li>
     </ul></li>
     </ul>
+    </div>
 */
 public class ContactServiceState extends Entity
 {
     /**
-        <p>Saves the state id and any custom variables for this contact. If the state id is null, this
+        <div class='markdown'><p>Saves the state id and any custom variables for this contact. If the state id is null, this
         is equivalent to calling reset().</p>
+        </div>
     */
     @Override
     public void save() throws IOException
@@ -89,7 +96,8 @@ public class ContactServiceState extends Entity
     }
 
     /**
-        <p>Resets the state for this contact for this service.</p>
+        <div class='markdown'><p>Resets the state for this contact for this service.</p>
+        </div>
     */
     public void reset() throws IOException
     {

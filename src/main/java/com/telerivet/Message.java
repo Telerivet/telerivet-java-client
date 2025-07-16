@@ -8,7 +8,7 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 
 /**
-    <p>Represents a single message.</p>
+    <div class='markdown'><p>Represents a single message.</p>
     
     <p>Fields:</p>
     
@@ -110,16 +110,24 @@ import org.json.JSONArray;
     <li><p>route_params (JSONObject)</p>
     
     <ul>
-    <li>Route-specific parameters for the message. The parameters object may have keys
-      matching the <code>phone_type</code> field of a phone (basic route) that may be used to send the
-      message. The corresponding value is an object with route-specific parameters to use
-      when the message is sent by that type of route.</li>
+    <li><p>Route-specific parameters for the message.</p>
+    
+    <p>When sending messages via chat apps such as WhatsApp, the route_params
+      parameter can be used to send messages with app-specific features such as quick
+      replies and link buttons.</p>
+    
+    <p>For more details, see <a href="#route_params">Route-Specific Parameters</a>.</p></li>
     <li>Read-only</li>
     </ul></li>
     <li><p>vars (JSONObject)</p>
     
     <ul>
-    <li>Custom variables stored for this message</li>
+    <li>Custom variables stored for this message. Variable names may be up to 32 characters
+      in length and can contain the characters a-z, A-Z, 0-9, and _.
+      Values may be strings, numbers, or boolean (true/false).
+      String values may be up to 4096 bytes in length when encoded as UTF-8.
+      Up to 100 variables are supported per object.
+      Setting a variable to null will delete the variable.</li>
     <li>Updatable via API</li>
     </ul></li>
     <li><p>priority (int)</p>
@@ -135,6 +143,15 @@ import org.json.JSONArray;
     <li>A description of the error encountered while sending a message. (This field is
       omitted from the API response if there is no error message.)</li>
     <li>Updatable via API</li>
+    </ul></li>
+    <li><p>error_code</p>
+    
+    <ul>
+    <li>A route-specific error code encountered while sending a message. The error code
+      values depend on the provider and may be described in the provider's API
+      documentation. Error codes may be strings or numbers, depending on the provider. (This
+      field is omitted from the API response if there is no error code.)</li>
+    <li>Read-only</li>
     </ul></li>
     <li><p>external_id</p>
     
@@ -319,11 +336,13 @@ import org.json.JSONArray;
     <li>Read-only</li>
     </ul></li>
     </ul>
+    </div>
  */
 public class Message extends Entity 
 {    
     /**
-        <p>Returns true if this message has a particular label, false otherwise.</p>
+        <div class='markdown'><p>Returns true if this message has a particular label, false otherwise.</p>
+        </div>
      */
     public boolean hasLabel(Label label) throws IOException
     {
@@ -332,7 +351,8 @@ public class Message extends Entity
     }
       
     /**
-        <p>Adds a label to the given message.</p>
+        <div class='markdown'><p>Adds a label to the given message.</p>
+        </div>
      */
     public void addLabel(Label label) throws IOException
     {
@@ -341,7 +361,8 @@ public class Message extends Entity
     }
     
     /**
-        <p>Removes a label from the given message.</p>
+        <div class='markdown'><p>Removes a label from the given message.</p>
+        </div>
      */    
     public void removeLabel(Label label) throws IOException
     {    
@@ -370,7 +391,7 @@ public class Message extends Entity
     }
 
     /**
-        <p>(Deprecated) Retrieves a list of MMS parts for this message (only for incoming MMS messages
+        <div class='markdown'><p>(Deprecated) Retrieves a list of MMS parts for this message (only for incoming MMS messages
         received via Telerivet Gateway Android app).
         Note: This only works for MMS messages received via the Telerivet
         Gateway Android app.
@@ -379,6 +400,7 @@ public class Message extends Entity
         
         <p>The return value has the same format as the <code>mms_parts</code> property of
         the Message object.</p>
+        </div>
     */
     public JSONArray getMMSParts() throws IOException
     {
@@ -386,7 +408,8 @@ public class Message extends Entity
     }
 
     /**
-        <p>Saves any fields that have changed for this message.</p>
+        <div class='markdown'><p>Saves any fields that have changed for this message.</p>
+        </div>
     */
     @Override
     public void save() throws IOException
@@ -395,10 +418,11 @@ public class Message extends Entity
     }
 
     /**
-        <p>Resends a message, for example if the message failed to send or if it was not delivered. If
+        <div class='markdown'><p>Resends a message, for example if the message failed to send or if it was not delivered. If
         the message was originally in the queued, retrying, failed, or cancelled states, then
         Telerivet will return the same message object. Otherwise, Telerivet will create and return a
         new message object.</p>
+        </div>
     */
     public Message resend(JSONObject options) throws IOException
     {
@@ -406,9 +430,10 @@ public class Message extends Entity
     }
 
     /**
-        <p>Cancels sending a message that has not yet been sent. Returns the updated message object.
+        <div class='markdown'><p>Cancels sending a message that has not yet been sent. Returns the updated message object.
         Only valid for outgoing messages that are currently in the queued, retrying, or cancelled
         states. For other messages, the API will return an error with the code 'not_cancellable'.</p>
+        </div>
     */
     public Message cancel() throws IOException
     {
@@ -416,7 +441,8 @@ public class Message extends Entity
     }
 
     /**
-        <p>Deletes this message.</p>
+        <div class='markdown'><p>Deletes this message.</p>
+        </div>
     */
     public void delete() throws IOException
     {
@@ -516,6 +542,11 @@ public class Message extends Entity
     public void setErrorMessage(String value)
     {
         set("error_message", value);
+    }
+
+    public String getErrorCode()
+    {
+        return (String) get("error_code");
     }
 
     public String getExternalId()

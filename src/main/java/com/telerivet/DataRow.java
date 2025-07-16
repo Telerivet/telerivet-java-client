@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 
 /**
-    <p>Represents a row in a custom data table.</p>
+    <div class='markdown'><p>Represents a row in a custom data table.</p>
     
     <p>For example, each response to a poll is stored as one row in a data table.
     If a poll has a question with ID 'q1', the verbatim response to that question would be
@@ -41,7 +41,12 @@ import org.json.JSONArray;
     <li><p>vars (JSONObject)</p>
     
     <ul>
-    <li>Custom variables stored for this data row</li>
+    <li>Custom variables stored for this data row. Variable names may be up to 32 characters
+      in length and can contain the characters a-z, A-Z, 0-9, and _.
+      Values may be strings, numbers, or boolean (true/false).
+      String values may be up to 4096 bytes in length when encoded as UTF-8.
+      Up to 100 variables are supported per object.
+      Setting a variable to null will delete the variable.</li>
     <li>Updatable via API</li>
     </ul></li>
     <li><p>time_created (UNIX timestamp)</p>
@@ -69,11 +74,13 @@ import org.json.JSONArray;
     <li>Read-only</li>
     </ul></li>
     </ul>
+    </div>
 */
 public class DataRow extends Entity
 {
     /**
-        <p>Saves any fields or custom variables that have changed for this data row.</p>
+        <div class='markdown'><p>Saves any fields or custom variables that have changed for this data row.</p>
+        </div>
     */
     @Override
     public void save() throws IOException
@@ -82,7 +89,8 @@ public class DataRow extends Entity
     }
 
     /**
-        <p>Deletes this data row.</p>
+        <div class='markdown'><p>Deletes this data row.</p>
+        </div>
     */
     public void delete() throws IOException
     {

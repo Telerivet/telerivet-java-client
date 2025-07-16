@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 
 /**
-    <p>Represents a Telerivet project.</p>
+    <div class='markdown'><p>Represents a Telerivet project.</p>
     
     <p>Provides methods for sending and scheduling messages, as well as
     accessing, creating and updating a variety of entities, including contacts, messages,
@@ -61,7 +61,12 @@ import org.json.JSONArray;
     <li><p>vars (JSONObject)</p>
     
     <ul>
-    <li>Custom variables stored for this project</li>
+    <li>Custom variables stored for this project. Variable names may be up to 32 characters
+      in length and can contain the characters a-z, A-Z, 0-9, and _.
+      Values may be strings, numbers, or boolean (true/false).
+      String values may be up to 4096 bytes in length when encoded as UTF-8.
+      Up to 100 variables are supported per object.
+      Setting a variable to null will delete the variable.</li>
     <li>Updatable via API</li>
     </ul></li>
     <li><p>organization_id (string, max 34 characters)</p>
@@ -71,11 +76,13 @@ import org.json.JSONArray;
     <li>Read-only</li>
     </ul></li>
     </ul>
+    </div>
 */
 public class Project extends Entity
 {
     /**
-        <p>Sends one message (SMS, MMS, chat app message, voice call, or USSD request).</p>
+        <div class='markdown'><p>Sends one message (SMS, MMS, chat app message, voice call, or USSD request).</p>
+        </div>
     */
     public Message sendMessage(JSONObject options) throws IOException
     {
@@ -83,12 +90,13 @@ public class Project extends Entity
     }
 
     /**
-        <p>Sends a text message (optionally with mail-merge templates) or voice call to a group or a
+        <div class='markdown'><p>Sends a text message (optionally with mail-merge templates) or voice call to a group or a
         list of up to 500 phone numbers.</p>
         
         <p>With <code>message_type</code>=<code>service</code>, invokes an automated service (such as
         a poll) for a group or list of phone numbers. Any service that can be triggered for a
         contact can be invoked via this method, whether or not the service actually sends a message.</p>
+        </div>
     */
     public Broadcast sendBroadcast(JSONObject options) throws IOException
     {
@@ -96,8 +104,9 @@ public class Project extends Entity
     }
 
     /**
-        <p>Sends up to 100 different messages in a single API request. This method is significantly
+        <div class='markdown'><p>Sends up to 100 different messages in a single API request. This method is significantly
         faster than sending a separate API request for each message.</p>
+        </div>
     */
     public JSONObject sendMulti(JSONObject options) throws IOException
     {
@@ -105,10 +114,11 @@ public class Project extends Entity
     }
 
     /**
-        <p>(Deprecated) Send a message a to group or a list of phone numbers.
+        <div class='markdown'><p>(Deprecated) Send a message a to group or a list of phone numbers.
         This method is only needed to maintain backward compatibility with
         code developed using previous versions of the client library.
         Use <code>sendBroadcast</code> or <code>sendMulti</code> instead.</p>
+        </div>
     */
     public JSONObject sendMessages(JSONObject options) throws IOException
     {
@@ -116,7 +126,7 @@ public class Project extends Entity
     }
 
     /**
-        <p>Schedules a message to a group or single contact. Note that Telerivet only sends scheduled
+        <div class='markdown'><p>Schedules a message to a group or single contact. Note that Telerivet only sends scheduled
         messages approximately once every 15 seconds, so it is not possible to control the exact
         second at which a scheduled message is sent.</p>
         
@@ -127,6 +137,7 @@ public class Project extends Entity
         as a poll) to be invoked for a group or list of phone numbers. Any service that can be
         triggered for a contact can be scheduled via this method, whether or not the service
         actually sends a message.</p>
+        </div>
     */
     public ScheduledMessage scheduleMessage(JSONObject options) throws IOException
     {
@@ -134,7 +145,7 @@ public class Project extends Entity
     }
 
     /**
-        <p>Creates a relative scheduled message. This allows scheduling messages on a different date
+        <div class='markdown'><p>Creates a relative scheduled message. This allows scheduling messages on a different date
         for each contact, for example on their birthday, a certain number of days before an
         appointment, or a certain number of days after enrolling in a campaign.</p>
         
@@ -148,6 +159,7 @@ public class Project extends Entity
         <p>With message_type=service, schedules an automated service (such as a
         poll). Any service that can be triggered for a contact can be scheduled via this method,
         whether or not the service actually sends a message.</p>
+        </div>
     */
     public RelativeScheduledMessage createRelativeScheduledMessage(JSONObject options) throws IOException
     {
@@ -155,8 +167,9 @@ public class Project extends Entity
     }
 
     /**
-        <p>Add an incoming message to Telerivet. Acts the same as if the message was received by a
+        <div class='markdown'><p>Add an incoming message to Telerivet. Acts the same as if the message was received by a
         phone. Also triggers any automated services that apply to the message.</p>
+        </div>
     */
     public Message receiveMessage(JSONObject options) throws IOException
     {
@@ -164,7 +177,7 @@ public class Project extends Entity
     }
 
     /**
-        <p>Retrieves OR creates and possibly updates a contact by name or phone number.</p>
+        <div class='markdown'><p>Retrieves OR creates and possibly updates a contact by name or phone number.</p>
         
         <p>If a phone number is provided, by default, Telerivet will search for
         an existing contact with that phone number (including suffix matches to allow finding
@@ -178,6 +191,7 @@ public class Project extends Entity
         <p>Then that contact will be updated with any parameters provided
         (<code>name</code>, <code>phone_number</code>, <code>vars</code>, <code>default_route_id</code>, <code>send_blocked</code>, <code>add_group_ids</code>,
         <code>remove_group_ids</code>).</p>
+        </div>
     */
     public Contact getOrCreateContact(JSONObject options) throws IOException
     {
@@ -185,7 +199,7 @@ public class Project extends Entity
     }
 
     /**
-        <p>Creates and/or updates up to 200 contacts in a single API call. When creating or updating a
+        <div class='markdown'><p>Creates and/or updates up to 200 contacts in a single API call. When creating or updating a
         large number of contacts, this method is significantly faster than sending a separate API
         request for each contact.</p>
         
@@ -196,6 +210,7 @@ public class Project extends Entity
         
         <p>If any contact was not found matching the provided <code>lookup_key</code>, a
         new contact will be created.</p>
+        </div>
     */
     public JSONObject importContacts(JSONObject options) throws IOException
     {
@@ -203,7 +218,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Queries contacts within the given project.</p>
+        <div class='markdown'><p>Queries contacts within the given project.</p>
+        </div>
     */
     public APICursor<Contact> queryContacts(JSONObject options)
     {
@@ -216,7 +232,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Retrieves the contact with the given ID.</p>
+        <div class='markdown'><p>Retrieves the contact with the given ID.</p>
+        </div>
     */
     public Contact getContactById(String id) throws IOException
     {
@@ -224,7 +241,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Initializes the Telerivet contact with the given ID without making an API request.</p>
+        <div class='markdown'><p>Initializes the Telerivet contact with the given ID without making an API request.</p>
+        </div>
     */
     public Contact initContactById(String id)
     {
@@ -232,7 +250,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Queries basic routes within the given project.</p>
+        <div class='markdown'><p>Queries basic routes within the given project.</p>
+        </div>
     */
     public APICursor<Phone> queryPhones(JSONObject options)
     {
@@ -245,7 +264,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Retrieves the basic route with the given ID.</p>
+        <div class='markdown'><p>Retrieves the basic route with the given ID.</p>
+        </div>
     */
     public Phone getPhoneById(String id) throws IOException
     {
@@ -253,7 +273,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Initializes the basic route with the given ID without making an API request.</p>
+        <div class='markdown'><p>Initializes the basic route with the given ID without making an API request.</p>
+        </div>
     */
     public Phone initPhoneById(String id)
     {
@@ -261,7 +282,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Queries messages within the given project.</p>
+        <div class='markdown'><p>Queries messages within the given project.</p>
+        </div>
     */
     public APICursor<Message> queryMessages(JSONObject options)
     {
@@ -274,7 +296,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Retrieves the message with the given ID.</p>
+        <div class='markdown'><p>Retrieves the message with the given ID.</p>
+        </div>
     */
     public Message getMessageById(String id) throws IOException
     {
@@ -282,7 +305,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Initializes the Telerivet message with the given ID without making an API request.</p>
+        <div class='markdown'><p>Initializes the Telerivet message with the given ID without making an API request.</p>
+        </div>
     */
     public Message initMessageById(String id)
     {
@@ -290,7 +314,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Queries broadcasts within the given project.</p>
+        <div class='markdown'><p>Queries broadcasts within the given project.</p>
+        </div>
     */
     public APICursor<Broadcast> queryBroadcasts(JSONObject options)
     {
@@ -303,7 +328,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Retrieves the broadcast with the given ID.</p>
+        <div class='markdown'><p>Retrieves the broadcast with the given ID.</p>
+        </div>
     */
     public Broadcast getBroadcastById(String id) throws IOException
     {
@@ -311,7 +337,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Initializes the Telerivet broadcast with the given ID without making an API request.</p>
+        <div class='markdown'><p>Initializes the Telerivet broadcast with the given ID without making an API request.</p>
+        </div>
     */
     public Broadcast initBroadcastById(String id)
     {
@@ -319,7 +346,7 @@ public class Project extends Entity
     }
 
     /**
-        <p>Creates and starts an asynchronous task that is applied to all entities matching a filter
+        <div class='markdown'><p>Creates and starts an asynchronous task that is applied to all entities matching a filter
         (e.g. contacts, messages, or data rows).
         Tasks are designed to efficiently process a large number of
         entities. When processing a large number of entities,
@@ -339,6 +366,7 @@ public class Project extends Entity
         the <code>task</code> variable will be available within the service. The
         service can use custom variables on the task object (e.g. <code>task.vars.example</code>), such as
         to store aggregate statistics for the rows matching the filter.</p>
+        </div>
     */
     public Task createTask(JSONObject options) throws IOException
     {
@@ -346,7 +374,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Queries batch tasks within the given project.</p>
+        <div class='markdown'><p>Queries batch tasks within the given project.</p>
+        </div>
     */
     public APICursor<Task> queryTasks(JSONObject options)
     {
@@ -359,7 +388,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Retrieves the task with the given ID.</p>
+        <div class='markdown'><p>Retrieves the task with the given ID.</p>
+        </div>
     */
     public Task getTaskById(String id) throws IOException
     {
@@ -367,7 +397,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Initializes the task with the given ID without making an API request.</p>
+        <div class='markdown'><p>Initializes the task with the given ID without making an API request.</p>
+        </div>
     */
     public Task initTaskById(String id)
     {
@@ -375,7 +406,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Queries groups within the given project.</p>
+        <div class='markdown'><p>Queries groups within the given project.</p>
+        </div>
     */
     public APICursor<Group> queryGroups(JSONObject options)
     {
@@ -388,7 +420,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Retrieves or creates a group by name.</p>
+        <div class='markdown'><p>Retrieves or creates a group by name.</p>
+        </div>
     */
     public Group getOrCreateGroup(String name) throws IOException
     {
@@ -396,7 +429,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Retrieves the group with the given ID.</p>
+        <div class='markdown'><p>Retrieves the group with the given ID.</p>
+        </div>
     */
     public Group getGroupById(String id) throws IOException
     {
@@ -404,7 +438,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Initializes the group with the given ID without making an API request.</p>
+        <div class='markdown'><p>Initializes the group with the given ID without making an API request.</p>
+        </div>
     */
     public Group initGroupById(String id)
     {
@@ -412,7 +447,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Queries labels within the given project.</p>
+        <div class='markdown'><p>Queries labels within the given project.</p>
+        </div>
     */
     public APICursor<Label> queryLabels(JSONObject options)
     {
@@ -425,7 +461,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Gets or creates a label by name.</p>
+        <div class='markdown'><p>Gets or creates a label by name.</p>
+        </div>
     */
     public Label getOrCreateLabel(String name) throws IOException
     {
@@ -433,7 +470,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Retrieves the label with the given ID.</p>
+        <div class='markdown'><p>Retrieves the label with the given ID.</p>
+        </div>
     */
     public Label getLabelById(String id) throws IOException
     {
@@ -441,7 +479,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Initializes the label with the given ID without making an API request.</p>
+        <div class='markdown'><p>Initializes the label with the given ID without making an API request.</p>
+        </div>
     */
     public Label initLabelById(String id)
     {
@@ -449,7 +488,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Queries data tables within the given project.</p>
+        <div class='markdown'><p>Queries data tables within the given project.</p>
+        </div>
     */
     public APICursor<DataTable> queryDataTables(JSONObject options)
     {
@@ -462,7 +502,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Gets or creates a data table by name.</p>
+        <div class='markdown'><p>Gets or creates a data table by name.</p>
+        </div>
     */
     public DataTable getOrCreateDataTable(String name) throws IOException
     {
@@ -470,7 +511,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Retrieves the data table with the given ID.</p>
+        <div class='markdown'><p>Retrieves the data table with the given ID.</p>
+        </div>
     */
     public DataTable getDataTableById(String id) throws IOException
     {
@@ -478,7 +520,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Initializes the data table with the given ID without making an API request.</p>
+        <div class='markdown'><p>Initializes the data table with the given ID without making an API request.</p>
+        </div>
     */
     public DataTable initDataTableById(String id)
     {
@@ -486,7 +529,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Queries scheduled messages within the given project.</p>
+        <div class='markdown'><p>Queries scheduled messages within the given project.</p>
+        </div>
     */
     public APICursor<ScheduledMessage> queryScheduledMessages(JSONObject options)
     {
@@ -499,7 +543,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Queries relative scheduled messages within the given project.</p>
+        <div class='markdown'><p>Queries relative scheduled messages within the given project.</p>
+        </div>
     */
     public APICursor<RelativeScheduledMessage> queryRelativeScheduledMessages(JSONObject options)
     {
@@ -512,7 +557,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Retrieves the scheduled message with the given ID.</p>
+        <div class='markdown'><p>Retrieves the scheduled message with the given ID.</p>
+        </div>
     */
     public ScheduledMessage getScheduledMessageById(String id) throws IOException
     {
@@ -520,7 +566,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Initializes the scheduled message with the given ID without making an API request.</p>
+        <div class='markdown'><p>Initializes the scheduled message with the given ID without making an API request.</p>
+        </div>
     */
     public ScheduledMessage initScheduledMessageById(String id)
     {
@@ -528,7 +575,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Retrieves the scheduled message with the given ID.</p>
+        <div class='markdown'><p>Retrieves the scheduled message with the given ID.</p>
+        </div>
     */
     public RelativeScheduledMessage getRelativeScheduledMessageById(String id) throws IOException
     {
@@ -536,7 +584,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Initializes the relative scheduled message with the given ID without making an API request.</p>
+        <div class='markdown'><p>Initializes the relative scheduled message with the given ID without making an API request.</p>
+        </div>
     */
     public RelativeScheduledMessage initRelativeScheduledMessageById(String id)
     {
@@ -544,7 +593,7 @@ public class Project extends Entity
     }
 
     /**
-        <p>Creates a new automated service.</p>
+        <div class='markdown'><p>Creates a new automated service.</p>
         
         <p>Only certain types of automated services can be created via the API.
         Other types of services can only be created via the web app.</p>
@@ -555,6 +604,7 @@ public class Project extends Entity
         with <code>service_type</code>=<code>custom_template_instance</code>. Converting a service
         to a template requires the Service Templates feature to be enabled
         for the organization.</p>
+        </div>
     */
     public Service createService(JSONObject options) throws IOException
     {
@@ -562,7 +612,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Queries services within the given project.</p>
+        <div class='markdown'><p>Queries services within the given project.</p>
+        </div>
     */
     public APICursor<Service> queryServices(JSONObject options)
     {
@@ -575,7 +626,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Retrieves the service with the given ID.</p>
+        <div class='markdown'><p>Retrieves the service with the given ID.</p>
+        </div>
     */
     public Service getServiceById(String id) throws IOException
     {
@@ -583,7 +635,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Initializes the service with the given ID without making an API request.</p>
+        <div class='markdown'><p>Initializes the service with the given ID without making an API request.</p>
+        </div>
     */
     public Service initServiceById(String id)
     {
@@ -591,10 +644,11 @@ public class Project extends Entity
     }
 
     /**
-        <p>Queries service log entries associated with this project.</p>
+        <div class='markdown'><p>Queries service log entries associated with this project.</p>
         
         <p>Note: Service logs are automatically deleted and no longer available
         via the API after approximately one month.</p>
+        </div>
     */
     public APICursor<JSONObject> queryServiceLogs(JSONObject options)
     {
@@ -607,7 +661,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Queries custom routes that can be used to send messages (not including Phones).</p>
+        <div class='markdown'><p>Queries custom routes that can be used to send messages (not including Phones).</p>
+        </div>
     */
     public APICursor<Route> queryRoutes(JSONObject options)
     {
@@ -620,7 +675,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Gets a custom route by ID</p>
+        <div class='markdown'><p>Gets a custom route by ID</p>
+        </div>
     */
     public Route getRouteById(String id) throws IOException
     {
@@ -628,7 +684,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Initializes a custom route by ID without making an API request.</p>
+        <div class='markdown'><p>Initializes a custom route by ID without making an API request.</p>
+        </div>
     */
     public Route initRouteById(String id)
     {
@@ -636,9 +693,10 @@ public class Project extends Entity
     }
 
     /**
-        <p>Returns an array of user accounts that have access to this project. Each item in the array
+        <div class='markdown'><p>Returns an array of user accounts that have access to this project. Each item in the array
         is an object containing <code>id</code>, <code>email</code>, and <code>name</code> properties. (The id corresponds to the
         <code>user_id</code> property of the Message object.)</p>
+        </div>
     */
     public JSONArray getUsers() throws IOException
     {
@@ -646,7 +704,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Returns information about each airtime transaction.</p>
+        <div class='markdown'><p>Returns information about each airtime transaction.</p>
+        </div>
     */
     public APICursor<AirtimeTransaction> queryAirtimeTransactions(JSONObject options)
     {
@@ -659,7 +718,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Gets an airtime transaction by ID</p>
+        <div class='markdown'><p>Gets an airtime transaction by ID</p>
+        </div>
     */
     public AirtimeTransaction getAirtimeTransactionById(String id) throws IOException
     {
@@ -667,7 +727,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Initializes an airtime transaction by ID without making an API request.</p>
+        <div class='markdown'><p>Initializes an airtime transaction by ID without making an API request.</p>
+        </div>
     */
     public AirtimeTransaction initAirtimeTransactionById(String id)
     {
@@ -675,10 +736,11 @@ public class Project extends Entity
     }
 
     /**
-        <p>Gets a list of all custom fields defined for contacts in this project. The return value is
+        <div class='markdown'><p>Gets a list of all custom fields defined for contacts in this project. The return value is
         an array of objects with the properties 'name', 'variable', 'type', 'order', 'readonly', and
         'lookup_key'. (Fields are automatically created any time a Contact's 'vars' property is
         updated.)</p>
+        </div>
     */
     public JSONArray getContactFields() throws IOException
     {
@@ -686,7 +748,11 @@ public class Project extends Entity
     }
 
     /**
-        <p>Allows customizing how a custom contact field is displayed in the Telerivet web app.</p>
+        <div class='markdown'><p>Allows customizing how a custom contact field is displayed in the Telerivet web app.</p>
+        
+        <p>The variable path parameter can contain the characters a-z, A-Z,
+        0-9, and _, and may be up to 32 characters in length.</p>
+        </div>
     */
     public JSONObject setContactFieldMetadata(String variable, JSONObject options) throws IOException
     {
@@ -694,10 +760,11 @@ public class Project extends Entity
     }
 
     /**
-        <p>Gets a list of all custom fields defined for messages in this project. The return value is
+        <div class='markdown'><p>Gets a list of all custom fields defined for messages in this project. The return value is
         an array of objects with the properties 'name', 'variable', 'type', 'order', 'readonly', and
         'lookup_key'. (Fields are automatically created any time a Contact's 'vars' property is
         updated.)</p>
+        </div>
     */
     public JSONArray getMessageFields() throws IOException
     {
@@ -705,7 +772,11 @@ public class Project extends Entity
     }
 
     /**
-        <p>Allows customizing how a custom message field is displayed in the Telerivet web app.</p>
+        <div class='markdown'><p>Allows customizing how a custom message field is displayed in the Telerivet web app.</p>
+        
+        <p>The variable path parameter can contain the characters a-z, A-Z,
+        0-9, and _, and may be up to 32 characters in length.</p>
+        </div>
     */
     public JSONObject setMessageFieldMetadata(String variable, JSONObject options) throws IOException
     {
@@ -713,9 +784,10 @@ public class Project extends Entity
     }
 
     /**
-        <p>Retrieves statistics about messages sent or received via Telerivet. This endpoint returns
+        <div class='markdown'><p>Retrieves statistics about messages sent or received via Telerivet. This endpoint returns
         historical data that is computed shortly after midnight each day in the project's time zone,
         and does not contain message statistics for the current day.</p>
+        </div>
     */
     public JSONObject getMessageStats(JSONObject options) throws IOException
     {
@@ -723,7 +795,8 @@ public class Project extends Entity
     }
 
     /**
-        <p>Saves any fields or custom variables that have changed for the project.</p>
+        <div class='markdown'><p>Saves any fields or custom variables that have changed for the project.</p>
+        </div>
     */
     @Override
     public void save() throws IOException
