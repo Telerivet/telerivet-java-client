@@ -13,9 +13,6 @@ import org.json.JSONArray;
     parameters, and properties related to Custom Routes continue to use the term "Route" to
     maintain backwards compatibility.</p>
     
-    <p>Custom routing rules can currently only be configured via Telerivet's web
-    UI.</p>
-    
     <p>Fields:</p>
     
     <ul>
@@ -48,13 +45,20 @@ import org.json.JSONArray;
     <li>ID of the project this route belongs to</li>
     <li>Read-only</li>
     </ul></li>
+    <li><p>actions (array of RoutingAction)</p>
+    
+    <ul>
+    <li>Array of routing action objects. Allowed action types: <code>use_phone</code>, <code>condition</code>.</li>
+    <li>Updatable via API</li>
+    </ul></li>
     </ul>
     </div>
 */
 public class Route extends Entity
 {
     /**
-        <div class='markdown'><p>Saves any fields or custom variables that have changed for this custom route.</p>
+        <div class='markdown'><p>Saves any fields, custom variables, or routing actions that have changed for this custom
+        route.</p>
         </div>
     */
     @Override
@@ -81,6 +85,16 @@ public class Route extends Entity
     public String getProjectId()
     {
         return (String) get("project_id");
+    }
+
+    public JSONArray getActions()
+    {
+        return (JSONArray) get("actions");
+    }
+
+    public void setActions(JSONArray value)
+    {
+        set("actions", value);
     }
 
     @Override

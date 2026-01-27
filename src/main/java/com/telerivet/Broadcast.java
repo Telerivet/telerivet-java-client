@@ -96,6 +96,14 @@ import org.json.JSONArray;
       numbers, or if the group membership changed while the broadcast was being sent.</li>
     <li>Read-only</li>
     </ul></li>
+    <li><p>num_parts (number)</p>
+    
+    <ul>
+    <li>The total number of SMS parts that have been sent in this broadcast. The number of
+      SMS parts does not include messages that are still queued, or messages that failed to
+      send.</li>
+    <li>Read-only</li>
+    </ul></li>
     <li><p>message_type</p>
     
     <ul>
@@ -263,6 +271,20 @@ import org.json.JSONArray;
     <li>ID of the project this broadcast belongs to</li>
     <li>Read-only</li>
     </ul></li>
+    <li><p>is_template (bool)</p>
+    
+    <ul>
+    <li>Set to true if Telerivet will render variables like [[contact.name]] in the message
+      content</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>recipients_str (string)</p>
+    
+    <ul>
+    <li>A string with a human readable description of the first few recipients (possibly
+      truncated)</li>
+    <li>Read-only</li>
+    </ul></li>
     </ul>
     </div>
 */
@@ -323,6 +345,11 @@ public class Broadcast extends Entity
     public Integer getEstimatedCount()
     {
         return (Integer) get("estimated_count");
+    }
+
+    public Double getNumParts()
+    {
+        return Util.toDouble(get("num_parts"));
     }
 
     public String getMessageType()
@@ -433,6 +460,16 @@ public class Broadcast extends Entity
     public String getProjectId()
     {
         return (String) get("project_id");
+    }
+
+    public Boolean getIsTemplate()
+    {
+        return (Boolean) get("is_template");
+    }
+
+    public String getRecipientsStr()
+    {
+        return (String) get("recipients_str");
     }
 
     @Override

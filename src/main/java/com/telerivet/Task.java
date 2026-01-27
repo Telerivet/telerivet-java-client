@@ -85,6 +85,12 @@ import org.json.JSONArray;
     <li>Allowed values: created, queued, active, complete, failed, cancelled</li>
     <li>Read-only</li>
     </ul></li>
+    <li><p>error_message (string)</p>
+    
+    <ul>
+    <li>Error message if the task failed</li>
+    <li>Read-only</li>
+    </ul></li>
     <li><p>vars (JSONObject)</p>
     
     <ul>
@@ -181,6 +187,11 @@ public class Task extends Entity
     public String getStatus()
     {
         return (String) get("status");
+    }
+
+    public String getErrorMessage()
+    {
+        return (String) get("error_message");
     }
 
     public String getTableId()

@@ -85,12 +85,42 @@ import org.json.JSONArray;
     <li>ID of the data table where responses to this service will be stored</li>
     <li>Updatable via API</li>
     </ul></li>
-    <li><p>phone_ids</p>
+    <li><p>phone_ids (array)</p>
     
     <ul>
     <li>IDs of phones (basic routes) associated with this service, or null if the service is
       associated with all routes. Only applies for service types that handle incoming
       messages, voice calls, or USSD sessions.</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>message_types (array of strings)</p>
+    
+    <ul>
+    <li>Types of messages that this service handles. Only provided for service types that
+      handle incoming messages.</li>
+    <li>Allowed values: text, call, ussd</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>table_ids (array)</p>
+    
+    <ul>
+    <li>IDs of data tables that this service applies to, or null if this service applies to
+      all data tables. Only provided for data row services (<code>data_row_script</code> and
+      <code>data_row_actions</code>).</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>message_statuses (array of strings)</p>
+    
+    <ul>
+    <li>Message statuses that this service handles. Only provided for
+      <code>message_status_actions</code> services.</li>
+    <li>Allowed values: sent, delivered, failed, failed_queued, not_delivered</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>tags (array)</p>
+    
+    <ul>
+    <li>Tags used to organize this service. Each tag can be up to 32 characters in length.</li>
     <li>Updatable via API</li>
     </ul></li>
     <li><p>apply_mode</p>
@@ -135,6 +165,12 @@ import org.json.JSONArray;
     <ul>
     <li>URL that a third-party can invoke to trigger this service. Only provided for
       services that are triggered by a webhook request.</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>is_custom_template (bool)</p>
+    
+    <ul>
+    <li>Whether this service was created from a custom service template</li>
     <li>Read-only</li>
     </ul></li>
     </ul>
@@ -212,7 +248,8 @@ public class Service extends Entity
         <div class='markdown'><p>Gets configuration specific to the type of automated service.</p>
         
         <p>Only certain types of services provide their configuration via the
-        API.</p>
+        API. See <a href="#service_config">Service Configuration Reference</a> for available configuration
+        options.</p>
         </div>
     */
     public JSONObject getConfig() throws IOException
@@ -314,14 +351,54 @@ public class Service extends Entity
         set("response_table_id", value);
     }
 
-    public String getPhoneIds()
+    public JSONArray getPhoneIds()
     {
-        return (String) get("phone_ids");
+        return (JSONArray) get("phone_ids");
     }
 
-    public void setPhoneIds(String value)
+    public void setPhoneIds(JSONArray value)
     {
         set("phone_ids", value);
+    }
+
+    public JSONArray getMessageTypes()
+    {
+        return (JSONArray) get("message_types");
+    }
+
+    public void setMessageTypes(JSONArray value)
+    {
+        set("message_types", value);
+    }
+
+    public JSONArray getTableIds()
+    {
+        return (JSONArray) get("table_ids");
+    }
+
+    public void setTableIds(JSONArray value)
+    {
+        set("table_ids", value);
+    }
+
+    public JSONArray getMessageStatuses()
+    {
+        return (JSONArray) get("message_statuses");
+    }
+
+    public void setMessageStatuses(JSONArray value)
+    {
+        set("message_statuses", value);
+    }
+
+    public JSONArray getTags()
+    {
+        return (JSONArray) get("tags");
+    }
+
+    public void setTags(JSONArray value)
+    {
+        set("tags", value);
     }
 
     public String getApplyMode()
@@ -367,6 +444,11 @@ public class Service extends Entity
     public String getWebhookUrl()
     {
         return (String) get("webhook_url");
+    }
+
+    public Boolean getIsCustomTemplate()
+    {
+        return (Boolean) get("is_custom_template");
     }
 
     @Override

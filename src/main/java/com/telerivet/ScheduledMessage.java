@@ -233,6 +233,13 @@ import org.json.JSONArray;
     <li>ID of the project this scheduled message belongs to</li>
     <li>Read-only</li>
     </ul></li>
+    <li><p>is_template (bool)</p>
+    
+    <ul>
+    <li>Set to true if Telerivet will render variables like [[contact.name]] in the message
+      content</li>
+    <li>Read-only</li>
+    </ul></li>
     </ul>
     </div>
 */
@@ -480,6 +487,11 @@ public class ScheduledMessage extends Entity
     public String getProjectId()
     {
         return (String) get("project_id");
+    }
+
+    public Boolean getIsTemplate()
+    {
+        return (Boolean) get("is_template");
     }
 
     @Override

@@ -58,6 +58,21 @@ import org.json.JSONArray;
       contact.</li>
     <li>Updatable via API</li>
     </ul></li>
+    <li><p>message_retention_days (int)</p>
+    
+    <ul>
+    <li>Number of days to retain messages in this project. Messages older than this will be
+      automatically deleted. If null, messages will be retained forever.</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>short_link_scheme (bool)</p>
+    
+    <ul>
+    <li>If true (the default), short links in messages will include the scheme (e.g.,
+      'https://rvt.me/xxxxxxxxx'). If false, short links will not include the scheme (e.g.,
+      'rvt.me/xxxxxxxxx').</li>
+    <li>Updatable via API</li>
+    </ul></li>
     <li><p>vars (JSONObject)</p>
     
     <ul>
@@ -134,7 +149,7 @@ public class Project extends Entity
         should be provided.</p>
         
         <p>With <code>message_type</code>=<code>service</code>, schedules an automated service (such
-        as a poll) to be invoked for a group or list of phone numbers. Any service that can be
+        as a poll) to be invoked for a group or an individual contact. Any service that can be
         triggered for a contact can be scheduled via this method, whether or not the service
         actually sends a message.</p>
         </div>
@@ -279,6 +294,145 @@ public class Project extends Entity
     public Phone initPhoneById(String id)
     {
         return new Phone(api, Util.options("project_id", get("id"), "id", id), false);
+    }
+
+    /**
+        <div class='markdown'><p>Creates a new basic route (phone) with external API credentials.</p>
+        
+        <p>For some external API providers, this method automatically updates webhook URLs configured
+        with the external provider so that incoming messages/calls and call status events are routed
+        to Telerivet. In this case, if you have already configured a webhook URL with the external
+        provider, it will be overwritten. For other external API providers, webhook URLs may require
+        manual configuration in order for the route to be fully functional.</p>
+        
+        <p>Note: This API can only create routes that connect to external gateway APIs using your own
+        account credentials. To add Android phones, WhatsApp routes, or routes with
+        Telerivet-managed billing, use the web app instead.</p>
+        
+        <p>Credentials are passed via the <code>external_account_id</code>, <code>external_id</code>, <code>external_secret</code>, and
+        <code>external_config</code> parameters. The meaning of these parameters for each phone type is as
+        follows:</p>
+        
+        <p><strong>Twilio Virtual Number</strong> (<code>phone_type</code>: twilio):</p>
+        
+        <ul>
+        <li><code>external_id</code> (optional): The SID of your Twilio phone number (starts with 'PN'); if not
+        provided, it will be looked up by the phone_number parameter</li>
+        <li><code>external_account_id</code> (required): Your Twilio Account SID (starts with 'AC')</li>
+        <li><code>external_secret</code> (required): Your Twilio Auth Token</li>
+        </ul>
+        
+        <p><strong>Twilio Messaging Service</strong> (<code>phone_type</code>: twilio_messaging_service):</p>
+        
+        <ul>
+        <li><code>external_id</code> (required): The SID of your Twilio messaging service (starts with 'MG')</li>
+        <li><code>external_account_id</code> (required): Your Twilio Account SID (starts with 'AC')</li>
+        <li><code>external_secret</code> (required): Your Twilio Auth Token</li>
+        </ul>
+        
+        <p><strong>Twilio Shortcode</strong> (<code>phone_type</code>: twilio_shortcode):</p>
+        
+        <ul>
+        <li><code>external_id</code> (optional): The SID of your Twilio shortcode (starts with 'SC'); if not
+        provided, it will be looked up by the phone_number parameter</li>
+        <li><code>external_account_id</code> (required): Your Twilio Account SID (starts with 'AC')</li>
+        <li><code>external_secret</code> (required): Your Twilio Auth Token</li>
+        </ul>
+        
+        <p><strong>Twilio Caller ID</strong> (<code>phone_type</code>: twilio_caller_id):</p>
+        
+        <ul>
+        <li><code>external_account_id</code> (required): Your Twilio Account SID (starts with 'AC')</li>
+        <li><code>external_secret</code> (required): Your Twilio Auth Token</li>
+        </ul>
+        
+        <p><strong>Vonage Virtual Number or Vonage Sender ID</strong> (<code>phone_type</code>: nexmo or nexmo_sender_id):</p>
+        
+        <ul>
+        <li><code>external_account_id</code> (required): Your Vonage API Key</li>
+        <li><code>external_secret</code> (required): Your Vonage API Secret</li>
+        </ul>
+        
+        <p><strong>Telesign SMS</strong> (<code>phone_type</code>: telesign):</p>
+        
+        <ul>
+        <li><code>external_account_id</code> (required): Your Telesign Customer ID</li>
+        <li><code>external_secret</code> (required): Your Telesign API Key</li>
+        <li><code>external_config.message_type</code>: <code>ARN</code>, <code>MKT</code>, or <code>OTP</code></li>
+        <li><code>external_config.sender_type</code>: <code>one_way</code> (default) or <code>two_way</code></li>
+        </ul>
+        
+        <p><strong>Infobip SMS</strong> (<code>phone_type</code>: infobip):</p>
+        
+        <ul>
+        <li><code>external_account_id</code> (required): Your Infobip username</li>
+        <li><code>external_secret</code> (required): Your Infobip API key</li>
+        <li><code>external_config.sender_type</code>: <code>one_way</code> (default) or <code>two_way</code></li>
+        <li><code>external_config.india_dlt_principal_entity_id</code>: India DLT Principal Entity ID (only
+        needed if sending to India)</li>
+        </ul>
+        
+        <p><strong>Infobip USSD</strong> (<code>phone_type</code>: infobip_ussd):</p>
+        
+        <ul>
+        <li>No external credentials required</li>
+        </ul>
+        
+        <p><strong>Africa's Talking SMS</strong> (<code>phone_type</code>: africas_talking):</p>
+        
+        <ul>
+        <li><code>external_account_id</code> (required): Your Africa's Talking username</li>
+        <li><code>external_secret</code> (required): Your Africa's Talking API key</li>
+        <li><code>external_config.sender_type</code>: <code>one_way</code> (default) or <code>two_way</code></li>
+        </ul>
+        
+        <p><strong>Africa's Talking USSD</strong> (<code>phone_type</code>: africas_talking_ussd):</p>
+        
+        <ul>
+        <li>No external credentials required</li>
+        </ul>
+        
+        <p><strong>Simulated Phone</strong> (<code>phone_type</code>: simulated):</p>
+        
+        <ul>
+        <li>No external credentials required</li>
+        <li>Messages are simulated locally and not sent to any external provider</li>
+        <li>Useful for testing</li>
+        </ul>
+        
+        <h4>Webhook URL Setup</h4>
+        
+        <p>Some route types require manual configuration of callback URLs in the external provider's
+        dashboard. When the Phone response includes an <code>external_setup</code> object, you will need to
+        configure the webhook URLs in your provider's account settings.</p>
+        
+        <p>The following phone types require manual webhook setup:</p>
+        
+        <ul>
+        <li><code>africas_talking</code>: <code>message_status_url</code> (always), <code>incoming_message_url</code> (if two_way)</li>
+        <li><code>africas_talking_ussd</code>: <code>incoming_call_url</code></li>
+        <li><code>infobip_ussd</code>: <code>incoming_call_url</code></li>
+        <li><code>twilio_messaging_service</code>: <code>incoming_message_url</code></li>
+        <li><code>telesign</code> (two_way only): <code>incoming_message_url</code></li>
+        </ul>
+        
+        <p>Telerivet automatically configures webhooks for the following phone types as follows:</p>
+        
+        <ul>
+        <li><code>twilio</code> - automatically updates incoming SMS and voice configuration for the Twilio
+        virtual number associated with the phone_number or external_id parameter</li>
+        <li><code>twilio_shortcode</code> - automatically updates incoming SMS configuration for the Twilio short
+        code associated with the phone_number or external_id parameter</li>
+        <li><code>nexmo</code> - automatically updates incoming SMS and voice configuration for the Vonage
+        virtual number matching the phone_number parameter</li>
+        <li><code>infobip</code> - automatically updates incoming SMS configuration for the Infobip virtual
+        number matching the phone_number parameter or external_id parameter</li>
+        </ul>
+        </div>
+    */
+    public Phone createPhone(JSONObject options) throws IOException
+    {
+        return new Phone(api, (JSONObject) api.doRequest("POST", getBaseApiPath() + "/phones", options));
     }
 
     /**
@@ -488,6 +642,47 @@ public class Project extends Entity
     }
 
     /**
+        <div class='markdown'><p>Queries message templates within the given project.</p>
+        </div>
+    */
+    public APICursor<MessageTemplate> queryMessageTemplates(JSONObject options)
+    {
+        return api.newCursor(MessageTemplate.class, getBaseApiPath() + "/message_templates", options);
+    }
+
+    public APICursor<MessageTemplate> queryMessageTemplates()
+    {
+        return queryMessageTemplates(null);
+    }
+
+    /**
+        <div class='markdown'><p>Creates a new message template that can be used when composing or scheduling messages.</p>
+        </div>
+    */
+    public MessageTemplate createMessageTemplate(JSONObject options) throws IOException
+    {
+        return new MessageTemplate(api, (JSONObject) api.doRequest("POST", getBaseApiPath() + "/message_templates", options));
+    }
+
+    /**
+        <div class='markdown'><p>Retrieves the message template with the given ID.</p>
+        </div>
+    */
+    public MessageTemplate getMessageTemplateById(String id) throws IOException
+    {
+        return new MessageTemplate(api, (JSONObject) api.doRequest("GET", getBaseApiPath() + "/message_templates/" + id));
+    }
+
+    /**
+        <div class='markdown'><p>Initializes the message template with the given ID without making an API request.</p>
+        </div>
+    */
+    public MessageTemplate initMessageTemplateById(String id)
+    {
+        return new MessageTemplate(api, Util.options("project_id", get("id"), "id", id), false);
+    }
+
+    /**
         <div class='markdown'><p>Queries data tables within the given project.</p>
         </div>
     */
@@ -593,17 +788,60 @@ public class Project extends Entity
     }
 
     /**
+        <div class='markdown'><p>Queries scheduled services within the given project.</p>
+        </div>
+    */
+    public APICursor<ScheduledService> queryScheduledServices(JSONObject options)
+    {
+        return api.newCursor(ScheduledService.class, getBaseApiPath() + "/scheduled_services", options);
+    }
+
+    public APICursor<ScheduledService> queryScheduledServices()
+    {
+        return queryScheduledServices(null);
+    }
+
+    /**
+        <div class='markdown'><p>Schedules a service to be triggered at a specified time.</p>
+        
+        <p>Only services that can be triggered for the project context and
+        handle the default event can be scheduled. This includes services with types
+        <code>scheduled_actions</code>, <code>scheduled_script</code>, and other service types that support project-level
+        triggering.</p>
+        
+        <p>(Note: To schedule services that are triggered for a contact,
+        <a href="#Project.scheduleMessage">project.scheduleMessage</a> should be used instead with
+        <code>message_type</code>=<code>service</code>.)</p>
+        </div>
+    */
+    public ScheduledService scheduleService(JSONObject options) throws IOException
+    {
+        return new ScheduledService(api, (JSONObject) api.doRequest("POST", getBaseApiPath() + "/scheduled_services", options));
+    }
+
+    /**
+        <div class='markdown'><p>Retrieves the scheduled service with the given ID.</p>
+        </div>
+    */
+    public ScheduledService getScheduledServiceById(String id) throws IOException
+    {
+        return new ScheduledService(api, (JSONObject) api.doRequest("GET", getBaseApiPath() + "/scheduled_services/" + id));
+    }
+
+    /**
+        <div class='markdown'><p>Initializes the scheduled service with the given ID without making an API request.</p>
+        </div>
+    */
+    public ScheduledService initScheduledServiceById(String id)
+    {
+        return new ScheduledService(api, Util.options("project_id", get("id"), "id", id), false);
+    }
+
+    /**
         <div class='markdown'><p>Creates a new automated service.</p>
         
         <p>Only certain types of automated services can be created via the API.
         Other types of services can only be created via the web app.</p>
-        
-        <p>Although Custom Actions services cannot be created directly via the
-        API, they may be converted to a template,
-        and then instances of the template can be created via this method
-        with <code>service_type</code>=<code>custom_template_instance</code>. Converting a service
-        to a template requires the Service Templates feature to be enabled
-        for the organization.</p>
         </div>
     */
     public Service createService(JSONObject options) throws IOException
@@ -675,6 +913,18 @@ public class Project extends Entity
     }
 
     /**
+        <div class='markdown'><p>Creates a new custom route that can be used to send messages via one or more basic routes
+        (phones).</p>
+        
+        <p>The <code>actions</code> array defines the routing rules.</p>
+        </div>
+    */
+    public Route createRoute(JSONObject options) throws IOException
+    {
+        return new Route(api, (JSONObject) api.doRequest("POST", getBaseApiPath() + "/routes", options));
+    }
+
+    /**
         <div class='markdown'><p>Gets a custom route by ID</p>
         </div>
     */
@@ -737,9 +987,9 @@ public class Project extends Entity
 
     /**
         <div class='markdown'><p>Gets a list of all custom fields defined for contacts in this project. The return value is
-        an array of objects with the properties 'name', 'variable', 'type', 'order', 'readonly', and
-        'lookup_key'. (Fields are automatically created any time a Contact's 'vars' property is
-        updated.)</p>
+        an array of objects with the properties 'name', 'variable', 'type', 'order', 'readonly',
+        'lookup_key', and 'show_on_conversation'. (Fields are automatically created any time a
+        Contact's 'vars' property is updated.)</p>
         </div>
     */
     public JSONArray getContactFields() throws IOException
@@ -761,8 +1011,8 @@ public class Project extends Entity
 
     /**
         <div class='markdown'><p>Gets a list of all custom fields defined for messages in this project. The return value is
-        an array of objects with the properties 'name', 'variable', 'type', 'order', 'readonly', and
-        'lookup_key'. (Fields are automatically created any time a Contact's 'vars' property is
+        an array of objects with the properties 'name', 'variable', 'type', 'order', and
+        'hide_values'. (Fields are automatically created any time a Message's 'vars' property is
         updated.)</p>
         </div>
     */
@@ -785,13 +1035,60 @@ public class Project extends Entity
 
     /**
         <div class='markdown'><p>Retrieves statistics about messages sent or received via Telerivet. This endpoint returns
-        historical data that is computed shortly after midnight each day in the project's time zone,
-        and does not contain message statistics for the current day.</p>
+        historical data that is computed shortly after midnight each day in the project's time zone.
+        If the date range includes the current day, it will include statistics for the current day
+        so far.</p>
         </div>
     */
     public JSONObject getMessageStats(JSONObject options) throws IOException
     {
         return (JSONObject) api.doRequest("GET", getBaseApiPath() + "/message_stats", options);
+    }
+
+    /**
+        <div class='markdown'><p>Queries webhooks within the given project.</p>
+        </div>
+    */
+    public APICursor<Webhook> queryWebhooks(JSONObject options)
+    {
+        return api.newCursor(Webhook.class, getBaseApiPath() + "/webhooks", options);
+    }
+
+    public APICursor<Webhook> queryWebhooks()
+    {
+        return queryWebhooks(null);
+    }
+
+    /**
+        <div class='markdown'><p>Creates a new webhook that will be triggered when specific events occur within the project.</p>
+        
+        <p>Note: The Webhook object is not used for notifying your server when
+        incoming messages are received. To notify a URL when incoming messages are received, you can
+        configure a webhook by <a href="#Project.createService">creating a Service</a> with type
+        incoming_message_webhook.</p>
+        </div>
+    */
+    public Webhook createWebhook(JSONObject options) throws IOException
+    {
+        return new Webhook(api, (JSONObject) api.doRequest("POST", getBaseApiPath() + "/webhooks", options));
+    }
+
+    /**
+        <div class='markdown'><p>Retrieves the webhook with the given ID.</p>
+        </div>
+    */
+    public Webhook getWebhookById(String id) throws IOException
+    {
+        return new Webhook(api, (JSONObject) api.doRequest("GET", getBaseApiPath() + "/webhooks/" + id));
+    }
+
+    /**
+        <div class='markdown'><p>Initializes the webhook with the given ID without making an API request.</p>
+        </div>
+    */
+    public Webhook initWebhookById(String id)
+    {
+        return new Webhook(api, Util.options("project_id", get("id"), "id", id), false);
     }
 
     /**
@@ -857,6 +1154,26 @@ public class Project extends Entity
     public void setAutoCreateContacts(Boolean value)
     {
         set("auto_create_contacts", value);
+    }
+
+    public Integer getMessageRetentionDays()
+    {
+        return (Integer) get("message_retention_days");
+    }
+
+    public void setMessageRetentionDays(Integer value)
+    {
+        set("message_retention_days", value);
+    }
+
+    public Boolean getShortLinkScheme()
+    {
+        return (Boolean) get("short_link_scheme");
+    }
+
+    public void setShortLinkScheme(Boolean value)
+    {
+        set("short_link_scheme", value);
     }
 
     public String getOrganizationId()

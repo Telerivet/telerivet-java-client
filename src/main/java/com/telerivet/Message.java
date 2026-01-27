@@ -137,6 +137,13 @@ import org.json.JSONArray;
       priority numbers first. Only defined for outgoing messages.</li>
     <li>Read-only</li>
     </ul></li>
+    <li><p>send_attempts (number)</p>
+    
+    <ul>
+    <li>The number of times Telerivet has attempted to send the message. Will be greater
+      than 1 if the message has been resent. Only defined for outgoing messages.</li>
+    <li>Read-only</li>
+    </ul></li>
     <li><p>error_message</p>
     
     <ul>
@@ -532,6 +539,11 @@ public class Message extends Entity
     public Integer getPriority()
     {
         return (Integer) get("priority");
+    }
+
+    public Double getSendAttempts()
+    {
+        return Util.toDouble(get("send_attempts"));
     }
 
     public String getErrorMessage()

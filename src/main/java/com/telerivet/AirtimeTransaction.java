@@ -58,6 +58,8 @@ import org.json.JSONArray;
     <ul>
     <li>Current status of airtime transaction (<code>successful</code>, <code>failed</code>, <code>cancelled</code>,
       <code>queued</code>, <code>processing</code>, <code>submitted</code>, <code>pending_approval</code>, or <code>pending_payment</code>)</li>
+    <li>Allowed values: successful, failed, cancelled, queued, processing, submitted,
+      pending_approval, pending_payment</li>
     <li>Read-only</li>
     </ul></li>
     <li><p>status_text</p>

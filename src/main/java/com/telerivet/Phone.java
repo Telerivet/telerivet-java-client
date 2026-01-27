@@ -82,6 +82,62 @@ import org.json.JSONArray;
     <li>ID of the project this phone belongs to</li>
     <li>Read-only</li>
     </ul></li>
+    <li><p>validate_recipient_numbers (bool)</p>
+    
+    <ul>
+    <li>Set to true to check that recipient phone numbers appear to be valid before sending
+      messages. Messages to invalid phone numbers will fail without being sent. Only applies
+      to phones capable of sending messages.</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>allowed_recipient_countries (array of strings)</p>
+    
+    <ul>
+    <li>Array of 2-letter country codes (ISO 3166-1 alpha-2) to which this phone is allowed
+      to send messages. When null, there is no restriction on recipient countries.</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>send_delay (number)</p>
+    
+    <ul>
+    <li>Number of seconds to wait after sending each message from this phone, to avoid
+      exceeding carrier rate limits.</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>timezone_id (string)</p>
+    
+    <ul>
+    <li>A string specifying the time zone that will be used when implementing quiet hours or
+      estimating send times; see <a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/List_of_tz_database_time_zones">List of tz database time zones Wikipedia
+      article</a>. When null, the
+      project's default time zone is used.</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>quiet_mode (string)</p>
+    
+    <ul>
+    <li>Controls behavior during quiet hours (see quiet_start/quiet_end). Possible values
+      are 'off' (quiet hours disabled), 'delay' (messages are delayed until quiet hours
+      end), or 'confirm' (requires manual confirmation to send during quiet hours).</li>
+    <li>Allowed values: off, delay, confirm</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>quiet_start (string)</p>
+    
+    <ul>
+    <li>Time of day when quiet hours begin, in HH:MM format (24-hour time) in the phone's
+      time zone. Messages sent during quiet hours are delayed or require confirmation
+      depending on quiet_mode. Only applicable when quiet_mode is not 'off'.</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>quiet_end (string)</p>
+    
+    <ul>
+    <li>Time of day when quiet hours end, in HH:MM format (24-hour time) in the phone's time
+      zone. Messages sent during quiet hours are delayed or require confirmation depending
+      on quiet_mode. Only applicable when quiet_mode is not 'off'.</li>
+    <li>Updatable via API</li>
+    </ul></li>
     <li><p>battery (int)</p>
     
     <ul>
@@ -147,6 +203,46 @@ import org.json.JSONArray;
       increase this limit, install additional SMS expansion packs in the Telerivet Gateway
       app. (only present for Android phones)</li>
     <li>Read-only</li>
+    </ul></li>
+    <li><p>external_account_id (string)</p>
+    
+    <ul>
+    <li>Account ID for the external API (e.g. Twilio Account SID, Vonage API Key). Only
+      present for routes that support external API configuration. See
+      <a href="#Project.createPhone">createPhone</a> for the meaning of this field for each phone type.</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>external_id (string)</p>
+    
+    <ul>
+    <li>External phone/resource ID within the external API account (if applicable). Only
+      present for routes that support external API configuration.</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>external_config (JSONObject)</p>
+    
+    <ul>
+    <li>Additional configuration settings specific to the phone_type. Only present for
+      routes that support external API configuration. See
+      <a href="#Project.createPhone">createPhone</a> for available settings for each phone type.</li>
+    <li>Updatable via API</li>
+    </ul></li>
+    <li><p>external_setup (JSONObject)</p>
+    
+    <ul>
+    <li>Configuration info for routes that require manual webhook setup. Only present for
+      routes that require manual configuration of callback URLs with the external provider.
+      Contains URL properties for each webhook type that needs to be configured (e.g.,
+      <code>incoming_message_url</code>, <code>message_status_url</code>, <code>incoming_call_url</code>).</li>
+    <li>Read-only</li>
+    </ul></li>
+    <li><p>external_secret (string)</p>
+    
+    <ul>
+    <li>Secret/API key for the external API (e.g. Twilio Auth Token, Vonage API Secret).
+      Only applicable for routes that support external API configuration. Write-only; not
+      returned by the API when retrieving a phone.</li>
+    <li>Updatable via API</li>
     </ul></li>
     </ul>
     </div>
@@ -237,6 +333,76 @@ public class Phone extends Entity
         return (String) get("project_id");
     }
 
+    public Boolean getValidateRecipientNumbers()
+    {
+        return (Boolean) get("validate_recipient_numbers");
+    }
+
+    public void setValidateRecipientNumbers(Boolean value)
+    {
+        set("validate_recipient_numbers", value);
+    }
+
+    public JSONArray getAllowedRecipientCountries()
+    {
+        return (JSONArray) get("allowed_recipient_countries");
+    }
+
+    public void setAllowedRecipientCountries(JSONArray value)
+    {
+        set("allowed_recipient_countries", value);
+    }
+
+    public Double getSendDelay()
+    {
+        return Util.toDouble(get("send_delay"));
+    }
+
+    public void setSendDelay(Double value)
+    {
+        set("send_delay", value);
+    }
+
+    public String getTimezoneId()
+    {
+        return (String) get("timezone_id");
+    }
+
+    public void setTimezoneId(String value)
+    {
+        set("timezone_id", value);
+    }
+
+    public String getQuietMode()
+    {
+        return (String) get("quiet_mode");
+    }
+
+    public void setQuietMode(String value)
+    {
+        set("quiet_mode", value);
+    }
+
+    public String getQuietStart()
+    {
+        return (String) get("quiet_start");
+    }
+
+    public void setQuietStart(String value)
+    {
+        set("quiet_start", value);
+    }
+
+    public String getQuietEnd()
+    {
+        return (String) get("quiet_end");
+    }
+
+    public void setQuietEnd(String value)
+    {
+        set("quiet_end", value);
+    }
+
     public Integer getBattery()
     {
         return (Integer) get("battery");
@@ -280,6 +446,51 @@ public class Phone extends Entity
     public Integer getSendLimit()
     {
         return (Integer) get("send_limit");
+    }
+
+    public String getExternalAccountId()
+    {
+        return (String) get("external_account_id");
+    }
+
+    public void setExternalAccountId(String value)
+    {
+        set("external_account_id", value);
+    }
+
+    public String getExternalId()
+    {
+        return (String) get("external_id");
+    }
+
+    public void setExternalId(String value)
+    {
+        set("external_id", value);
+    }
+
+    public JSONObject getExternalConfig()
+    {
+        return (JSONObject) get("external_config");
+    }
+
+    public void setExternalConfig(JSONObject value)
+    {
+        set("external_config", value);
+    }
+
+    public JSONObject getExternalSetup()
+    {
+        return (JSONObject) get("external_setup");
+    }
+
+    public String getExternalSecret()
+    {
+        return (String) get("external_secret");
+    }
+
+    public void setExternalSecret(String value)
+    {
+        set("external_secret", value);
     }
 
     @Override

@@ -105,18 +105,18 @@ public class DataTable extends Entity
         <div class='markdown'><p>Retrieves the row in the given table with the given ID.</p>
         </div>
     */
-    public DataRow getRowById(String id) throws IOException
+    public DataRow getRowById(String row_id) throws IOException
     {
-        return new DataRow(api, (JSONObject) api.doRequest("GET", getBaseApiPath() + "/rows/" + id));
+        return new DataRow(api, (JSONObject) api.doRequest("GET", getBaseApiPath() + "/rows/" + row_id));
     }
 
     /**
         <div class='markdown'><p>Initializes the row in the given table with the given ID, without making an API request.</p>
         </div>
     */
-    public DataRow initRowById(String id)
+    public DataRow initRowById(String row_id)
     {
-        return new DataRow(api, Util.options("project_id", get("project_id"), "table_id", get("id"), "id", id), false);
+        return new DataRow(api, Util.options("project_id", get("project_id"), "table_id", get("id"), "row_id", row_id), false);
     }
 
     /**

@@ -51,7 +51,7 @@ import org.json.JSONParserConfiguration;
  * @author youngj
  */
 public class TelerivetAPI {
-    public static String CLIENT_VERSION = "1.8.0";
+    public static String CLIENT_VERSION = "1.8.5";
 
     public static final int HTTP_CONNECTION_TIMEOUT = 10000; // ms
     public static final int HTTP_SOCKET_TIMEOUT = 10000; // ms
